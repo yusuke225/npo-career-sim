@@ -1675,5 +1675,161 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'life_npo_mba_program',
+    title: '報考私立大學「非營利組織管理學程碩士在職專班」：週末上課換學位與跨團人脈？',
+    category: 'intertwined',
+    tag: '在職進修與人脈',
+    weight: 15,
+    conditions: {
+      orgTypes: [
+        'large_welfare',
+        'grassroots',
+        'local_foundation',
+        'advocacy_ngo',
+        'academic_society',
+        'corp_intl_ngo',
+      ],
+      excludeOutsideNPO: true,
+      minAge: 26,
+      maxAge: 46,
+    },
+    narrative:
+      '工作幾年後，你開始覺得單靠現場土法煉鋼總有天花板。某私立大學的「非營利組織管理學程碩士在職專班」正在招生，簡章上寫著師資涵蓋社福、倡議、勸募與組織治理實務，同學多半是各組織主管與資深專員。只是兩年學分費加上週末整天上課、下班趕論文，對存款與體力都是硬仗。',
+    choices: [
+      {
+        id: 'enroll_npo_mba',
+        label: '正式報考入學！咬牙扛兩年學分費與週末課表，把實務經驗升級成管理視野',
+        sublabel: '存款 -$65,000、身心能量大減，但大幅累積專業資本、人脈與學歷加給資格',
+        effect: {
+          savingsDelta: -65000,
+          hasProfessionalCert: true,
+          salaryDelta: 2500,
+          statsDelta: { energy: -10, capital: 16, purpose: 6, life: -6, impactScore: 10 },
+          milestoneTag: '考取私立大學非營利組織管理學程碩士在職專班',
+        },
+        outcomeText:
+          '兩年來週六早八準時進教室、半夜改問卷差點懷疑人生，但拿到學位與認識一群不同領域的同學後，你第一次感覺自己不再是一個人在孤軍奮戰。',
+      },
+      {
+        id: 'audit_free_lectures',
+        label: '先旁聽公開講座與工作坊就好，把六萬多學費留著當緊急預備金',
+        sublabel: '守住存款與週末睡眠，靠免費跨團社群慢慢補齊管理知識',
+        effect: {
+          statsDelta: { energy: 3, capital: 6, life: 4, impactScore: 4 },
+        },
+        outcomeText:
+          '你把簡章收進抽屜，改報名幾場免費的組織治理與財務講座。雖然沒有多一張碩士文憑，但週末能好好睡到自然醒也是一種續航力。',
+      },
+    ],
+  },
+  {
+    id: 'life_union_labor_grad_school',
+    title: '報考國立大學「勞工研究所」在職專班：把第一線勞權實務升級為勞動法與集體協商專業',
+    category: 'intertwined',
+    tag: '工會在職進修',
+    weight: 16,
+    conditions: {
+      orgTypes: ['industrial_union', 'occupational_union'],
+      excludeOutsideNPO: true,
+      minAge: 26,
+      maxAge: 46,
+    },
+    narrative:
+      '跑了幾場勞資爭議調解與裁決庭後，你越來越深刻體會只靠熱血衝撞不夠，面對資方律師團還得要有更扎實的勞動法理與集體談判研究功底。某國立大學「勞工研究所」在職專班正在招生，同學幾乎都是各工會幹部、調解人與勞政實務者，只是兩年通勤上課與寫論文勢必吃掉所有週末。',
+    choices: [
+      {
+        id: 'enroll_labor_grad_school',
+        label: '報考入學！扛下學費與兩年下班唸書壓力，取得勞研所碩士學位與跨工會戰友網',
+        sublabel: '存款 -$55,000、獲得證照／碩士敘薪資格，談判底氣與專業人脈大增',
+        effect: {
+          savingsDelta: -55000,
+          hasProfessionalCert: true,
+          salaryDelta: 2500,
+          statsDelta: { energy: -10, capital: 17, purpose: 7, life: -6, impactScore: 11 },
+          milestoneTag: '考取國立大學勞工研究所在職專班',
+        },
+        outcomeText:
+          '下班趕高鐵去上勞工法研討課的日子累到不行，但寫出的碩士論文案例直接被其他工會拿來當裁決參考，那份專業自信無可取代。',
+      },
+      {
+        id: 'join_labor_study_group',
+        label: '暫不背學費與論文債，先加入免費跨工會勞動法讀書會累積實戰筆記',
+        sublabel: '守住存款與休假時間，用案例實戰與前輩共學替代正式學位',
+        effect: {
+          statsDelta: { energy: 3, capital: 7, life: 4, impactScore: 5 },
+        },
+        outcomeText:
+          '你省下五萬多學費，每隔週晚上和幾位友會秘書聚在咖啡廳拆解最新裁決書，一樣練出一身硬底子。',
+      },
+    ],
+  },
+  {
+    id: 'life_union_social_gathering',
+    title: '受邀參加工會聯誼活動：原來全台灣不是只有我在這間辦公室快撐不下去',
+    category: 'life',
+    tag: '工會交流與支持',
+    weight: 15,
+    conditions: { excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '週末傍晚，朋友拉你參加一場由工會舉辦的「民間組織與基層工作者聯誼餐會」。走進餐廳原本有點社恐，沒想到一聊起來，隔壁桌的學會秘書、社福社工、倡議專員跟工會幹部全都在吐一樣的苦水——凍薪、理監事會奇聞、年底核銷地獄。大家邊吃邊笑，反而有一種久違的被理解感。',
+    choices: [
+      {
+        id: 'join_union_mutual_aid',
+        label: '留到最後和大家交換聯絡方式，加入互助群組固定交流薪資行情與職場經驗',
+        sublabel: '花一點餐費與週末夜晚，換來跨組織戰友與情緒支持網',
+        effect: {
+          savingsDelta: -800,
+          statsDelta: { energy: 8, purpose: 7, capital: 8, life: 8, impactScore: 5 },
+        },
+        outcomeText:
+          '回家路上你發現手機多了十幾個新朋友，群組裡有人分享薪資行情、有人整理勞基法範本。原來知道自己不孤單，就足以讓人多撐過好幾個低潮。',
+      },
+      {
+        id: 'greet_and_rest_early',
+        label: '禮貌打完招呼、聽完大家經驗分享就先回家早點休息',
+        sublabel: '省下社交耗電，帶回幾個實用小道消息並保有獨處時間',
+        effect: {
+          savingsDelta: -500,
+          statsDelta: { energy: 5, capital: 3, life: 4 },
+        },
+        outcomeText:
+          '雖然沒有深聊，但聽見別間組織也有一模一樣的荒謬日常，你心裡默默鬆了一口氣，回家泡了杯熱茶早早上床睡覺。',
+      },
+    ],
+  },
+  {
+    id: 'life_union_labor_education',
+    title: '報名工會勞動教育課程：第一次把《勞基法》、特休與勞退帳本徹底搞懂',
+    category: 'intertwined',
+    tag: '勞動權益培力',
+    weight: 15,
+    conditions: { excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '工會在假日開了一場免費的「非營利與受僱者勞動教育工作坊」，主題直指圈內最常踩的坑：補休歸零、假承攬真僱傭、高薪低報、以及勞退 6% 怎麼查。報名人數意外爆滿，台上講師一句「做好事不代表你要放棄自己的勞動基準」，讓台下不少人默默點頭拍照。',
+    choices: [
+      {
+        id: 'audit_own_labor_rights',
+        label: '認真抄完筆記並回家核對自己的薪資單、投保級距與勞退專戶',
+        sublabel: '把法規知識變成保護自己的護身符，未來面對不合理要求更有底氣',
+        effect: {
+          statsDelta: { energy: -2, purpose: 6, capital: 10, life: 4, impactScore: 8 },
+          milestoneTag: '完成工會勞動教育培力並學會維護自身勞權',
+        },
+        outcomeText:
+          '核對完資料才發現自己過去對加班費與投保級距一知半解。你把講義存進雲端，也開始懂得在不撕破臉的前提下，用白紙黑字保護自己與同事。',
+      },
+      {
+        id: 'share_labor_edu_with_team',
+        label: '順手把課程重點整理成懶人包分享給辦公室同事，一起討論合理工時',
+        sublabel: '從獨善其身走向集體意識，在團隊裡播下重視勞動條件的種子',
+        effect: {
+          statsDelta: { energy: -4, purpose: 9, capital: 8, life: 2, impactScore: 12 },
+        },
+        outcomeText:
+          '茶水間裡大家第一次公開聊起補休與加班規範，雖然主管路過時表情有點微妙，但團隊對「好好工作也要好好生活」多了一份共識。',
+      },
+    ],
+  },
 ];
 

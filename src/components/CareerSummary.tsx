@@ -162,6 +162,25 @@ export function CareerSummary({
           </div>
         </section>
 
+        <div className="cert-percentile" style={{ marginBottom: 18 }}>
+          <strong>這只是十萬分之一的其中一種可能。</strong>
+          想體驗不同組織、地區與人生處境的交織，歡迎點擊下方「再抽一段新的職涯」；如果你也在關注台灣民間組織工作者的真實勞動處境，歡迎追蹤{' '}
+          <a
+            href="https://www.facebook.com/NPOWIU/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: 'var(--accent-teal)',
+              textDecoration: 'underline',
+              textUnderlineOffset: '3px',
+              fontWeight: 600,
+            }}
+          >
+            台灣非營利組織產業工會（NPOIU）
+          </a>{' '}
+          臉書專頁。
+        </div>
+
         <div
           style={{
             display: 'flex',
