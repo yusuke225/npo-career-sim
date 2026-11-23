@@ -1,0 +1,22 @@
+{
+  "name": "做好事，是份好工作嗎？ — 非營利組織職涯模擬器",
+  "short_name": "NPO職涯模擬",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#faf6f9",
+  "theme_color": "#7b5b8e",
+  "icons": [
+    {
+      "src": "./apple-touch-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}
