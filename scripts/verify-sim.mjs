@@ -75,6 +75,20 @@ try {
     assert.ok(setFlags.has(flag), `forbiddenFlag "${flag}" is never set by any event choice`);
   }
 
+  // Ensure donation-crowdout and welfare-kickback events cannot trigger for unions
+  const crowdout = sim.ALL_EVENTS.find((e) => e.id === 'era_earthquake_crowdout');
+  assert.ok(crowdout?.conditions?.orgTypes, 'era_earthquake_crowdout must restrict orgTypes');
+  assert.ok(
+    !crowdout.conditions.orgTypes.includes('industrial_union') &&
+      !crowdout.conditions.orgTypes.includes('occupational_union'),
+    'era_earthquake_crowdout must not trigger for unions'
+  );
+  const illegalTerm = sim.ALL_EVENTS.find((e) => e.id === 'labor_illegal_termination');
+  assert.ok(
+    illegalTerm?.conditions?.excludeOrgTypes?.includes('industrial_union'),
+    'labor_illegal_termination must exclude industrial_union'
+  );
+
   // 3. Validate employment-type pension & expense rules
   for (const empType of ['regular', 'multi_employment', 'contractor']) {
     const startState = sim.buildStateFromConfig(

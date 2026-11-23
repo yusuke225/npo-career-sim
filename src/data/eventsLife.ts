@@ -80,7 +80,11 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     tag: '台灣公益結構現場',
     weight: 32,
     isEraEvent: true,
-    conditions: { yearRange: [2018, 2032], excludeOutsideNPO: true },
+    conditions: {
+      yearRange: [2018, 2032],
+      excludeOutsideNPO: true,
+      orgTypes: ['grassroots', 'large_welfare', 'local_foundation', 'advocacy_ngo'],
+    },
     narrative:
       '台灣發生重大地震與複合災情，全國愛心捐款瞬間大量湧入大型救災專戶。這當然令人欣慰，但你們這種非急難型的日常服務或小型倡議組織，緊接著三個月的單筆捐款與小額轉帳幾乎腰斬。財務會議上沒人敢大聲抱怨，只能苦笑著重算明年預算。',
     choices: [
@@ -182,7 +186,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
   },
   {
     id: 'life20_cny_relatives',
-    title: '過年圍爐親戚連環問：「你做那種愛心志工，一個月領多少？」',
+    title: '過年圍爐親戚連環問：「你在{orgNoun}上班，一個月領多少？」',
     category: 'life',
     tag: '家庭與社會認同',
     weight: 16,
@@ -946,7 +950,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     weight: 26,
     conditions: { minAge: 55, maxAge: 65, excludeOutsideNPO: true },
     narrative:
-      '在這個生態走過四分之一個世紀，如今理監事與後輩都敬你三分。然而眼前培養了四年的接班人選，作風與你大不相同——他們想把老牌期刊電子化、砍掉你當年一手建立的某些傳統儀式。是趁還沒離開前出手擋下，還是真的放手讓屬於他們的組織長出來？',
+      '在這個生態走過四分之一個世紀，如今理監事與後輩都敬你三分。然而眼前培養了四年的接班人選，作風與你大不相同——他們想把行之有年的紙本流程全面數位化、砍掉你當年一手建立的某些傳統做法。是趁還沒離開前出手擋下，還是真的放手讓屬於他們的組織長出來？',
     choices: [
       {
         id: 'graceful_handover',
@@ -1178,7 +1182,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
   },
   {
     id: 'life30_sibling_care_argument',
-    title: '家庭群組的沉默分工：「你在那個比較彈性的協會，爸媽看醫生就你去吧」',
+    title: '家庭群組的沉默分工：「你在那個比較彈性的{orgNoun}，爸媽看醫生就你去吧」',
     category: 'intertwined',
     tag: '家庭性別與職涯偏見',
     weight: 15,

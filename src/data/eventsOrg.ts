@@ -1328,7 +1328,7 @@ export const ORG_EVENTS: GameEvent[] = [
       },
       {
         id: 'carry_both_roles',
-        label: '怕原本服務對象或會員沒人照顧，咬牙把兩個人的工作量一肩扛下',
+        label: '怕原本經手的{targetNoun}與業務沒人接手，咬牙把兩個人的工作量一肩扛下',
         sublabel: '成為組織不可或缺的救火隊，代價是身心劇烈透支',
         effect: {
           statsDelta: { energy: -16, purpose: 3, capital: 5, life: -10, impactScore: 11 },
@@ -1957,7 +1957,7 @@ export const ORG_EVENTS: GameEvent[] = [
     weight: 14,
     conditions: { excludeOutsideNPO: true, minTenure: 2 },
     narrative:
-      '核對季度單據時，你意外發現幾張打著「跨團體聯繫會議」名義報支的高價餐廳發票，實際上是理事長或某資深主管私人宴請友人的開銷。金額不算天文數字，但這正是民間捐款人最痛恨的信任破口。',
+      '核對季度單據時，你意外發現幾張打著「跨團體聯繫會議」名義報支的高價餐廳發票，實際上是理事長或某資深主管私人宴請友人的開銷。金額不算天文數字，但這正是會員與支持者最痛恨的信任破口。',
     choices: [
       {
         id: 'block_and_record',
@@ -2072,7 +2072,7 @@ export const ORG_EVENTS: GameEvent[] = [
     weight: 20,
     conditions: {
       excludeOutsideNPO: true,
-      excludeOrgTypes: ['industrial_union', 'occupational_union', 'corp_intl_ngo'],
+      excludeOrgTypes: ['industrial_union', 'occupational_union', 'corp_intl_ngo', 'academic_society'],
     },
     narrative:
       '新年度政府標案規定專職人員須依衛福部或計畫標準給薪，但領薪水前一天會計卻拿來一張「員工自願定期捐款授權書」，低聲說：「大家都一樣啦，帳戶進去後每個月自動轉五千塊回來當機構急難備用金，這樣明年組織才撐得下去。」',
@@ -2112,7 +2112,7 @@ export const ORG_EVENTS: GameEvent[] = [
     weight: 18,
     conditions: { excludeOutsideNPO: true, minTenure: 1 },
     narrative:
-      '這一年為了年會、立院攻防與社區夜間訪視，你照表申請了 64 小時加班補休，卻因為案量太重根本請不完。12 月底行政突然發信通知：「依組織內規，未休畢之補休視同放棄、不得折算加班費。」而且主管還暗示出勤系統只準打早上九點到下午六點。',
+      '這一年為了{weekendTask}與趕不完的業務，你照表申請了 64 小時加班補休，卻因為案量太重根本請不完。12 月底行政突然發信通知：「依組織內規，未休畢之補休視同放棄、不得折算加班費。」而且主管還暗示出勤系統只準打早上九點到下午六點。',
     choices: [
       {
         id: 'demand_overtime_pay_law',
@@ -2147,7 +2147,7 @@ export const ORG_EVENTS: GameEvent[] = [
     weight: 16,
     conditions: {
       excludeOutsideNPO: true,
-      excludeOrgTypes: ['corp_intl_ngo'],
+      excludeOrgTypes: ['corp_intl_ngo', 'industrial_union', 'academic_society', 'advocacy_ngo'],
       employmentTypes: ['regular'],
       minTenure: 2,
     },
