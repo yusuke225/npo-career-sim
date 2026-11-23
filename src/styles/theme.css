@@ -1,0 +1,59 @@
+:root {
+  --font-serif: 'Noto Serif TC', 'Songti TC', 'PMingLiU', serif;
+  --font-sans: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* 淺色模式：柔霧櫻粉・紫羅蘭紙本風 */
+  --bg-page: #faf6f9;
+  --bg-surface: #ffffff;
+  --bg-subtle: #f3ebf2;
+  --bg-elevated: #fdfbfd;
+  --border-hairline: #e8dce7;
+  --border-strong: #d4c2d3;
+
+  --ink-primary: #2a212d;
+  --ink-secondary: #5e5063;
+  --ink-muted: #88788e;
+
+  --accent-teal: #7b5b8e;
+  --accent-teal-soft: rgba(123, 91, 142, 0.12);
+  --accent-rose: #c86d8a;
+  --accent-rose-soft: rgba(200, 109, 138, 0.12);
+  --accent-crimson: #c65872;
+  --accent-crimson-soft: rgba(198, 88, 114, 0.12);
+  --accent-amber: #b87b64;
+  --accent-amber-soft: rgba(184, 123, 100, 0.13);
+  --accent-green: #5b8c7a;
+  --accent-green-soft: rgba(91, 140, 122, 0.12);
+
+  --shadow-card: 0 2px 6px rgba(82, 54, 92, 0.05);
+  --shadow-modal: 0 14px 40px rgba(42, 33, 45, 0.14);
+}
+
+[data-theme='dark'] {
+  /* 深色模式：夜幕紫霞・薰衣草閱讀風 */
+  --bg-page: #191621;
+  --bg-surface: #231e2e;
+  --bg-subtle: #2d263b;
+  --bg-elevated: #272133;
+  --border-hairline: #383049;
+  --border-strong: #4e4363;
+
+  --ink-primary: #f3edf7;
+  --ink-secondary: #c7bad0;
+  --ink-muted: #9687a1;
+
+  --accent-teal: #b694cc;
+  --accent-teal-soft: rgba(182, 148, 204, 0.17);
+  --accent-rose: #e393ad;
+  --accent-rose-soft: rgba(227, 147, 173, 0.16);
+  --accent-crimson: #e57e96;
+  --accent-crimson-soft: rgba(229, 126, 150, 0.16);
+  --accent-amber: #dba38c;
+  --accent-amber-soft: rgba(219, 163, 140, 0.16);
+  --accent-green: #7cb39f;
+  --accent-green-soft: rgba(124, 179, 159, 0.16);
+
+  --shadow-card: 0 2px 6px rgba(10, 8, 16, 0.32);
+  --shadow-modal: 0 16px 48px rgba(10, 8, 16, 0.56);
+}
