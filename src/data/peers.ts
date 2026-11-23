@@ -268,8 +268,7 @@ const EVOLUTIONS: EvolutionOutcome[] = [
     id: 'resting_career_gap',
     status: 'resting',
     label: () => '離職轉行摸索中 · 去向未定',
-    note: '還沒到能退休的年紀卻已撐不下去，遞出辭呈後暫時離開非營利圈，先靠零星接案或兼職維持生活、摸索下一步。',
-    targetSalaryRange: [22000, 28500],
+    note: '還沒到能退休的年紀卻已撐不下去，遞出辭呈後暫時離開非營利圈，仍在摸索下一步去向（此處保留離職前薪資）。',
     minYears: 2,
     weight: 8,
     isEligible: (p) =>
@@ -378,8 +377,7 @@ export function advancePeersForYear(
     if (chosen.maxSalaryAfter !== undefined) {
       nextSalary = Math.min(chosen.maxSalaryAfter, nextSalary);
     }
-    const overallFloor =
-      nextStatus === 'resting' || nextStatus === 'studying' ? 22000 : 28590;
+    const overallFloor = nextStatus === 'studying' ? 22000 : 28590;
     nextSalary = Math.max(overallFloor, Math.min(92000, nextSalary));
 
     const historyEntry = `${currentYear}｜${nextLabel}`;

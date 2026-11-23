@@ -571,7 +571,8 @@ export function GameDashboard({
                   <div className="peer-role">{peer.currentLabel}</div>
                   <p className="peer-note">{peer.latestNote}</p>
                   <div className="peer-foot">
-                    估計月薪 NT$ {peer.salaryEstimate.toLocaleString()}
+                    {peer.currentStatus === 'resting' ? '離職前月薪' : '估計月薪'} NT${' '}
+                    {peer.salaryEstimate.toLocaleString()}
                   </div>
                 </div>
               );

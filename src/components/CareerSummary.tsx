@@ -72,7 +72,7 @@ export function CareerSummary({
 
         <div className="summary-kpi-grid">
           <div className="kpi-box">
-            <div className="kpi-label">終點月薪 / 職涯峰值</div>
+            <div className="kpi-label">最終月薪</div>
             <div className="kpi-value">
               NT$ {record.endSalary.toLocaleString()}
             </div>
@@ -153,7 +153,8 @@ export function CareerSummary({
                     {peer.latestNote}
                   </div>
                   <div className="font-mono" style={{ fontSize: 11, color: 'var(--ink-muted)' }}>
-                    估計月薪 NT$ {peer.salaryEstimate.toLocaleString()}
+                    {peer.currentStatus === 'resting' ? '最終月薪（離職前）' : '最終月薪'} NT${' '}
+                    {peer.salaryEstimate.toLocaleString()}
                   </div>
                 </div>
               );

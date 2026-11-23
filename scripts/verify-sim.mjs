@@ -136,10 +136,10 @@ try {
     }
     for (const peer of state.peers) {
       assert.ok(Number.isFinite(peer.salaryEstimate), `Non-finite peer salary in simulation ${i}`);
-      if (peer.currentStatus === 'resting' || peer.currentStatus === 'studying') {
-        assert.ok(peer.salaryEstimate >= 22000, `Peer ${peer.id} salary below resting floor: ${peer.salaryEstimate}`);
+      if (peer.currentStatus === 'studying') {
+        assert.ok(peer.salaryEstimate >= 22000, `Peer ${peer.id} salary below studying floor: ${peer.salaryEstimate}`);
       } else {
-        assert.ok(peer.salaryEstimate >= 28590, `Peer ${peer.id} salary below active floor: ${peer.salaryEstimate}`);
+        assert.ok(peer.salaryEstimate >= 28590, `Peer ${peer.id} salary below active/pre-exit floor: ${peer.salaryEstimate}`);
       }
       if (peer.currentStatus === 'pivoted') {
         assert.ok(peer.salaryEstimate >= 40000, `Pivoted peer salary too low: ${peer.salaryEstimate}`);

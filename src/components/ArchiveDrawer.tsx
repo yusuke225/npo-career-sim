@@ -129,7 +129,7 @@ export function ArchiveDrawer({
                     className="font-mono"
                     style={{ fontSize: 11, color: 'var(--ink-muted)', marginTop: 4 }}
                   >
-                    終點月薪 NT$ {rec.endSalary.toLocaleString()} · 存款 NT${' '}
+                    最終月薪 NT$ {rec.endSalary.toLocaleString()} · 存款 NT${' '}
                     {rec.finalSavings.toLocaleString()}
                   </div>
                 </button>
