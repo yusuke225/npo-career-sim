@@ -164,6 +164,9 @@ export function computeMonthlyExpense(
   if (state.employmentType === 'contractor') {
     selfPaidInsurance =
       2600 + (state.monthlySalary >= 20000 ? Math.round(state.monthlySalary * 0.0211) : 0);
+  } else if (state.employmentType === 'multi_employment') {
+    // 多元方案有勞保（含職災）與健保，但不適用就業保險法與勞退提撥
+    payrollDeduction = Math.round(state.monthlySalary * 0.068);
   } else {
     payrollDeduction = Math.round(state.monthlySalary * 0.08);
   }
@@ -735,9 +738,11 @@ export function advanceQuarter(state: SimulationState, rng = Math.random): Simul
     }
   }
 
-  // 勞退 6% 提撥累計（自然人承攬無雇主提撥！）
+  // 勞退 6% 提撥累計（多元就業方案屬公法救助關係、自然人承攬非僱傭，皆無雇主 6% 勞退提撥！）
   const pensionContrib =
-    state.employmentType === 'contractor' ? 0 : Math.round(nextSalary * 0.06 * 3);
+    state.employmentType === 'contractor' || state.employmentType === 'multi_employment'
+      ? 0
+      : Math.round(nextSalary * 0.06 * 3);
   let nextPension = state.laborPensionTotal + pensionContrib;
   if (nextQuarter === 4) {
     nextPension = Math.round(nextPension * 1.022);
@@ -1187,7 +1192,7 @@ export function buildCareerArchive(
     : `在台灣約十萬名社福、倡議、學會與工會受僱者中，低薪、一人多工與照顧壓力使得多數人尚未走到 55 歲退休便悄然離職摸索轉行。你這段長達 ${totalYears} 年的經歷累積 NT$ ${state.laborPensionTotal.toLocaleString()} 勞退專戶（${pensionLawNote}），精準映照了民間部門與人生現實之間的拉鋸。`;
 
   const shareText = [
-    `【做好事，是份好工作嗎？ v0.11｜台灣 NPO 與人民團體職涯結算】`,
+    `【做好事，是份好工作嗎？ v0.12｜台灣 NPO 與人民團體職涯結算】`,
     `檔案字號：${state.docNumber}`,
     `最終稱號：${title}（${stampLabel}）`,
     `經歷：${state.startYear}–${state.currentYear}（共 ${totalYears} 年｜${state.startAge} → ${state.age} 歲）`,

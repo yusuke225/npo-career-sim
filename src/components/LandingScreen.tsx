@@ -91,7 +91,7 @@ export function LandingScreen({
           <strong className="font-serif" style={{ fontSize: 17 }}>
             做好事，是份好工作嗎？
           </strong>
-          <span className="brand-code">1 IN 100,000 · TW-NPO SIM v0.11</span>
+          <span className="brand-code">1 IN 100,000 · TW-NPO SIM v0.12</span>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <button type="button" className="btn btn-sm" onClick={onOpenArchive}>
@@ -197,7 +197,7 @@ export function LandingScreen({
           </button>
         </div>
         <p style={{ margin: '10px 0 0', fontSize: 12, color: 'var(--ink-muted)' }}>
-          註：遊戲可以中途存檔，但同時只能保存一段職涯
+          註：遊戲可以中途存檔，但同時只能保存一段職涯。推薦以電腦瀏覽器遊玩。
         </p>
       </main>
 
@@ -352,8 +352,7 @@ export function LandingScreen({
 
       <section className="card ecology-strip">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2 style={{ fontSize: 16 }}>收錄之台灣非營利與人民團體生態抽樣權重</h2>
-          <span style={{ fontSize: 12, color: 'var(--ink-muted)' }}>含社福、倡議、學會與工會</span>
+          <h2 style={{ fontSize: 16 }}>非營利組織隨機抽樣權重</h2>
         </div>
         <div className="ecology-grid">
           {ORG_TYPE_LIST.map((o) => (
@@ -375,7 +374,7 @@ export function LandingScreen({
           向《80億分之1》（1in8b.life）帶給我們的感動致敬，本作所有組織與案例是基於實務處境以虛構呈現，數據僅存於您自己的瀏覽器。
         </div>
         <div>
-          v0.11｜via{' '}
+          v0.12｜via{' '}
           <a
             href="mailto:yusuke225@gmail.com"
             style={{ color: 'var(--accent-teal)', textDecoration: 'underline', textUnderlineOffset: '3px' }}

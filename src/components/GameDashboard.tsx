@@ -305,7 +305,11 @@ export function GameDashboard({
 
             {exp.payrollDeduction > 0 && (
               <div className="finance-subline">
-                <span>勞健保自付額（受僱扣繳）</span>
+                <span>
+                  {state.employmentType === 'multi_employment'
+                    ? '勞健保自付額（無就保／無勞退）'
+                    : '勞健保自付額（受僱扣繳）'}
+                </span>
                 <span className="font-mono">{exp.payrollDeduction.toLocaleString()}</span>
               </div>
             )}
@@ -371,7 +375,11 @@ export function GameDashboard({
               <span>勞退 6% 專戶（滿60歲領）</span>
               <span className="font-mono">
                 NT$ {state.laborPensionTotal.toLocaleString()}
-                {state.employmentType === 'contractor' ? '（承攬 0%）' : ''}
+                {state.employmentType === 'contractor'
+                  ? '（承攬 0%）'
+                  : state.employmentType === 'multi_employment'
+                    ? '（多元 0%）'
+                    : ''}
               </span>
             </div>
           </section>

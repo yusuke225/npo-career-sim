@@ -1989,32 +1989,32 @@ export const ORG_EVENTS: GameEvent[] = [
   // =========================================================================
   {
     id: 'labor_multi_employment_trap',
-    title: '「多元就業開發方案」期滿倒數：會計暗示先離職三個月再重報',
+    title: '「多元就業開發方案」期滿倒數：公法救助無勞退與失業給付的斷層',
     category: 'work',
     tag: '多元方案斷層',
     weight: 26,
     conditions: { employmentTypes: ['multi_employment'], excludeOutsideNPO: true },
     narrative:
-      '你透過勞動部「多元就業開發方案／培力就業計畫」進駐協會滿一年，領著接近基本工資的薪水卻實際在扛全職專案與核銷。補助即將屆滿，組織卻說自籌款還是不足無法把你轉正職，主管委婉問：「要不要先休息空窗一陣子去別處，或是改簽自然人承攬繼續幫我們？」',
+      '你透過勞動部「多元就業開發方案」進駐協會滿一年，領著接近基本工資的上工津貼卻實際在扛全職專案與核銷。因官方將此方案定調為「公法救助關係」而非一般勞雇關係，這一年雖有勞保與健保，但完全不適用《勞基法》與《就業保險法》——既沒有一毛錢雇主 6% 勞退提撥，方案期滿也沒有資遣費或失業給付可領。補助即將屆滿，組織卻說自籌款不足無法轉正職，主管委婉問：「要不要先空窗一陣子，或是改簽自然人承攬繼續幫我們？」',
     choices: [
       {
         id: 'fight_convert_regular',
-        label: '拒絕非法空窗回聘，拿出這一年建立的服務實績與外部補助提案爭取轉正職',
-        sublabel: '若成功轉正職並取得 6% 勞退提撥；若組織拒收則自負離場壓力',
+        label: '拒絕非法空窗回聘，拿出這一年建立的服務實績與外部補助提案爭取轉為一般正職',
+        sublabel: '成功轉正職納入《勞基法》、就業保險並開始享有雇主 6% 勞退提撥',
         effect: {
           changeEmploymentType: 'regular',
           salaryDelta: 2000,
           statsDelta: { energy: -8, purpose: 4, capital: 8, life: 4, impactScore: 10 },
           setFlag: 'labor_dispute_hit',
-          milestoneTag: '成功自多元就業方案轉正職受僱',
+          milestoneTag: '成功自多元就業方案轉為一般正職受僱',
         },
         outcomeText:
-          '你替協會連夜寫出一份地方企業合作小額補助案，理事會看著沒有你就沒人會跑核銷系統的現實，終於點頭把你納進一般正職編制。',
+          '你替協會連夜寫出一份地方企業合作小額補助案，理事會看著沒有你就沒人會跑核銷系統的現實，終於點頭把你納進一般正職編制，總算開始累積 6% 勞退與就保年資。',
       },
       {
         id: 'accept_contractor_shift',
         label: '不捨放掉手邊案子與收入空窗，答應先改簽「自然人承攬」續留原單位',
-        sublabel: '表面月領多 $1,500，實則失去 6% 勞退且須自付職業工會勞健保',
+        sublabel: '表面月領多 $1,500，但同樣無 6% 勞退，連原有的單位勞健保都失去、須全額自付工會保費',
         effect: {
           changeEmploymentType: 'contractor',
           salaryDelta: 1500,
@@ -2022,7 +2022,7 @@ export const ORG_EVENTS: GameEvent[] = [
           setFlag: 'labor_dispute_hit',
         },
         outcomeText:
-          '你照樣每天早上九點到辦公室報到、聽從主管交辦業務，只是契約名稱變成了「外部專案承攬」，從此連健保都得自己去找職業工會加保。',
+          '你照樣每天早上九點到辦公室報到、聽從主管交辦業務，只是身分從「公法救助進用人員」變成了「外部專案承攬」，依舊沒有勞退，連勞健保都得自己去職業工會全額加保。',
       },
     ],
   },
@@ -2148,6 +2148,7 @@ export const ORG_EVENTS: GameEvent[] = [
     conditions: {
       excludeOutsideNPO: true,
       excludeOrgTypes: ['corp_intl_ngo'],
+      employmentTypes: ['regular'],
       minTenure: 2,
     },
     narrative:

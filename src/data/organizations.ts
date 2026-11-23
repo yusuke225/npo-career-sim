@@ -24,9 +24,10 @@ export const EMPLOYMENT_TYPES: Record<EmploymentType, EmploymentTypeConfig> = {
   },
   multi_employment: {
     id: 'multi_employment',
-    label: '多元就業開發／培力方案進用',
+    label: '多元就業開發方案進用（公法救助關係）',
     shortLabel: '多元方案',
-    description: '勞動部補助進用，多領取近基本工資、一年一聘極少調薪，方案期滿常遭遇轉銜斷層。',
+    description:
+      '勞動部補助進用，官方定位屬「公法救助關係」而非一般勞雇：雖有勞保（含職災）與健保，但不適用《勞基法》與《就業保險法》，無雇主 6% 勞退提撥、無資遣費與失業給付，期滿易遇轉銜斷層。',
   },
   contractor: {
     id: 'contractor',

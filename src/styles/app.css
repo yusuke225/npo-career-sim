@@ -285,7 +285,8 @@ h3,
 .hero-lead {
   color: var(--ink-secondary);
   margin: 0 0 24px;
-  max-width: 66ch;
+  width: 100%;
+  text-align: justify;
 }
 
 .pace-selector {
