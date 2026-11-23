@@ -75,7 +75,7 @@ const ROUTINE_LINES: RoutineLine[] = [
   {
     tag: '工會組織',
     title: '廠區換班門口的傳單',
-    text: '傍晚五點半站在工廠側門風口發入會簡章，警衛一直盯著你的背心，但總算有兩位作業員偷偷接過去。',
+    text: '傍晚五點半站在單位側門風口發入會簡章，警衛一直盯著你的背心，但總算有兩位剛下班的基層員工偷偷接過去。',
     orgTypes: ['industrial_union'],
   },
   {
@@ -87,7 +87,7 @@ const ROUTINE_LINES: RoutineLine[] = [
   {
     tag: '集體行動',
     title: '連署書與理事會沙盤推演',
-    text: '晚上八點半工會辦公室還亮著燈，幹部一邊吃炒飯一邊盤點哪幾個產線還沒湊齊連署門檻。',
+    text: '晚上八點半工會辦公室還亮著燈，幹部一邊吃炒飯一邊盤點哪幾個班別與單位還沒湊齊連署門檻。',
     orgTypes: ['industrial_union'],
   },
   {

@@ -340,9 +340,9 @@ export const ORG_CONTEXT_TOKENS: Record<OrgTypeId, OrgContextTokens> = {
   },
   industrial_union: {
     orgNoun: '產業工會',
-    targetNoun: '產線與輪班會員',
+    targetNoun: '第一線輪班會員',
     weekendTask: '勞資抗爭動員或輪班座談',
-    fieldMove: '去工業區廠區大門發傳單',
+    fieldMove: '去職場或輪班現場外發傳單',
     certGoal: '勞動法學程與勞資調解人培訓',
     lectureTopic: '集體勞動爭議調解與不當勞動行為裁決',
     hometownOrg: '家鄉工業區的聯合產業工會',

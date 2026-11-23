@@ -55,7 +55,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
       orgTypes: ['industrial_union', 'occupational_union'],
     },
     narrative:
-      '三級警戒重創各行各業，工會電話從早響到晚：職業工會會員急著問「勞工生活補貼三萬／一萬元怎麼申請」，產線與服務業會員則面臨資方片面放無薪假、扣防疫隔離假薪水與廠區群聚風險。',
+      '三級警戒重創各行各業，工會電話從早響到晚：職業工會會員急著問「勞工生活補貼三萬／一萬元怎麼申請」，第一線輪班與服務業會員則面臨資方片面放無薪假、扣防疫隔離假薪水與職場群聚風險。',
     choices: [
       {
         id: 'covid_union_relief_desk',
@@ -893,7 +893,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
       excludeOutsideNPO: true,
     },
     narrative:
-      '眼看平台經濟與跨區新興行業勞工長期缺乏工會保障，一群信任你的產線代表與配送員找上門：「發起人名冊已經湊齊三十五人了，只要你願意來扛創會秘書長，我們自己向勞動局申請立案成立聯合產業工會！」',
+      '眼看平台經濟與跨區新興行業勞工長期缺乏工會保障，一群信任你的基層工會代表與配送員找上門：「發起人名冊已經湊齊三十五人了，只要你願意來扛創會秘書長，我們自己向勞動局申請立案成立聯合產業工會！」',
     choices: [
       {
         id: 'co_found_union',

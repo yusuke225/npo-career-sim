@@ -456,7 +456,7 @@ export const ORG_EVENTS: GameEvent[] = [
     weight: 14,
     conditions: { orgTypes: ['industrial_union'], excludeOutsideNPO: true },
     narrative:
-      '工會內部兩大派系在會員代表大會前夕徹底撕破臉：理事長這派主張維持與資方及勞動部官員的體制內對話管道；監事長那派則公開貼文痛批秘書處「軟弱妥協」，要求立刻發動包圍主管機關抗爭。雙方都要你這個全職秘書表態選邊站。',
+      '工會內部兩大派系在會員代表大會前夕徹底撕破臉：理事長這派主張維持與資方及勞動部官員的體制內對話管道；監事會召集人那派則公開貼文痛批秘書處「軟弱妥協」，要求立刻發動包圍主管機關抗爭。雙方都要你這個全職秘書表態選邊站。',
     choices: [
       {
         id: 'mediate_procedural',
@@ -1961,7 +1961,7 @@ export const ORG_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'block_and_record',
-        label: '堅持依財會準則退件不予核銷，並請監事長備查帳務內控流程',
+        label: '堅持依財會準則退件不予核銷，並請監事會召集人備查帳務內控流程',
         sublabel: '守住組織清白與自己不背黑鍋的法律底線，但辦公室氣氛降至冰點',
         effect: {
           statsDelta: { energy: -8, purpose: 10, capital: 6, life: -2, impactScore: 12 },
@@ -2771,7 +2771,7 @@ export const ORG_EVENTS: GameEvent[] = [
     weight: 19,
     conditions: { orgTypes: ['industrial_union'], excludeOutsideNPO: true, minTenure: 1 },
     narrative:
-      '深夜十一點半，公司突然公告下月起調整大夜輪班津貼與變形工時排班，未經勞資會議同意。工會 LINE 群組瞬間跳出兩百多則憤怒留言，產線幹部打電話問你明天早上要不要直接去勞動局遞調解申請書。',
+      '深夜十一點半，公司突然公告下月起調整大夜輪班津貼與變形工時排班，未經勞資會議同意。工會 LINE 群組瞬間跳出兩百多則憤怒留言，基層幹部打電話問你明天早上要不要直接去勞動局遞調解申請書。',
     choices: [
       {
         id: 'file_mediation_and_mobilize',

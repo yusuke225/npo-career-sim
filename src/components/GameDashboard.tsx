@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   AlertTriangle,
   Bot,
@@ -66,6 +67,7 @@ export function GameDashboard({
   onSaveAndHome,
   onManualFinish,
 }: GameDashboardProps) {
+  const [mobileTab, setMobileTab] = useState<'events' | 'status'>('events');
   const maxQuarters = state.maxYears * 4;
   const progressPct = Math.min(100, Math.round((state.totalQuartersElapsed / maxQuarters) * 100));
   const yearsText = (state.totalQuartersElapsed / 4).toFixed(1);
@@ -188,9 +190,53 @@ export function GameDashboard({
         </div>
       </header>
 
-      <div className="dashboard-grid">
+      {/* 手機版頂部常駐職涯進度與「事件／狀態」雙分頁切換 */}
+      <div className="mobile-top-hud">
+        <section className="card horizon-bar-wrap">
+          <div className="horizon-meta">
+            <span>
+              職涯進度：第 {state.totalQuartersElapsed} / {maxQuarters} 季（{progressPct}%）
+            </span>
+            <span className="font-mono">{state.docNumber}</span>
+          </div>
+          <div className="stat-track">
+            <div
+              className="stat-fill"
+              style={{ width: `${progressPct}%`, backgroundColor: 'var(--accent-teal)' }}
+            />
+          </div>
+          <div className="era-banner">
+            <strong>時代脈動：</strong>
+            {state.eraNote}
+          </div>
+        </section>
+
+        <div className="mobile-tab-bar" role="tablist" aria-label="手機版檢視分頁">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mobileTab === 'events'}
+            className={`mobile-tab-btn ${mobileTab === 'events' ? 'active' : ''}`}
+            onClick={() => setMobileTab('events')}
+          >
+            <span>事件</span>
+            {state.pendingEvent && <span className="mobile-tab-badge">待抉擇</span>}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mobileTab === 'status'}
+            className={`mobile-tab-btn ${mobileTab === 'status' ? 'active' : ''}`}
+            onClick={() => setMobileTab('status')}
+          >
+            <span>狀態</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="dashboard-grid" data-mobile-tab={mobileTab}>
         {/* 左欄：個人狀態、真實財務拆解、組織與重心 */}
-        <aside className="stack-col">
+        <aside className="stack-col col-status">
           <section className="card panel-card">
             <div className="panel-heading">
               <span>個人身心與資本指標</span>
@@ -460,8 +506,8 @@ export function GameDashboard({
         </aside>
 
         {/* 中欄：職涯進度、當前關鍵抉擇卡片、紀事年表 */}
-        <main className="stack-col">
-          <section className="card horizon-bar-wrap">
+        <main className="stack-col col-events">
+          <section className="card horizon-bar-wrap desktop-horizon-card">
             <div className="horizon-meta">
               <span>
                 職涯進度：第 {state.totalQuartersElapsed} / {maxQuarters} 季（{progressPct}%）
