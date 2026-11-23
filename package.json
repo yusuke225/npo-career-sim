@@ -1,6 +1,6 @@
 {
   "name": "npo-career-sim",
-  "version": "0.12.1",
+  "version": "0.2.0",
   "description": "做好事，是份好工作嗎？ — 台灣非營利與人民團體職涯模擬器",
   "type": "module",
   "scripts": {

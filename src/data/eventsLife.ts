@@ -239,7 +239,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     isEraEvent: true,
     conditions: { yearRange: [2025, 2045], excludeOutsideNPO: true },
     narrative:
-      '生成式 AI 快速進駐辦公室，公文草稿與會議逐字稿速度翻倍；但主管與理事也開始期待「既然現在有 AI，那明年方案數量跟社群貼文是不是可以再多做三成？」同時間大企業永續報告書需求暴增，身邊不斷有同業收到獵人頭邀請。',
+      '生成式 AI 快速進駐辦公室，公文草稿與會議逐字稿速度翻倍；但主管與{boardNoun}也開始期待「既然現在有 AI，那明年方案數量跟社群貼文是不是可以再多做三成？」同時間大企業永續報告書需求暴增，身邊不斷有同業收到獵人頭邀請。',
     choices: [
       {
         id: 'ai_for_worker_relief',
@@ -941,7 +941,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
           statsDelta: { energy: -6, purpose: 7, capital: 10, life: 4, impactScore: 12 },
         },
         outcomeText:
-          '你跟年輕專員坦白溝通預警期的重要性，同時逼自己與理事會戒掉「前兩天才臨時改議程」的壞習慣。三個月後，那位新人反而主動提出好幾個高效改善提案。',
+          '你跟年輕專員坦白溝通預警期的重要性，同時逼自己與{boardNoun}戒掉「前兩天才臨時改議程」的壞習慣。三個月後，那位新人反而主動提出好幾個高效改善提案。',
       },
       {
         id: 'lecture_passion',

@@ -257,6 +257,7 @@ export interface OrgContextTokens {
   lectureTopic: string;
   hometownOrg: string;
   bossTitle: string;
+  boardNoun: string;
   sectorFocus: string;
 }
 
@@ -270,6 +271,7 @@ export const ORG_CONTEXT_TOKENS: Record<OrgTypeId, OrgContextTokens> = {
     lectureTopic: '脆弱家庭處遇與方案核銷實務',
     hometownOrg: '家鄉縣市的社福服務中心',
     bossTitle: '執行長',
+    boardNoun: '董事會',
     sectorFocus: '脆弱家庭服務與兒少保護',
   },
   grassroots: {
@@ -281,6 +283,7 @@ export const ORG_CONTEXT_TOKENS: Record<OrgTypeId, OrgContextTokens> = {
     lectureTopic: '草根募款企劃與社區陪伴實戰',
     hometownOrg: '家鄉在地的社區發展協會',
     bossTitle: '理事長',
+    boardNoun: '理事會',
     sectorFocus: '社區照顧據點與民間陪伴',
   },
   local_foundation: {
@@ -292,6 +295,7 @@ export const ORG_CONTEXT_TOKENS: Record<OrgTypeId, OrgContextTokens> = {
     lectureTopic: '地方創生專案規劃與資源整合',
     hometownOrg: '老家縣市的文化教育基金會',
     bossTitle: '執行長',
+    boardNoun: '董事會',
     sectorFocus: '地方教育培力與社區營造',
   },
   advocacy_ngo: {
@@ -303,6 +307,7 @@ export const ORG_CONTEXT_TOKENS: Record<OrgTypeId, OrgContextTokens> = {
     lectureTopic: '政策遊說策略與公共溝通實戰',
     hometownOrg: '南部區域性議題倡議分會',
     bossTitle: '秘書長',
+    boardNoun: '理事會',
     sectorFocus: '制度倡議與社會對話',
   },
   corp_intl_ngo: {
@@ -314,6 +319,7 @@ export const ORG_CONTEXT_TOKENS: Record<OrgTypeId, OrgContextTokens> = {
     lectureTopic: '社會影響力評估與跨界公益合作',
     hometownOrg: '中南部的區域型基金會駐點',
     bossTitle: '執行長',
+    boardNoun: '董事會',
     sectorFocus: '永續影響力與跨界資源媒合',
   },
   academic_society: {
@@ -325,6 +331,7 @@ export const ORG_CONTEXT_TOKENS: Record<OrgTypeId, OrgContextTokens> = {
     lectureTopic: '人民團體會務運作與繼續教育系統治理',
     hometownOrg: '中南部大學附設的區域專業學會',
     bossTitle: '理事長',
+    boardNoun: '理事會',
     sectorFocus: '專業繼續教育與會務治理',
   },
   occupational_union: {
@@ -336,6 +343,7 @@ export const ORG_CONTEXT_TOKENS: Record<OrgTypeId, OrgContextTokens> = {
     lectureTopic: '職業災害給付申訴與勞健保會務實務',
     hometownOrg: '家鄉的縣市職業工會',
     bossTitle: '總幹事',
+    boardNoun: '理事會',
     sectorFocus: '基層勞健保服務與職災權益',
   },
   industrial_union: {
@@ -347,6 +355,7 @@ export const ORG_CONTEXT_TOKENS: Record<OrgTypeId, OrgContextTokens> = {
     lectureTopic: '集體勞動爭議調解與不當勞動行為裁決',
     hometownOrg: '家鄉工業區的聯合產業工會',
     bossTitle: '工會秘書長',
+    boardNoun: '理事會',
     sectorFocus: '集體勞動談判與團體協約',
   },
 };

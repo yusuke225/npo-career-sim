@@ -278,7 +278,7 @@ const EVOLUTIONS: EvolutionOutcome[] = [
     id: 'founded_new_npo',
     status: 'founded',
     label: () => '新創民間公益組織 · 共同發起人',
-    note: '不滿舊組織科層僵化，與幾位戰友湊了登記資本額自己立案，重回月領三萬二的草創期。',
+    note: '不滿舊組織科層僵化，與幾位戰友湊齊三十位發起人立案成立新協會，重回月領三萬二的草創期。',
     targetSalaryRange: [31000, 35000],
     minYears: 6,
     maxYears: 18,

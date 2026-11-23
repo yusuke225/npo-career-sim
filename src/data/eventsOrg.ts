@@ -252,7 +252,7 @@ export const ORG_EVENTS: GameEvent[] = [
     weight: 18,
     conditions: { orgTypes: ['industrial_union'], excludeOutsideNPO: true },
     narrative:
-      '你協助某高科技園區／傳產廠區秘密籌組企業工會已經三個月，距離三十人發起門檻只差最後五份連署書。不料昨晚有兩名熱心員工被廠長個別叫進會議室「關心最近是不是下班跟外面工會的人走很近」，群組瞬間人心惶惶，已有三人私訊想撤回連署。',
+      '你協助某大型企業或院區單位秘密籌組企業工會已經三個月，距離三十人發起門檻只差最後五份連署書。不料昨晚有兩名熱心員工被單位主管個別叫進會議室「關心最近是不是下班跟外面工會的人走很近」，群組瞬間人心惶惶，已有三人私訊想撤回連署。',
     choices: [
       {
         id: 'rush_register_and_protect',

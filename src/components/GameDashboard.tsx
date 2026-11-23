@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   AlertTriangle,
   Bot,
@@ -68,6 +68,21 @@ export function GameDashboard({
   onManualFinish,
 }: GameDashboardProps) {
   const [mobileTab, setMobileTab] = useState<'events' | 'status'>('events');
+  const pendingEventId = state.pendingEvent?.id ?? null;
+
+  useEffect(() => {
+    if (pendingEventId) {
+      setMobileTab('events');
+    }
+  }, [pendingEventId]);
+
+  const handleConfirmManualFinish = () => {
+    const actionLabel = state.age >= 55 ? '屆齡退休結算' : '中途離職結算';
+    if (window.confirm(`確定要提前「${actionLabel}」並結束本段職涯模擬嗎？`)) {
+      onManualFinish();
+    }
+  };
+
   const maxQuarters = state.maxYears * 4;
   const progressPct = Math.min(100, Math.round((state.totalQuartersElapsed / maxQuarters) * 100));
   const yearsText = (state.totalQuartersElapsed / 4).toFixed(1);
@@ -182,7 +197,7 @@ export function GameDashboard({
               <span>存檔回首頁</span>
             </button>
 
-            <button type="button" className="btn btn-sm btn-crimson" onClick={onManualFinish}>
+            <button type="button" className="btn btn-sm btn-crimson" onClick={handleConfirmManualFinish}>
               <Flag size={13} />
               <span>{state.age >= 55 ? '屆齡退休結算' : '中途離職結算'}</span>
             </button>

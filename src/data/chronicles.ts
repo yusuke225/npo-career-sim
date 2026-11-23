@@ -9,6 +9,7 @@ interface RoutineLine {
   roles?: RoleId[];
   onlyOutsideNPO?: boolean;
   excludeOutsideNPO?: boolean;
+  onlyRegular?: boolean;
   quarters?: Array<1 | 2 | 3 | 4>;
   focuses?: FocusId[];
   regions?: RegionId[];
@@ -283,6 +284,7 @@ const ROUTINE_LINES: RoutineLine[] = [
     title: '年終獎金入帳通知',
     text: '財務傳來今年的年終試算表，在物價上漲的年份裡，大家都默默盯著「0.8 個月還是 1.5 個月」那行字。',
     quarters: [4],
+    onlyRegular: true,
     excludeOutsideNPO: true,
   },
   {
@@ -322,7 +324,7 @@ const ROUTINE_LINES: RoutineLine[] = [
   {
     tag: '中生代處境',
     title: '夾在理監事與新人之間',
-    text: '一方面要替年輕專員擋掉不合理的臨時交辦，另一方面還要消化資深理事「以前我們都這樣做」的堅持。',
+    text: '一方面要替年輕專員擋掉不合理的臨時交辦，另一方面還要消化組織高層「以前我們都這樣做」的堅持。',
     minAge: 33,
     maxAge: 46,
     excludeOutsideNPO: true,
@@ -371,7 +373,7 @@ const ROUTINE_LINES: RoutineLine[] = [
   {
     tag: '中年體檢',
     title: '健檢報告上的數個紅字',
-    text: '翻著剛寄到的健檢報告，醫生叮嚀要注意血壓與胃食道逆流，少熬夜趕標案與少喝黑咖啡。',
+    text: '翻著剛寄到的健檢報告，醫生叮嚀要注意血壓與胃食道逆流，少熬夜趕業務與少喝黑咖啡。',
     minAge: 38,
   },
   {
@@ -440,7 +442,7 @@ const ROUTINE_LINES: RoutineLine[] = [
   {
     tag: '理監事會',
     title: '週末的會議紀錄逐字修正',
-    text: '星期六開了一整天理事會，禮拜一主管又退回會議紀錄說某位資深理事的措辭要改得「更圓融一點」。',
+    text: '星期六開了一整天理監事或董事會議，禮拜一主管又退回會議紀錄說某位資深委員的措辭要改得「更圓融一點」。',
     orgTypes: ['academic_society', 'industrial_union', 'occupational_union', 'grassroots'],
   },
   {
@@ -618,6 +620,7 @@ export function pickRoutineLine(state: SimulationState, rng = Math.random): Rout
       if (line.orgTypes && !line.orgTypes.includes(state.org.type)) return false;
       if (line.roles && !line.roles.includes(state.role)) return false;
     }
+    if (line.onlyRegular && state.employmentType !== 'regular') return false;
     if (line.quarters && !line.quarters.includes(state.currentQuarter)) return false;
     if (line.minAge !== undefined && state.age < line.minAge) return false;
     if (line.maxAge !== undefined && state.age > line.maxAge) return false;
