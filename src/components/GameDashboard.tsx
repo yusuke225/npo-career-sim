@@ -387,7 +387,7 @@ export function GameDashboard({
               <span className="font-mono">{exp.housing.toLocaleString()}</span>
             </div>
             <div className="finance-subline">
-              <span>基本生活與交通</span>
+              <span>生活、交通與保險雜支</span>
               <span className="font-mono">{exp.living.toLocaleString()}</span>
             </div>
             {exp.studentLoan > 0 && (

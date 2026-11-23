@@ -1539,5 +1539,141 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'life_expense_may_tax_and_weddings',
+    title: '五月報稅季撞上三張紅色炸彈：帳戶瞬間少掉半個月薪水',
+    category: 'life',
+    tag: '日常開銷衝擊',
+    weight: 16,
+    conditions: { minAge: 25, maxAge: 45 },
+    narrative:
+      '五月才剛刷完綜合所得稅、機車燃料稅與牌照稅，同一個禮拜桌曆上又連續出現大學同學、前同事與表妹的三場喜宴。紅包行情一張比一張高，看著網銀餘額數字，這個月連一杯手搖飲都要猶豫三秒。',
+    choices: [
+      {
+        id: 'attend_and_pay_full',
+        label: '人情還是得顧：照行情包完紅包並如期繳清稅單，勒緊褲帶過下個月',
+        sublabel: '存款一次減少 $18,000，守住親友與同儕人情',
+        effect: {
+          savingsDelta: -18000,
+          statsDelta: { energy: -3, life: 4 },
+        },
+        outcomeText:
+          '婚禮上大家都笑得很開心，只有你自己回家打開記帳 App 嘆了一口氣，決定接下來三週晚餐全部自己煮麵。',
+      },
+      {
+        id: 'selective_attend_budget',
+        label: '只挑最要好的一場出席，其餘禮到人不到並把稅款辦分期減輕現金壓力',
+        sublabel: '存款減少 $9,500，守住緊急預備金但略感人情疏離',
+        effect: {
+          savingsDelta: -9500,
+          statsDelta: { energy: 1, life: -3 },
+        },
+        outcomeText:
+          '雖然心裡有點不好意思，但至少沒有讓這個月帳戶見底，也學會量力而為才是長久之道。',
+      },
+    ],
+  },
+  {
+    id: 'life_expense_dental_root_canal',
+    title: '牙痛拖到半夜掛急診：牙醫宣布得做顯微根管與全瓷冠自費',
+    category: 'life',
+    tag: '醫療自費帳單',
+    weight: 16,
+    conditions: { minAge: 26, maxAge: 58 },
+    narrative:
+      '忙著趕專案一再延後洗牙與補牙，這週終於半夜痛到睡不著。牙醫照完 X 光搖搖頭說已經蛀到神經，想保住這顆臼齒得做顯微根管加上全瓷冠牙套，健保不給付，整套報價三萬二千元。',
+    choices: [
+      {
+        id: 'do_proper_crown',
+        label: '牙齒要用一輩子：咬牙刷卡做完整根管與牙套，徹底治好不留後患',
+        sublabel: '存款減少 $32,000，保住長期健康與生活品質',
+        effect: {
+          savingsDelta: -32000,
+          statsDelta: { energy: 4, life: 2 },
+        },
+        outcomeText:
+          '付錢那刻幾乎聽到存摺哀嚎，但終於能正常吃飯不再半夜痛醒，也下定決心以後再忙也要每半年定期看牙。',
+      },
+      {
+        id: 'cheaper_metal_or_delay',
+        label: '選最便宜的健保根管加基礎材質先撐著，能省一半是一半',
+        sublabel: '存款減少 $14,000，但治療過程折騰且恢復期不適',
+        effect: {
+          savingsDelta: -14000,
+          statsDelta: { energy: -5, life: -2 },
+        },
+        outcomeText:
+          '跑了五趟診所總算補起來，省下一萬八的代價是往後啃硬東西都得小心翼翼。',
+      },
+    ],
+  },
+  {
+    id: 'life_expense_laptop_phone_dead',
+    title: '陪伴五年的筆電與手機同月罷工：不換連工作群組都回不了',
+    category: 'life',
+    tag: '3C 設備汰換',
+    weight: 15,
+    conditions: { minAge: 24, maxAge: 55 },
+    narrative:
+      '組織沒配公務手機、筆電也早已過保卡頓，偏偏這週你自己的筆電主機板燒掉，手機電池也膨脹到自動關機。明天還要交計畫簡報跟回工作 LINE，只好衝去賣場看著動輒兩三萬的標價發呆。',
+    choices: [
+      {
+        id: 'buy_reliable_new_gear',
+        label: '一次換成耐用中階新機，免得開會簡報到一半又藍屏社死',
+        sublabel: '存款減少 $28,000，工作效率與日常順暢度大幅提升',
+        effect: {
+          savingsDelta: -28000,
+          statsDelta: { energy: 3, capital: 2, life: 2 },
+        },
+        outcomeText:
+          '新筆電三秒開機的那一刻確實很爽，只是分期帳單會提醒你這筆支出整整半年的時間。',
+      },
+      {
+        id: 'buy_refurbished_and_repair',
+        label: '手機只花錢換副廠電池、筆電買二手整新機先頂著用',
+        sublabel: '存款減少 $12,000，守住現金流但設備偶爾還是卡頓',
+        effect: {
+          savingsDelta: -12000,
+          statsDelta: { energy: -4, life: -2 },
+        },
+        outcomeText:
+          '靠著逛拍賣網站跟維修小店省下一萬六，雖然新買的二手筆電風扇聲像吹風機，至少簡報順利交卷了。',
+      },
+    ],
+  },
+  {
+    id: 'life_expense_insurance_and_home_appliance',
+    title: '商業醫療險保費調漲＋租屋家電汰換：成年人的隱形固定帳單',
+    category: 'life',
+    tag: '風險防護與生活費',
+    weight: 15,
+    conditions: { minAge: 28, maxAge: 52 },
+    narrative:
+      '月底一次收到兩張通知：年繳的實支實付醫療與意外險因年齡級距與條款調整一次調漲，同時間家裡除濕機與熱水器也雙雙故障。這類平常不會算進月薪試算表的隱形開銷，總在最沒防備的時候一起報到。',
+    choices: [
+      {
+        id: 'keep_full_insurance_and_replace',
+        label: '醫療保障不能斷！照繳年保費並把壞掉的家電一次換新',
+        sublabel: '存款減少 $24,000，守住生病時的風險底線與居住舒適度',
+        effect: {
+          savingsDelta: -24000,
+          statsDelta: { energy: 2, life: 4 },
+        },
+        outcomeText:
+          '看著帳戶數字縮水一截，但想到身邊曾有同業沒買保險住院差點借錢，還是覺得這筆保命錢不能省。',
+      },
+      {
+        id: 'trim_insurance_and_diy',
+        label: '請保險業務把保單瘦身成最陽春的基礎方案，家電先買便宜二手貨湊合',
+        sublabel: '存款減少 $11,000，短期壓力減輕但未來抗風險能力下降',
+        effect: {
+          savingsDelta: -11000,
+          statsDelta: { energy: -3, life: -3 },
+        },
+        outcomeText:
+          '帳面現金守住了，但半夜聽著二手除濕機喀喀作響，心裡也明白低薪最可怕的是連風險緩衝都得打折。',
+      },
+    ],
+  },
 ];
 
