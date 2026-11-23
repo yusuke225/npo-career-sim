@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Archive,
   ChevronDown,
@@ -6,6 +6,7 @@ import {
   Dices,
   Play,
   SlidersHorizontal,
+  Smartphone,
   Trash2,
 } from 'lucide-react';
 import faviconImg from '../assets/favicon.png';
@@ -31,6 +32,11 @@ import type {
   ThemeMode,
 } from '../types/game';
 import { ThemeToggle } from './ThemeToggle';
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
 
 interface LandingScreenProps {
   theme: ThemeMode;
@@ -60,7 +66,52 @@ export function LandingScreen({
   onOpenArchive,
 }: LandingScreenProps) {
   const [showCustom, setShowCustom] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [showInstallGuide, setShowInstallGuide] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
   const [orgType, setOrgType] = useState<OrgTypeId>('large_welfare');
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const standalone =
+      window.matchMedia?.('(display-mode: standalone)').matches ||
+      Boolean((window.navigator as Navigator & { standalone?: boolean }).standalone);
+    setIsStandalone(standalone);
+
+    const handleBeforeInstall = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+    };
+    const handleInstalled = () => {
+      setDeferredPrompt(null);
+      setShowInstallGuide(false);
+      setIsStandalone(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    window.addEventListener('appinstalled', handleInstalled);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+      window.removeEventListener('appinstalled', handleInstalled);
+    };
+  }, []);
+
+  const handleAddToHomeScreen = async () => {
+    if (deferredPrompt) {
+      await deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      if (choice.outcome === 'accepted') {
+        setDeferredPrompt(null);
+        setShowInstallGuide(false);
+      }
+      return;
+    }
+    setShowInstallGuide((prev) => !prev);
+  };
+
+  const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+  const isInAppBrowser = /Line|FBAN|FBAV|Instagram/i.test(ua);
+  const isIOS = /iPhone|iPad|iPod/i.test(ua);
   const [role, setRole] = useState<RoleId>('social_worker');
   const [region, setRegion] = useState<RegionId>('taipei_metro');
   const [background, setBackground] = useState<BackgroundTierId>('independent');
@@ -195,7 +246,44 @@ export function LandingScreen({
             <span>自選組織與起點</span>
             {showCustom ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
           </button>
+          {!isStandalone && (
+            <button
+              type="button"
+              className="btn"
+              onClick={handleAddToHomeScreen}
+              aria-expanded={showInstallGuide}
+              title="將本網站釘選到手機桌面，像 App 一樣快速開啟"
+            >
+              <Smartphone size={16} />
+              <span>加入手機主畫面</span>
+            </button>
+          )}
         </div>
+        {showInstallGuide && !isStandalone && (
+          <div
+            className="org-preview-box"
+            style={{ marginTop: 12, fontSize: 13, lineHeight: 1.7 }}
+          >
+            <strong>如何將本模擬器加到手機桌面：</strong>
+            {isInAppBrowser ? (
+              <div>
+                目前偵測到您正在 LINE / Facebook / IG 內建瀏覽器開啟。請先點選畫面右上角或右下角選單，選擇「
+                <strong>以預設瀏覽器開啟（Safari / Chrome）</strong>」，再執行「加入主畫面」。
+              </div>
+            ) : isIOS ? (
+              <div>
+                請點擊 Safari 下方工具列的「<strong>分享（↑）</strong>」按鈕，往下滑選擇「
+                <strong>加入主畫面</strong>」，再點右上角「新增」即可在桌面建立捷徑。
+              </div>
+            ) : (
+              <div>
+                請點擊瀏覽器右上角「<strong>⋮ 選單</strong>」，選擇「
+                <strong>加入主畫面</strong>」或「<strong>安裝應用程式</strong>」即可建立桌面捷徑（iPhone
+                請用 Safari 點下方分享鈕 → 加入主畫面）。
+              </div>
+            )}
+          </div>
+        )}
         <p style={{ margin: '10px 0 0', fontSize: 12, color: 'var(--ink-muted)' }}>
           註：遊戲可以中途存檔，但同時只能保存一段職涯。推薦以電腦瀏覽器遊玩。
         </p>
