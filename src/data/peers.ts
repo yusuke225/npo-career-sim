@@ -140,118 +140,174 @@ export function generateCohortPeers(
   });
 }
 
+function roundToHundred(value: number): number {
+  return Math.round(value / 100) * 100;
+}
+
 interface EvolutionOutcome {
+  id: string;
   status: PeerStatus;
+  getStatus?: (peer: PeerWorker) => PeerStatus;
   label: (peer: PeerWorker) => string;
   note: string;
-  salaryDelta: number;
+  salaryDelta?: number;
+  targetSalaryRange?: [number, number];
+  minSalaryAfter?: number;
+  maxSalaryAfter?: number;
   minYears: number;
+  maxYears?: number;
   weight: number;
   orgFilter?: OrgTypeId[];
+  isEligible?: (peer: PeerWorker) => boolean;
 }
 
 const EVOLUTIONS: EvolutionOutcome[] = [
   {
+    id: 'promoted_senior_supervisor',
     status: 'promoted',
     label: (p) => `${p.startOrgLabel} · 資深專員暨督導`,
-    note: '熬過前輩離職潮成為組織台柱，薪水微調但扛起所有新人教育與評鑑。',
+    note: '熬過前輩離職潮成為組織台柱，薪水調升但也扛起新人教育與評鑑。',
     salaryDelta: 5500,
+    minSalaryAfter: 41000,
+    maxSalaryAfter: 56000,
     minYears: 3,
     weight: 18,
+    isEligible: (p) =>
+      (p.currentStatus === 'active' || p.currentStatus === 'promoted') &&
+      !p.currentLabel.includes('資深專員暨督導') &&
+      !p.currentLabel.includes('秘書長') &&
+      !p.currentLabel.includes('總幹事'),
   },
   {
+    id: 'promoted_society_sg',
     status: 'promoted',
     label: () => '全國性專業學會 · 專任秘書長',
     note: '理事長換了兩屆還是只有其熟悉內政部人團法與學分系統，默默升為專任秘書長。',
-    salaryDelta: 9000,
+    salaryDelta: 8500,
+    minSalaryAfter: 46000,
+    maxSalaryAfter: 62000,
     minYears: 5,
     weight: 22,
     orgFilter: ['academic_society'],
+    isEligible: (p) =>
+      (p.currentStatus === 'active' || p.currentStatus === 'promoted') &&
+      !p.currentLabel.includes('秘書長'),
   },
   {
+    id: 'promoted_union_director',
     status: 'promoted',
     label: () => '跨廠區聯合工會 · 總幹事',
     note: '接連打贏兩件不當勞動行為裁決案後，轉任總幹事並兼顧勞教培訓。',
     salaryDelta: 7500,
+    minSalaryAfter: 45000,
+    maxSalaryAfter: 60000,
     minYears: 4,
     weight: 24,
     orgFilter: ['industrial_union', 'occupational_union'],
+    isEligible: (p) =>
+      (p.currentStatus === 'active' || p.currentStatus === 'promoted') &&
+      !p.currentLabel.includes('總幹事'),
   },
   {
+    id: 'pivoted_corp_esg',
     status: 'pivoted',
     label: () => '星辰科技聯盟 · ESG 永續管理師',
     note: '憑藉長期政策研究與企業募款對接經驗轉戰企業 ESG 部門，月薪顯著調升且準時下班，偶爾仍會關注老戰友動態。',
-    salaryDelta: 14000,
+    targetSalaryRange: [54000, 68000],
     minYears: 5,
-    weight: 6,
+    weight: 4,
     orgFilter: ['corp_intl_ngo', 'advocacy_ngo', 'local_foundation'],
+    isEligible: (p) => p.currentStatus !== 'pivoted' && p.currentStatus !== 'founded',
   },
   {
+    id: 'pivoted_public_sw',
     status: 'pivoted',
     label: () => '縣市政府社福中心 · 約聘社工督導',
     note: '考進公部門社政體系，福利與年終終於穩定，改從政府補助審查端看過去自己貼過的核銷單據。',
-    salaryDelta: 7500,
+    targetSalaryRange: [45000, 52000],
     minYears: 4,
-    weight: 10,
+    weight: 5,
     orgFilter: ['large_welfare', 'grassroots', 'local_foundation'],
+    isEligible: (p) => p.currentStatus !== 'pivoted' && p.currentStatus !== 'founded',
   },
   {
+    id: 'pivoted_labor_bureau',
     status: 'pivoted',
     label: () => '地方政府勞動局 · 勞資爭議調解專員',
     note: '帶著工會與勞動法規實戰資歷轉任公部門調解與勞動行政職，工時比工運現場正常許多。',
-    salaryDelta: 6500,
+    targetSalaryRange: [42000, 49000],
     minYears: 4,
-    weight: 9,
+    weight: 5,
     orgFilter: ['industrial_union', 'occupational_union'],
+    isEligible: (p) => p.currentStatus !== 'pivoted' && p.currentStatus !== 'founded',
   },
   {
+    id: 'pivoted_sme_hr',
     status: 'pivoted',
     label: () => '一般中小企業 · 行政人資暨專案管理',
     note: '厭倦換屆改選內耗與低薪凍漲，決定轉回一般商業辦公室領固定年終、過單純的朝九晚六生活。',
-    salaryDelta: 5500,
+    targetSalaryRange: [40000, 48000],
     minYears: 3,
-    weight: 9,
+    weight: 5,
     orgFilter: ['academic_society', 'grassroots', 'occupational_union'],
+    isEligible: (p) => p.currentStatus !== 'pivoted' && p.currentStatus !== 'founded',
   },
   {
+    id: 'studying_grad_school',
     status: 'studying',
     label: () => '在職進修 · 社福公衛碩士班',
     note: '暫時退出全職高壓工作，邊念研究所邊接研究助理案，想替自己的職涯換口氣。',
-    salaryDelta: -8000,
+    targetSalaryRange: [26000, 32000],
     minYears: 2,
-    weight: 11,
+    maxYears: 14,
+    weight: 6,
+    isEligible: (p) =>
+      p.currentStatus !== 'studying' && p.currentStatus !== 'pivoted' && p.currentStatus !== 'founded',
   },
   {
+    id: 'resting_career_gap',
     status: 'resting',
     label: () => '離職轉行摸索中 · 去向未定',
-    note: '還沒到能退休的年紀卻已撐不下去，遞出辭呈後暫時離開非營利圈，還在摸索下一步該轉行去哪裡。',
-    salaryDelta: -18000,
+    note: '還沒到能退休的年紀卻已撐不下去，遞出辭呈後暫時離開非營利圈，先靠零星接案或兼職維持生活、摸索下一步。',
+    targetSalaryRange: [22000, 28500],
     minYears: 2,
-    weight: 14,
+    weight: 8,
+    isEligible: (p) =>
+      p.currentStatus !== 'resting' && p.currentStatus !== 'pivoted' && p.currentStatus !== 'founded',
   },
   {
+    id: 'founded_new_npo',
     status: 'founded',
     label: () => '新創民間公益組織 · 共同發起人',
     note: '不滿舊組織科層僵化，與幾位戰友湊了登記資本額自己立案，重回月領三萬二的草創期。',
-    salaryDelta: -4000,
+    targetSalaryRange: [31000, 35000],
     minYears: 6,
-    weight: 10,
+    maxYears: 18,
+    weight: 4,
+    isEligible: (p) => p.currentStatus === 'active' || p.currentStatus === 'promoted',
   },
   {
+    id: 'active_steady_grind',
     status: 'active',
+    getStatus: (p) => (p.currentStatus === 'promoted' ? 'promoted' : 'active'),
     label: (p) => p.currentLabel,
     note: '仍在原崗位迎戰今年度大會與核銷季，笑稱自己已經練成「對突發狀況面無表情」的體質。',
-    salaryDelta: 800,
+    salaryDelta: 1200,
+    minSalaryAfter: 32000,
+    maxSalaryAfter: 62000,
     minYears: 1,
-    weight: 20,
+    weight: 28,
+    isEligible: (p) => p.currentStatus === 'active' || p.currentStatus === 'promoted',
   },
   {
+    id: 'active_return_to_field',
     status: 'active',
     label: (p) => `${p.startOrgLabel} · 調整步調後重返現場`,
     note: '經過休養或進修重新整隊出發，換了更有制度的單位繼續留在民間部門。',
-    salaryDelta: 3500,
+    targetSalaryRange: [35000, 43000],
     minYears: 3,
-    weight: 16,
+    weight: 26,
+    isEligible: (p) => p.currentStatus === 'resting' || p.currentStatus === 'studying',
   },
 ];
 
@@ -263,27 +319,31 @@ export function advancePeersForYear(
 ): PeerWorker[] {
   return peers.map((peer) => {
     const nextAge = peer.age + 1;
-    // 約 42% 機率今年發生可見動向更新，其餘保持穩定
+    // 約 45% 機率今年發生可見動向更新，其餘依現況反映緩步微調或凍薪
     if (rng() > 0.45) {
+      let passiveSalary = peer.salaryEstimate;
+      if (peer.currentStatus === 'pivoted') {
+        if (rng() < 0.65 && passiveSalary < 88000) {
+          passiveSalary = Math.min(88000, roundToHundred(passiveSalary * 1.022));
+        }
+      } else if (peer.currentStatus !== 'resting' && peer.currentStatus !== 'studying') {
+        const cap = peer.currentStatus === 'promoted' ? 66000 : 56000;
+        if (rng() < 0.35 && passiveSalary < cap) {
+          passiveSalary = Math.min(cap, Math.max(28590, roundToHundred(passiveSalary * 1.015)));
+        }
+      }
       return {
         ...peer,
         age: nextAge,
+        salaryEstimate: passiveSalary,
       };
     }
 
     const eligible = EVOLUTIONS.filter((ev) => {
       if (yearsElapsed < ev.minYears) return false;
+      if (ev.maxYears !== undefined && yearsElapsed > ev.maxYears) return false;
       if (ev.orgFilter && !ev.orgFilter.includes(peer.orgType)) return false;
-      // 防止狀態與職稱文字錯位殘留
-      if (ev.note.startsWith('仍在原崗位') && peer.currentStatus !== 'active' && peer.currentStatus !== 'promoted') {
-        return false;
-      }
-      if (ev.note.startsWith('經過休養或進修') && peer.currentStatus !== 'resting' && peer.currentStatus !== 'studying') {
-        return false;
-      }
-      // 已轉出至企業的不容易突然變回學會秘書長
-      if (peer.currentStatus === 'pivoted' && ev.status === 'promoted') return false;
-      if (peer.currentStatus === 'founded' && ev.status === 'resting') return false;
+      if (ev.isEligible && !ev.isEligible(peer)) return false;
       return true;
     });
 
@@ -302,8 +362,26 @@ export function advancePeersForYear(
       }
     }
 
+    const nextStatus = chosen.getStatus ? chosen.getStatus(peer) : chosen.status;
     const nextLabel = chosen.label(peer);
-    const nextSalary = Math.max(27470, Math.min(92000, peer.salaryEstimate + chosen.salaryDelta));
+    let nextSalary = peer.salaryEstimate;
+    if (chosen.targetSalaryRange) {
+      nextSalary = roundToHundred(
+        randomInt(chosen.targetSalaryRange[0], chosen.targetSalaryRange[1], rng)
+      );
+    } else if (chosen.salaryDelta !== undefined) {
+      nextSalary = roundToHundred(peer.salaryEstimate + chosen.salaryDelta);
+    }
+    if (chosen.minSalaryAfter !== undefined) {
+      nextSalary = Math.max(chosen.minSalaryAfter, nextSalary);
+    }
+    if (chosen.maxSalaryAfter !== undefined) {
+      nextSalary = Math.min(chosen.maxSalaryAfter, nextSalary);
+    }
+    const overallFloor =
+      nextStatus === 'resting' || nextStatus === 'studying' ? 22000 : 28590;
+    nextSalary = Math.max(overallFloor, Math.min(92000, nextSalary));
+
     const historyEntry = `${currentYear}｜${nextLabel}`;
     const nextHistory =
       peer.history[peer.history.length - 1] === historyEntry
@@ -311,14 +389,14 @@ export function advancePeersForYear(
         : [...peer.history.slice(-3), historyEntry];
 
     const extraTag =
-      chosen.status === 'pivoted' && peer.orgType !== 'corp_intl_ngo'
+      nextStatus === 'pivoted' && peer.orgType !== 'corp_intl_ngo'
         ? `（原${ORG_TYPES[peer.orgType].shortLabel}）`
         : '';
 
     return {
       ...peer,
       age: nextAge,
-      currentStatus: chosen.status,
+      currentStatus: nextStatus,
       currentLabel: nextLabel,
       latestNote: `${chosen.note}${extraTag}`,
       salaryEstimate: nextSalary,
