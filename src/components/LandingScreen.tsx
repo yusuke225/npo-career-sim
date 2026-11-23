@@ -41,10 +41,12 @@ interface BeforeInstallPromptEvent extends Event {
 interface LandingScreenProps {
   theme: ThemeMode;
   pace: PaceMode;
+  playerName: string;
   archiveCount: number;
   savedCareer: SimulationState | null;
   onToggleTheme: () => void;
   onChangePace: (pace: PaceMode) => void;
+  onChangePlayerName: (name: string) => void;
   onStartRandom: () => void;
   onStartCustom: (config: StartConfigInput) => void;
   onResumeCareer: () => void;
@@ -55,10 +57,12 @@ interface LandingScreenProps {
 export function LandingScreen({
   theme,
   pace,
+  playerName,
   archiveCount,
   savedCareer,
   onToggleTheme,
   onChangePace,
+  onChangePlayerName,
   onStartRandom,
   onStartCustom,
   onResumeCareer,
@@ -229,6 +233,21 @@ export function LandingScreen({
               濃縮 16 年（64 季），約 14–16 個核心兩難抉擇，適合單次快速體驗（約 8–10 分鐘）
             </div>
           </button>
+        </div>
+
+        <div className="field-group" style={{ marginBottom: 18, maxWidth: 360 }}>
+          <label className="field-label" htmlFor="inp-player-name">
+            你的姓名／暱稱（選填，留空將隨機命名）
+          </label>
+          <input
+            id="inp-player-name"
+            type="text"
+            className="field-select"
+            maxLength={16}
+            value={playerName}
+            onChange={(e) => onChangePlayerName(e.target.value)}
+            placeholder="例如：林小安（留空則隨機抽取）"
+          />
         </div>
 
         <div className="hero-actions">
@@ -429,6 +448,7 @@ export function LandingScreen({
                   employmentType,
                   startAge,
                   pace,
+                  playerName,
                 })
               }
             >

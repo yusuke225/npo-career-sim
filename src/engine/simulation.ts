@@ -207,7 +207,11 @@ function pickRoleForOrg(orgType: OrgTypeId, rng: () => number): RoleId {
   return pickRandom(allowed, rng);
 }
 
-export function generateRandomStart(pace: PaceMode, rng = Math.random): SimulationState {
+export function generateRandomStart(
+  pace: PaceMode,
+  rng = Math.random,
+  customPlayerName?: string
+): SimulationState {
   const orgCfg = pickWeighted(ORG_TYPE_LIST, rng);
   const role = pickRoleForOrg(orgCfg.id, rng);
   const regionCfg = pickWeighted(Object.values(REGIONS), rng);
@@ -233,6 +237,7 @@ export function generateRandomStart(pace: PaceMode, rng = Math.random): Simulati
       employmentType,
       startAge,
       pace,
+      playerName: customPlayerName,
     },
     true,
     rng
@@ -338,7 +343,8 @@ export function buildStateFromConfig(
   const orgName = pickRandom(orgCfg.namePool, rng);
   const issueArea = pickRandom(orgCfg.issuePool, rng);
   const boardClimate = pickRandom(orgCfg.boardClimates, rng);
-  const playerName = pickRandom(PLAYER_NAME_POOL, rng);
+  const customName = input.playerName?.trim().slice(0, 16);
+  const playerName = customName || pickRandom(PLAYER_NAME_POOL, rng);
   const docNumber = generateDocNumber(orgCfg.id, startYear, rng);
 
   // 估算結構稀有度文句（與台灣整體生態對照）

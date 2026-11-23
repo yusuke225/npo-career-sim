@@ -4,6 +4,7 @@ import { CareerSummary } from './components/CareerSummary';
 import { GameDashboard } from './components/GameDashboard';
 import { IntakeCertificate } from './components/IntakeCertificate';
 import { LandingScreen } from './components/LandingScreen';
+import { PLAYER_NAME_POOL, pickRandom } from './data/organizations';
 import {
   ARCHIVE_STORAGE_KEY,
   advanceQuarter,
@@ -50,6 +51,7 @@ export function App() {
   const [speed, setSpeed] = useState<1 | 2 | 4 | 8>(1);
   const [autoDecide, setAutoDecide] = useState(false);
   const [lastCustomConfig, setLastCustomConfig] = useState<StartConfigInput | null>(null);
+  const [customPlayerName, setCustomPlayerName] = useState('');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -66,11 +68,11 @@ export function App() {
 
   const handleStartRandom = useCallback(() => {
     setLastCustomConfig(null);
-    const fresh = generateRandomStart(pace);
+    const fresh = generateRandomStart(pace, Math.random, customPlayerName);
     setSimState(fresh);
     setViewingArchive(null);
     setScreen('intake');
-  }, [pace]);
+  }, [pace, customPlayerName]);
 
   const handleStartCustom = useCallback((config: StartConfigInput) => {
     setLastCustomConfig(config);
@@ -82,18 +84,32 @@ export function App() {
 
   const handleReroll = useCallback(() => {
     const fresh = lastCustomConfig
-      ? buildStateFromConfig(lastCustomConfig, false)
-      : generateRandomStart(pace);
+      ? buildStateFromConfig({ ...lastCustomConfig, playerName: customPlayerName }, false)
+      : generateRandomStart(pace, Math.random, customPlayerName);
     setSimState(fresh);
-  }, [lastCustomConfig, pace]);
+  }, [lastCustomConfig, pace, customPlayerName]);
+
+  const handleChangePlayerName = useCallback((name: string) => {
+    const sliced = name.slice(0, 16);
+    setCustomPlayerName(sliced);
+    setSimState((prev) => (prev ? { ...prev, playerName: sliced } : prev));
+  }, []);
 
   const handleConfirmStart = useCallback(() => {
     setIsPlaying(true);
     setAutoDecide(false);
     setSpeed(1);
     if (simState && !simState.isEnded) {
-      saveActiveCareer(simState);
-      setSavedCareer(simState);
+      const normalizedName = simState.playerName.trim().slice(0, 16) || pickRandom(PLAYER_NAME_POOL);
+      const readyState =
+        normalizedName === simState.playerName
+          ? simState
+          : { ...simState, playerName: normalizedName };
+      if (readyState !== simState) {
+        setSimState(readyState);
+      }
+      saveActiveCareer(readyState);
+      setSavedCareer(readyState);
     }
     setScreen('playing');
   }, [simState]);
@@ -237,10 +253,12 @@ export function App() {
         <LandingScreen
           theme={theme}
           pace={pace}
+          playerName={customPlayerName}
           archiveCount={archives.length}
           savedCareer={savedCareer}
           onToggleTheme={toggleTheme}
           onChangePace={setPace}
+          onChangePlayerName={setCustomPlayerName}
           onStartRandom={handleStartRandom}
           onStartCustom={handleStartCustom}
           onResumeCareer={handleResumeCareer}
@@ -254,6 +272,7 @@ export function App() {
           state={simState}
           theme={theme}
           onToggleTheme={toggleTheme}
+          onChangePlayerName={handleChangePlayerName}
           onConfirmStart={handleConfirmStart}
           onReroll={handleReroll}
           onBackHome={() => setScreen('landing')}

@@ -271,6 +271,7 @@ export interface StartConfigInput {
   employmentType?: EmploymentType;
   startAge: number;
   pace: PaceMode;
+  playerName?: string;
 }
 
 export interface SimulationState {

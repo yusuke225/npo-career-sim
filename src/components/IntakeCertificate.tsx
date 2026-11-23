@@ -7,6 +7,7 @@ interface IntakeCertificateProps {
   state: SimulationState;
   theme: ThemeMode;
   onToggleTheme: () => void;
+  onChangePlayerName: (name: string) => void;
   onConfirmStart: () => void;
   onReroll: () => void;
   onBackHome: () => void;
@@ -16,6 +17,7 @@ export function IntakeCertificate({
   state,
   theme,
   onToggleTheme,
+  onChangePlayerName,
   onConfirmStart,
   onReroll,
   onBackHome,
@@ -55,9 +57,21 @@ export function IntakeCertificate({
 
         <div className="cert-table">
           <div className="cert-cell">
-            <div className="cert-cell-label">受僱者姓名／報到年齡</div>
-            <div className="cert-cell-value">
-              {state.playerName}（{state.startAge} 歲 · {state.startYear} 年入行）
+            <label className="cert-cell-label" htmlFor="cert-player-name">
+              受僱者姓名（可修改）／報到年齡
+            </label>
+            <div className="cert-cell-value" style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+              <input
+                id="cert-player-name"
+                type="text"
+                className="field-select"
+                maxLength={16}
+                value={state.playerName}
+                onChange={(e) => onChangePlayerName(e.target.value)}
+                style={{ width: 150, padding: '4px 8px', fontSize: 14 }}
+                aria-label="受僱者姓名"
+              />
+              <span>（{state.startAge} 歲 · {state.startYear} 年入行）</span>
             </div>
           </div>
 
