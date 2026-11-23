@@ -116,7 +116,7 @@ const ROUTINE_LINES: RoutineLine[] = [
     orgTypes: ['industrial_union'],
   },
 
-  // === 職業工會／總工會專屬日常 ===
+  // === 職業工會專屬日常 ===
   {
     tag: '職業工會',
     title: '勞健保加退保櫃檯高峰',
@@ -150,7 +150,7 @@ const ROUTINE_LINES: RoutineLine[] = [
   },
   {
     tag: '工會政治',
-    title: '總工會改選前的茶壺風波',
+    title: '理監事改選前的茶壺風波',
     text: '不同派系理事輪流來辦公室泡茶探口風，你保持禮貌微笑繼續把手上的月報表打完。',
     orgTypes: ['occupational_union'],
   },

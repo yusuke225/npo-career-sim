@@ -221,8 +221,8 @@ export const ORG_TYPES: Record<OrgTypeId, OrgTypeConfig> = {
   },
   occupational_union: {
     id: 'occupational_union',
-    label: '職業工會／區域總工會',
-    shortLabel: '職業/總工會',
+    label: '職業工會（基層自營／無一定雇主）',
+    shortLabel: '職業工會',
     legalForm: '工會法人（工會法）',
     weight: 5,
     sizeLabel: '專職 3–18 人',
@@ -236,7 +236,7 @@ export const ORG_TYPES: Record<OrgTypeId, OrgTypeConfig> = {
       '都會區空間裝修從業人員職業工會',
       '海風餐飲與烘焙勞動者職業工會',
       '春山造型與個人服務職業工會',
-      '島嶼跨業勞動者聯合總工會',
+      '都會區汽車修護與運輸從業人員職業工會',
     ],
     issuePool: ['勞健保與職災給付代辦', '自營作業者職訓課程', '勞資糾紛與調解諮詢', '基層會員服務與動員'],
     structuralSummary:
@@ -334,7 +334,7 @@ export const ORG_CONTEXT_TOKENS: Record<OrgTypeId, OrgContextTokens> = {
     fieldMove: '跑職業訓練教室與勞保局送件',
     certGoal: '就業服務乙級證照與勞動法實務班',
     lectureTopic: '職業災害給付申訴與勞健保會務實務',
-    hometownOrg: '家鄉的縣市總工會',
+    hometownOrg: '家鄉的縣市職業工會',
     bossTitle: '總幹事',
     sectorFocus: '基層勞健保服務與職災權益',
   },

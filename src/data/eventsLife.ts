@@ -464,7 +464,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
           statsDelta: { energy: 3, capital: 6, life: 4, impactScore: 5 },
         },
         outcomeText:
-          '你把學費省下來當緊急預備金，同時建立起自己的專案與調解案例資料庫，一樣成為圈內搶手的實戰派。',
+          '你把學費省下來當緊急預備金，同時建立起自己的專案與實務案例資料庫，一樣成為圈內搶手的實戰派。',
       },
     ],
   },
@@ -1176,7 +1176,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     weight: 24,
     conditions: { maxPurpose: 50, excludeOutsideNPO: true },
     narrative:
-      '又解決完一個個案，下週又來三個一模一樣的案件；剛打贏一場調解，同一家公司換個部門繼續違法；剛辦完一場大活動，理事還是照舊只在意大合照位置。你坐在書桌前望著熄掉的螢幕，突然徹底感受不到這些努力的意義。',
+      '又忙完一輪{weekendTask}，下週結構問題依舊原地打轉；好不容易熬夜交出專案與報告，卻彷彿沒人真正看見{targetNoun}的處境。你坐在書桌前望著熄掉的螢幕，突然徹底感受不到這些努力的意義。',
     choices: [
       {
         id: 'seek_peer_support_circle',
@@ -1409,7 +1409,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     weight: 14,
     conditions: { minAge: 36, maxAge: 56 },
     narrative:
-      '當年手把手教你寫第一個計畫書、帶你去勞動局跑調解的資深前輩住進了加護病房。他奉獻了三十年給台灣民間運動與社福界，名下沒有房產、存款有限，病房外擠滿了各團體趕來輪班照顧的後輩。看著病床上的他，你彷彿看見某種版本的未來。',
+      '當年手把手教你寫第一個計畫書、帶你一起{fieldMove}的資深前輩住進了加護病房。他奉獻了三十年給台灣民間社會與基層現場，名下沒有房產、存款有限，病房外擠滿了各團體趕來輪班照顧的後輩。看著病床上的他，你彷彿看見某種版本的未來。',
     choices: [
       {
         id: 'organize_mutual_aid_fund',
