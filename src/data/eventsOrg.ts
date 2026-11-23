@@ -2147,7 +2147,7 @@ export const ORG_EVENTS: GameEvent[] = [
     weight: 16,
     conditions: {
       excludeOutsideNPO: true,
-      excludeOrgTypes: ['corp_intl_ngo', 'industrial_union', 'academic_society', 'advocacy_ngo'],
+      orgTypes: ['large_welfare', 'grassroots', 'local_foundation'],
       employmentTypes: ['regular'],
       minTenure: 2,
     },

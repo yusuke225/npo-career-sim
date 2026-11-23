@@ -85,8 +85,10 @@ try {
   );
   const illegalTerm = sim.ALL_EVENTS.find((e) => e.id === 'labor_illegal_termination');
   assert.ok(
-    illegalTerm?.conditions?.excludeOrgTypes?.includes('industrial_union'),
-    'labor_illegal_termination must exclude industrial_union'
+    illegalTerm?.conditions?.orgTypes &&
+      !illegalTerm.conditions.orgTypes.includes('industrial_union') &&
+      !illegalTerm.conditions.orgTypes.includes('occupational_union'),
+    'labor_illegal_termination must not trigger for unions'
   );
 
   // 3. Validate employment-type pension & expense rules
