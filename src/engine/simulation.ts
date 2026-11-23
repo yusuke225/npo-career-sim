@@ -444,7 +444,7 @@ export function buildStateFromConfig(
 }
 
 function interpolateText(text: string, state: SimulationState): string {
-  const tokens = ORG_CONTEXT_TOKENS[state.startOrgType];
+  const tokens = ORG_CONTEXT_TOKENS[state.org.type];
   return text
     .replaceAll('{orgNoun}', tokens.orgNoun)
     .replaceAll('{targetNoun}', tokens.targetNoun)

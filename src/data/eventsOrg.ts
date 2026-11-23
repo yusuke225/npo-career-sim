@@ -2363,4 +2363,537 @@ export const ORG_EVENTS: GameEvent[] = [
       },
     ],
   },
+
+  // =========================================================================
+  // v0.121 新增：八大組織專屬沉浸事件（各類 +2 則）
+  // =========================================================================
+  {
+    id: 'welfare_media_privacy_clash',
+    title: '媒體採訪的倫理拉扯：公關希望「拍受助家庭淚灑鏡頭」衝勸募',
+    category: 'work',
+    tag: '大型社福倫理現場',
+    weight: 18,
+    conditions: { orgTypes: ['large_welfare'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '年底大型勸募起跑，公關組接洽電視台專題採訪，對方製作人明講：「要有受助阿嬤和小朋友在租屋處落淚的畫面，募款電話才會響。」但你很清楚，這戶脆弱家庭的孩子下週還要去學校面對同學眼光。',
+    choices: [
+      {
+        id: 'protect_client_dignity',
+        label: '堅持社工倫理拒拍正臉與悲情橋段，改以匿名剪影與制度結構受訪',
+        sublabel: '守住個案尊嚴，但勸募短影音點閱率不如預期',
+        effect: {
+          statsDelta: { energy: -5, purpose: 10, capital: 5, life: 1, impactScore: 12 },
+        },
+        outcomeText:
+          '公關組雖然碎念少了一波流量，但那位媽媽私下握著你的手說「謝謝你們沒有把我們家當博同情的工具」，你更確定這條紅線不能退。',
+      },
+      {
+        id: 'compromise_guided_interview',
+        label: '在充分知情同意與全程把關下配合側拍，換取年度急難救助金來源',
+        sublabel: '募款順利達標、組織財力回穩，但內心留下淡淡拉扯',
+        effect: {
+          orgFinanceDelta: 1,
+          statsDelta: { energy: -7, purpose: -3, capital: 4, life: -1, impactScore: 9 },
+        },
+        outcomeText:
+          '節目播出後確實湧入一筆指定捐款幫了十幾個家庭，只是剪輯出來的配樂比你想像中煽情，讓你盯著螢幕久久沒關電視。',
+      },
+    ],
+  },
+  {
+    id: 'welfare_new_gov_eval_kpi',
+    title: '衛福部評鑑新增「數位量化成效」：前線社工被表單淹沒',
+    category: 'work',
+    tag: '標案評鑑現場',
+    weight: 17,
+    conditions: { orgTypes: ['large_welfare'], excludeOutsideNPO: true, minTenure: 2 },
+    narrative:
+      '新年度委託案評鑑指標大改版，主管機關要求把每個個案家庭的「復原力分數、轉介追蹤週期、滿意度前後測」全部登打進新系統。前線夥伴哀鴻遍野，光是填表每週就吃掉一整天訪視時間。',
+    choices: [
+      {
+        id: 'build_shared_template',
+        label: '主動整理精簡版共用表單與自動彙整範本，幫全組省下重複登打時間',
+        sublabel: '短期加班爆肝，但大幅提升團隊行政效率與你在機構的話語權',
+        effect: {
+          statsDelta: { energy: -10, purpose: 4, capital: 10, life: -3, impactScore: 11 },
+          milestoneTag: '建置社福評鑑精簡登打流程',
+        },
+        outcomeText:
+          '你花兩個週末把繁瑣表格改成半自動套印，前線同事終於能在六點半前收工，連主管都在跨組會議點名感謝你。',
+      },
+      {
+        id: 'push_back_at_review',
+        label: '在局處業務聯繫會報直接反映過度評鑑排擠直接服務，爭取簡化表單',
+        sublabel: '替第一線發聲，短期與承辦窗口氣氛略緊繃',
+        effect: {
+          statsDelta: { energy: -6, purpose: 8, capital: 6, life: 1, impactScore: 10 },
+        },
+        outcomeText:
+          '承辦科長當場臉色不太好看，但隔季公文真的把三張重複表格整併成一張，別家機構的社工私下傳訊稱讚你敢講真話。',
+      },
+    ],
+  },
+  {
+    id: 'grassroots_rent_eviction',
+    title: '社區據點房東通知收回都更：三個月內得重找無障礙平價空間',
+    category: 'work',
+    tag: '草根據點危機',
+    weight: 18,
+    conditions: { orgTypes: ['grassroots'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '經營五年的巷弄一樓據點突然收到房東通知，整排老透天要談都更不再續約。附近新大樓店租翻倍，協會帳戶裡只夠付兩個月押金，如果找不到一樓無障礙空間，輪椅長輩下個月就沒地方共餐了。',
+    choices: [
+      {
+        id: 'mobilize_community_search',
+        label: '發動社區里民與店家一起找閒置老屋，週末自己刷油漆 DIY 搬家',
+        sublabel: '體力大透支，但把危機變成凝聚社區向心力的契機',
+        effect: {
+          statsDelta: { energy: -13, purpose: 10, capital: 7, life: -4, impactScore: 14 },
+          milestoneTag: '成功搶救社區據點完成無障礙搬遷',
+        },
+        outcomeText:
+          '巷口五金行老闆主動牽線一間便宜老屋，十幾位志工與長輩家屬週末一起搬書櫃刷牆壁，新據點開張那天整條巷子都來吃湯圓。',
+      },
+      {
+        id: 'apply_public_space_share',
+        label: '向區公所與在地教會／活動中心爭取分時段共用空間，先保住服務不斷線',
+        sublabel: '省下高額租金與搬家體力，但每次活動都得搬運器材重新佈置',
+        effect: {
+          orgFinanceDelta: 1,
+          statsDelta: { energy: -6, purpose: 4, capital: 6, life: 1, impactScore: 9 },
+        },
+        outcomeText:
+          '雖然少了專屬的固定小客廳，但每月省下兩萬多房租讓協會財務喘了一大口氣，你也練就十分鐘內把活動中心變出共餐場地的神技。',
+      },
+    ],
+  },
+  {
+    id: 'grassroots_volunteer_drama',
+    title: '熱心資深志工阿姨在據點「下指導棋」，年輕夥伴氣到想離職',
+    category: 'work',
+    tag: '草根團隊磨合',
+    weight: 16,
+    conditions: { orgTypes: ['grassroots'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '創會初期就幫忙煮飯的資深志工阿姨很有熱忱，但最近常當眾指責新進社工「不會跟老人講話」，甚至私下改掉排班表。年輕同事躲在儲藏室眼眶泛紅，說再這樣下去月底就要提離職。',
+    choices: [
+      {
+        id: 'set_volunteer_boundary',
+        label: '泡壺茶好好與阿姨深談，溫和但堅定畫出「志工與專職分工界線」',
+        sublabel: '考驗溝通情商，處理得好能同時留住人情與專業',
+        effect: {
+          statsDelta: { energy: -7, purpose: 6, capital: 8, life: 1, impactScore: 10 },
+        },
+        outcomeText:
+          '阿姨一開始覺得委屈，聽懂你肯定她多年付出、只是希望分工更清楚後才釋懷。團隊重新訂了志工公約，年輕夥伴也願意留下來了。',
+      },
+      {
+        id: 'reorganize_shifts_quietly',
+        label: '先用排班錯開兩人時段冷處理，避免在社區里民圈掀起人情風波',
+        sublabel: '短期相安無事，但根本的權責模糊問題仍在',
+        effect: {
+          statsDelta: { energy: -4, purpose: -3, capital: 2, life: 2, impactScore: 4 },
+        },
+        outcomeText:
+          '衝突暫時壓下來了，只是你每個月排班都像在玩數獨，還得隨時留意兩邊在群組裡的微妙氣氛。',
+      },
+    ],
+  },
+  {
+    id: 'local_found_youth_return',
+    title: '返鄉青年團隊補助期滿卻尚未損益兩平，董事會要求退場止血',
+    category: 'work',
+    tag: '地方創生兩難',
+    weight: 18,
+    conditions: { orgTypes: ['local_foundation'], excludeOutsideNPO: true, minTenure: 2 },
+    narrative:
+      '基金會連續兩年補助一組返鄉青年做地方文化導覽與農產選物，口碑很好，但淡季營收始終打不平人事成本。董事會檢討會上幾位商界董事直言：「兩年還賺不了錢就該停損，不能一直靠基金會輸血。」',
+    choices: [
+      {
+        id: 'design_bridge_grant',
+        label: '提出「最後一年轉型陪伴計畫」，幫團隊對接企業採購與學校戶外教學',
+        sublabel: '扛下董事會質疑與輔導壓力，替地方團隊爭取真正站起來的機會',
+        effect: {
+          statsDelta: { energy: -9, purpose: 9, capital: 9, life: -2, impactScore: 14 },
+          milestoneTag: '協助地方返鄉團隊成功轉型自立',
+        },
+        outcomeText:
+          '半年內你幫他們談成兩間企業福委會中秋禮盒與三所國小校外教學，隔年團隊終於首次損益兩平，董事會也對你的企劃眼光刮目相看。',
+      },
+      {
+        id: 'graceful_sunset_review',
+        label: '如實向團隊說明基金會資源上限，協助結案盤點並轉介政府地方創生計畫',
+        sublabel: '守住基金會財務紀律，但面對青年失落眼神心裡五味雜陳',
+        effect: {
+          orgFinanceDelta: 1,
+          statsDelta: { energy: -5, purpose: -1, capital: 6, life: 2, impactScore: 7 },
+        },
+        outcomeText:
+          '雖然沒能再續撥第三年補助，但你熬夜幫他們改完國發會提案書並成功過關，也學會地方陪伴不能只靠單一單位硬撐。',
+      },
+    ],
+  },
+  {
+    id: 'local_found_local_festival',
+    title: '縣府文化局邀辦地方老街文化季：預算砍半卻要做到縣長滿意',
+    category: 'work',
+    tag: '地方公私協力',
+    weight: 17,
+    conditions: { orgTypes: ['local_foundation'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '縣府文化局點名由你們基金會承辦年度老街文化季，但核定補助款比原提案少了四成，承辦科長還笑笑補一句：「縣長很重視開幕舞台氣勢，燈光音響跟伴手禮不能省喔。」',
+    choices: [
+      {
+        id: 'renegotiate_scope_with_county',
+        label: '攤開成本明細與縣府重新議約，把華而不實的煙火與舞台預算改投入在地職人市集',
+        sublabel: '敢對公部門說不，守住活動品質與團隊尊嚴',
+        effect: {
+          statsDelta: { energy: -7, purpose: 8, capital: 8, life: 1, impactScore: 12 },
+        },
+        outcomeText:
+          '幾輪拉鋸後文化局同意縮減開幕排場、把錢留給在地商家與導覽員，活動當天人潮爆滿，連縣長走完市集都稱讚很有地方味。',
+      },
+      {
+        id: 'absorb_cost_with_donors',
+        label: '動用基金會自有基金並向在地企業拉贊助硬吞下來，保住與縣府的長期關係',
+        sublabel: '活動體面過關，但團隊累翻且消耗基金會自有資金',
+        effect: {
+          orgFinanceDelta: -1,
+          statsDelta: { energy: -11, purpose: 1, capital: 5, life: -4, impactScore: 9 },
+        },
+        outcomeText:
+          '開幕式氣勢十足、長官合照拍得很滿意，但撤場那晚你在老街騎樓吃著冷掉的便當，心想明年一定要先談好底線。',
+      },
+    ],
+  },
+  {
+    id: 'advocacy_eia_hearing_clash',
+    title: '環評大會／公聽會現場遭動員嗆聲，媒體只剪三秒衝突畫面',
+    category: 'work',
+    tag: '倡議攻防現場',
+    weight: 19,
+    conditions: { orgTypes: ['advocacy_ngo'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '籌備半年的環境與公共政策公聽會登場，開發方動員上百人舉牌包圍會場外叫陣。你手裡握著兩百頁科學評估數據，晚間新聞卻只播了雙方推擠的三秒畫面，網路留言區瞬間湧入大批攻擊。',
+    choices: [
+      {
+        id: 'publish_data_factcheck',
+        label: '連夜把兩百頁報告拆成圖文懶人包與公開資料表，冷靜用事實正面對決',
+        sublabel: '熬夜爆肝但展現專業高度，贏得獨立媒體與學界轉發',
+        effect: {
+          statsDelta: { energy: -11, purpose: 11, capital: 9, life: -3, impactScore: 16 },
+          milestoneTag: '以專業數據圖文扭轉公聽會輿論風向',
+        },
+        outcomeText:
+          '隔天上午懶人包被轉發破萬次，幾位原本觀望的專家委員主動引用你們的數據，讓審查會決議補件再審，硬生生擋下草率過關。',
+      },
+      {
+        id: 'focus_committee_lobbying',
+        label: '暫時遠離網路筆戰保護身心，把精力集中在一對一拜會關鍵審查委員與立委辦公室',
+        sublabel: '聲量較低但實際影響力扎實，減少無謂情緒消耗',
+        effect: {
+          statsDelta: { energy: -5, purpose: 7, capital: 8, life: 2, impactScore: 12 },
+        },
+        outcomeText:
+          '你關掉社群通知專心跑了六場閉門簡報，最後委員把你們提出的關鍵附帶決議寫進會議紀錄，證明安靜的專業一樣有力量。',
+      },
+    ],
+  },
+  {
+    id: 'advocacy_coalition_split',
+    title: '跨團體修法聯盟意見分裂：「先求有再求好」還是堅持底線？',
+    category: 'work',
+    tag: '倡議策略抉擇',
+    weight: 17,
+    conditions: { orgTypes: ['advocacy_ngo'], excludeOutsideNPO: true, minTenure: 2 },
+    narrative:
+      '立院黨團協商進入最後關頭，執政黨端出一個「只納入六成訴求、刪掉關鍵罰則」的折衷版本。聯盟內部分成兩派：務實派主張先過關再修法，理念派痛批這是打假球要求集體退席抗議。',
+    choices: [
+      {
+        id: 'broker_two_stage_clause',
+        label: '提出折衷策略：附帶決議明訂兩年檢討期與資訊公開義務，力保聯盟不分裂',
+        sublabel: '兩邊不討好卻最有可能在體制內推進實質進展',
+        effect: {
+          statsDelta: { energy: -9, purpose: 5, capital: 11, life: -2, impactScore: 14 },
+        },
+        outcomeText:
+          '協商會議一路開到凌晨兩點，雖然沒拿到滿分版本，但成功把「資訊公開」與「兩年檢討條款」塞進附帶決議，替下一階段留住武器。',
+      },
+      {
+        id: 'hold_firm_principle',
+        label: '堅持刪掉罰則等同紙老虎，開記者會公開反對並向支持者說明底線',
+        sublabel: '守住倡議團體的獨立立場與核心支持者信任，短期與部分盟友降溫',
+        effect: {
+          statsDelta: { energy: -7, purpose: 10, capital: 4, life: 0, impactScore: 11 },
+        },
+        outcomeText:
+          '記者會結束後小額定捐意外微幅上升，支持者留言「謝謝你們沒有為了妥協放棄原則」，但也意味著這條修法路還要再多跑兩年。',
+      },
+    ],
+  },
+  {
+    id: 'corp_ngo_hq_kpi_mismatch',
+    title: '國際總部／母企業下達全球統一 KPI，與台灣在地脈絡格格不入',
+    category: 'work',
+    tag: '跨國／企業分會現場',
+    weight: 19,
+    conditions: { orgTypes: ['corp_intl_ngo'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '亞太區總部剛寄來新年度全球戰略簡報，要求台灣分會把六成預算轉去推一套「歐美設計的數位氣候倡議 App」，但台灣在地合作夥伴最缺的其實是基層人力與實體社區調適資源。',
+    choices: [
+      {
+        id: 'localize_hq_framework',
+        label: '熬夜寫一份中英文對照影響力報告，把台灣在地需求「翻譯」進總部 KPI 架構裡',
+        sublabel: '展現跨文化轉譯功力，同時保住總部預算與在地夥伴資源',
+        effect: {
+          statsDelta: { energy: -9, purpose: 8, capital: 11, life: -2, impactScore: 14 },
+          milestoneTag: '成功說服總部調整在地化公益指標',
+        },
+        outcomeText:
+          '區域總監在視訊會議裡對你的數據與在地案例讚不絕口，破例核准台灣分會保留彈性額度，你也成了總部眼中最懂亞太現場的窗口。',
+      },
+      {
+        id: 'execute_hq_playbook',
+        label: '先照總部模板準時交差達標，私下再慢慢調整明年預算比例',
+        sublabel: '評核安全過關、準時下班，但總覺得離台灣現場越來越遠',
+        effect: {
+          statsDelta: { energy: 1, purpose: -6, capital: 4, life: 4, impactScore: 6 },
+        },
+        outcomeText:
+          '季度英文報表漂漂亮亮拿了綠燈，但看著下載量慘澹的 App 後台，你心裡明白這筆預算本來可以幫到更多人。',
+      },
+    ],
+  },
+  {
+    id: 'corp_ngo_brand_crisis_freeze',
+    title: '母企業爆出公關風波：基金會年度公益計畫被迫緊急低調暫緩',
+    category: 'work',
+    tag: '母體品牌連動風險',
+    weight: 17,
+    conditions: { orgTypes: ['corp_intl_ngo'], excludeOutsideNPO: true, minTenure: 2 },
+    narrative:
+      '母公司突然因勞資或供應鏈新聞登上頭條，集團公關長一通電話打來，要求基金會原本下週要公開舉辦的公益論壇與補助記者會全部暫緩，避免媒體追問母公司爭議。但合作草根團體已經訂好場地與車票。',
+    choices: [
+      {
+        id: 'protect_partner_funding',
+        label: '同意取消對外媒體場，但強力爭取「補助款照常撥付、不讓合作團體背鍋」',
+        sublabel: '在企業公關壓力下守住對民間夥伴的誠信',
+        effect: {
+          statsDelta: { energy: -8, purpose: 9, capital: 8, life: -1, impactScore: 12 },
+        },
+        outcomeText:
+          '你跑了三趟總部法務與公關室，總算保住所有補助撥款與場地違約金補償。合作夥伴私下說「你們跟其他只顧公關的單位不一樣」。',
+      },
+      {
+        id: 'defer_all_programs',
+        label: '完全配合集團危機處理全面延期一季，向合作團體致歉重排時程',
+        sublabel: '內部零風險，但合作夥伴對企業基金會的信任度明顯下滑',
+        effect: {
+          statsDelta: { energy: -3, purpose: -7, capital: -2, life: 2, impactScore: 3 },
+        },
+        outcomeText:
+          '集團危機兩個月後平息了，但有兩間很棒的草根協會明年婉拒再合作，讓你深刻體會依附企業品牌的結構代價。',
+      },
+    ],
+  },
+  {
+    id: 'society_credit_system_crash',
+    title: '年會前夕繼續教育積分系統大當機，上百名執業會員電話灌爆辦公室',
+    category: 'work',
+    tag: '學會會務現場',
+    weight: 19,
+    conditions: { orgTypes: ['academic_society'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '年度學術研討會倒數三天，外包廠商維護的線上報名與繼續教育積分系統突然掛點，上百位急著湊執照換證學分的會員從早上九點開始輪番打爆學會唯一一支市話，理事還催你中午前交出大會議程勘誤表。',
+    choices: [
+      {
+        id: 'emergency_manual_fallback',
+        label: '立刻啟動 Google 表單備援登記、發全體會員公告並盯緊廠商連夜修復',
+        sublabel: '兩天沒睡好但成功化解危機，成為整間學會最穩的定海神針',
+        effect: {
+          statsDelta: { energy: -12, purpose: 5, capital: 10, life: -4, impactScore: 12 },
+          milestoneTag: '成功化解學會年會前夕積分系統當機危機',
+        },
+        outcomeText:
+          '你一邊安撫電話那頭焦急的會員、一邊同步人工核對學分清冊，年會當天報到順暢無比，理事長在晚宴上特別舉杯向你致謝。',
+      },
+      {
+        id: 'push_vendor_and_limit_calls',
+        label: '統一改用官網公告與信箱收件分流，強硬要求外包商依合約負起緊急搶修責任',
+        sublabel: '守住自己不被電話淹沒，但短期收到幾封會員客訴信',
+        effect: {
+          statsDelta: { energy: -5, purpose: 2, capital: 7, life: 1, impactScore: 8 },
+        },
+        outcomeText:
+          '廠商隔天傍晚終於修好系統，你也順勢把「高流量壓力測試」寫進明年續約條款，不再讓一人秘書處替爛系統擦屁股。',
+      },
+    ],
+  },
+  {
+    id: 'society_journal_plagiarism',
+    title: '學會核心期刊遭檢舉疑似抄襲，主編與理事會怕得罪學界大老',
+    category: 'work',
+    tag: '學術倫理與政治',
+    weight: 17,
+    conditions: { orgTypes: ['academic_society'], excludeOutsideNPO: true, minTenure: 2 },
+    narrative:
+      '學會發行的專業期刊收到匿名檢舉，指出某篇剛刊登的論文與國外文章高度重疊，而通訊作者恰好是某名校系主任兼前任常務理事。主編私下問你：「能不能先冷處理，別把事情鬧大？」',
+    choices: [
+      {
+        id: 'follow_ethics_committee',
+        label: '堅持依期刊出版倫理規範送交匿名學倫審查小組，完整留存程序紀錄',
+        sublabel: '守住學會公信力與學術底線，但得承受部分資深理事的冷眼',
+        effect: {
+          statsDelta: { energy: -8, purpose: 10, capital: 7, life: -2, impactScore: 13 },
+          boardClimate: 'factional',
+          milestoneTag: '守住學會期刊出版倫理審查程序',
+        },
+        outcomeText:
+          '審查小組最終決議刊登更正與撤稿聲明。雖然那位大老氣得退會，但年輕學者與國際資料庫對學會期刊的信任度反而大增。',
+      },
+      {
+        id: 'quiet_corrigendum',
+        label: '協助主編私下聯繫作者主動補註引文與勘誤，將風波控制在最小範圍',
+        sublabel: '避免理事會撕破臉，但心裡對學術圈的權力結構看得很透',
+        effect: {
+          statsDelta: { energy: -5, purpose: -4, capital: 4, life: 1, impactScore: 5 },
+        },
+        outcomeText:
+          '作者摸摸鼻子補交了勘誤啟事，風波暫時平息；你也更清楚自己只是專任秘書，能守住程序留底已經盡了本分。',
+      },
+    ],
+  },
+  {
+    id: 'ind_union_shift_negotiation',
+    title: '資方片面更改輪班班表：會員群組半夜炸鍋要求立刻發動調解',
+    category: 'work',
+    tag: '產企業工會前線',
+    weight: 19,
+    conditions: { orgTypes: ['industrial_union'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '深夜十一點半，公司突然公告下月起調整大夜輪班津貼與變形工時排班，未經勞資會議同意。工會 LINE 群組瞬間跳出兩百多則憤怒留言，產線幹部打電話問你明天早上要不要直接去勞動局遞調解申請書。',
+    choices: [
+      {
+        id: 'file_mediation_and_mobilize',
+        label: '連夜整理法條與班表證據，隔天一早召開緊急理事會並同步向勞動局申請調解',
+        sublabel: '搶佔談判先機、大幅提振會員士氣，但連續一週睡眠不足',
+        effect: {
+          statsDelta: { energy: -12, purpose: 11, capital: 9, life: -4, impactScore: 16 },
+          milestoneTag: '帶隊擋下資方片面更改輪班班表',
+        },
+        outcomeText:
+          '你們在調解會上攤開完整排班違法證據並預告啟動爭議程序，資方眼見會員團結只好撤回公告重回談判桌，這季新入會人數暴增三成。',
+      },
+      {
+        id: 'survey_members_first',
+        label: '先發起 48 小時匿名會員問卷盤點各廠區痛點，凝聚共識後再正式發函要求協商',
+        sublabel: '步調穩健、降低內部雜音，但部分激進會員嫌動作太慢',
+        effect: {
+          statsDelta: { energy: -6, purpose: 6, capital: 8, life: 1, impactScore: 11 },
+        },
+        outcomeText:
+          '問卷回收率超過七成，讓理事會手握具體多數民意上桌談判，最終爭取到保留大夜津貼並加碼換班緩衝時數。',
+      },
+    ],
+  },
+  {
+    id: 'ind_union_anti_union_transfer',
+    title: '工會幹部遭公司調往偏遠廠區：赤裸裸的不當勞動行為打壓',
+    category: 'work',
+    tag: '工會法裁決戰',
+    weight: 18,
+    conditions: { orgTypes: ['industrial_union'], excludeOutsideNPO: true, minTenure: 2 },
+    narrative:
+      '剛在團體協約談判桌上火力全開的工會常務理事，隔週就收到人資通知「因應組織調整，下週一調派至兩小時車程外的南部倉庫」。全會上下都知道這是殺雞儆猴，若不反擊，以後沒人敢當工會幹部。',
+    choices: [
+      {
+        id: 'file_ulp_ruling',
+        label: '協助幹部向勞動部提起「不當勞動行為裁決」，並發動跨工會聲援記者會',
+        sublabel: '硬仗耗時半年以上，但這是守住工會尊嚴與法制紅線的關鍵一役',
+        effect: {
+          statsDelta: { energy: -11, purpose: 12, capital: 11, life: -3, impactScore: 17 },
+          milestoneTag: '打贏不當勞動行為裁決守住工會幹部',
+        },
+        outcomeText:
+          '你跑了四次裁決庭整理上百頁事證，勞動部最終裁定資方構成打壓工會、調職無效！勝訴消息傳回廠區，全體幹部士氣大振。',
+      },
+      {
+        id: 'negotiate_transfer_revoke',
+        label: '透過勞動局協調與資方高層私下斡旋，以撤回調令換取不擴大媒體曝光',
+        sublabel: '最快保住幹部原本工作與家庭生活，省下漫長訴訟耗損',
+        effect: {
+          statsDelta: { energy: -6, purpose: 4, capital: 7, life: 2, impactScore: 10 },
+        },
+        outcomeText:
+          '兩週後公司以「原單位人力吃緊」為由悄悄撤回調令。雖然沒拿到裁決書判例，但至少讓那位有兩個小孩的理事不用每天多通勤四小時。',
+      },
+    ],
+  },
+  {
+    id: 'occ_union_fake_membership_audit',
+    title: '勞保局突擊清查職業工會「掛名加保」異常名單，理事會陷入兩難',
+    category: 'work',
+    tag: '職業工會合規危機',
+    weight: 19,
+    conditions: { orgTypes: ['occupational_union'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '勞保局來函要求清查近半年新增會員的實際從業證明，點名十幾位疑似無實際工作卻透過親戚介紹「掛名加保」的會員。幾位資深理事私下勸你：「這都是熟人介紹的，清掉會少一筆常年會費跟選票啦。」',
+    choices: [
+      {
+        id: 'enforce_strict_audit',
+        label: '堅持依法寄發補件通知並退保不合格名單，向理事會說明一旦遭懲處全會都要陪葬',
+        sublabel: '短期流失部分會費且得罪人情，但守住工會合法資格與自己不背刑責',
+        effect: {
+          statsDelta: { energy: -8, purpose: 9, capital: 8, life: 0, impactScore: 13 },
+          boardClimate: 'factional',
+          milestoneTag: '清查職業工會異常加保守住合法資格',
+        },
+        outcomeText:
+          '雖然被兩位理事念了一整個禮拜，但兩個月後鄰近某工會真的因包庇掛名加保遭檢調約談，理事長這才私下稱讚你當時幫大家踩了煞車。',
+      },
+      {
+        id: 'soft_verification_notice',
+        label: '先電話逐一勸導補齊接案收據與工作切結書，給三個月緩衝期自然退會',
+        sublabel: '降低理事會與會員反彈，但行政核對工作量暴增',
+        effect: {
+          statsDelta: { energy: -10, purpose: 2, capital: 5, life: -2, impactScore: 7 },
+        },
+        outcomeText:
+          '你花了兩週打完所有電話，大部分不合格名單都默默自行辦理退保，總算在勞保局複查前把帳面整理乾淨。',
+      },
+    ],
+  },
+  {
+    id: 'occ_union_vocational_training_audit',
+    title: '勞動部職訓計畫突襲點名：幾位師傅臨時接案缺席差點被扣補助',
+    category: 'work',
+    tag: '職業工會職訓現場',
+    weight: 18,
+    conditions: { orgTypes: ['occupational_union'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '工會承辦的勞動部在職訓練班正在上課，評核委員突然不預警進教室點名。偏偏今天有四位自營師傅臨時接到大案子沒請假就缺席，還有一位上課滑手機報價，委員當場在訪視紀錄表上畫了紅線。',
+    choices: [
+      {
+        id: 'tighten_attendance_and_appeal',
+        label: '立刻逐一聯繫學員補齊正式請假與從業證明，並建立開課前一天簡訊提醒機制',
+        sublabel: '保住補助核銷與工會評鑑等級，但也得承受部分師傅抱怨管太多',
+        effect: {
+          statsDelta: { energy: -9, purpose: 5, capital: 8, life: -1, impactScore: 11 },
+        },
+        outcomeText:
+          '你趕在三日內補齊完整佐證說明，順利保住補助款不被扣減；下期開課改成開訓前先講清楚請假規則，出席率一口氣拉高到九成五。',
+      },
+      {
+        id: 'adjust_class_schedule',
+        label: '向理事會與職訓承辦提案，把下期課程改成夜間與雨天彈性時段貼合師傅作息',
+        sublabel: '花心力重排講師與場地，但從根本解決基層師傅上課痛點',
+        effect: {
+          statsDelta: { energy: -7, purpose: 8, capital: 9, life: 0, impactScore: 13 },
+          milestoneTag: '推動職業工會彈性時段職訓班改革',
+        },
+        outcomeText:
+          '改成平日晚間開課後，師傅們白天接案、晚上安心學新技術，結訓滿意度拿到全縣最高分，連勞動部承辦都把你們當示範案例。',
+      },
+    ],
+  },
 ];

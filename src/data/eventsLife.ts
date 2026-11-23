@@ -5,36 +5,155 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
   // 時代大事件（依年份區間觸發）
   // =========================================================================
   {
-    id: 'era_2020_covid',
-    title: '2020 疫情海嘯：實體活動全面喊卡與組織求生戰',
+    id: 'era_2020_covid_welfare',
+    title: '2020 疫情海嘯：據點關閉改送餐與急難紓困求生戰',
     category: 'era',
     tag: '台灣時代事件 · 2020',
     weight: 40,
     isEraEvent: true,
-    conditions: { yearRange: [2020, 2021], excludeOutsideNPO: true },
+    conditions: {
+      yearRange: [2020, 2021],
+      excludeOutsideNPO: true,
+      orgTypes: ['large_welfare', 'grassroots', 'local_foundation'],
+    },
     narrative:
-      '三級警戒與防疫規範說來就來，學會年會飯店訂金卡死、社福社區據點被迫關閉改送餐、職業工會櫃檯擠滿焦急詢問「紓困四萬元怎麼申請」的會員。同時間實體募款義賣歸零，所有人被迫在一週內學會遠距協作與線上直播。',
+      '三級警戒與防疫規範說來就來，社區共餐據點與課輔班被迫緊急關閉、實體募款義賣歸零。獨居長輩斷了熱食、脆弱家庭父母因停業頓失收入，辦公室得在一週內改組為送餐與防疫物資調度站。',
     choices: [
       {
-        id: 'covid_digital_pivot',
-        label: '連夜把年會、課程或關懷服務全面轉成線上＋防疫物資包宅配',
-        sublabel: '超時搶救組織現金流與服務不中斷，學會跨螢幕工作術',
+        id: 'covid_welfare_delivery',
+        label: '改採無接觸送餐與防疫物資包宅配，同時把募款與志工聯繫全面搬上線',
+        sublabel: '超時搶救服務不斷線與現金流，練就跨螢幕動員能力',
         effect: {
-          statsDelta: { energy: -11, capital: 11, purpose: 6, life: -4, impactScore: 15 },
-          milestoneTag: '帶領團隊完成疫情期間數位轉型應變',
+          statsDelta: { energy: -11, capital: 10, purpose: 8, life: -4, impactScore: 16 },
+          milestoneTag: '帶領社福團隊完成疫情期間無接觸送餐與數位轉型',
         },
         outcomeText:
-          '你在一週內學會 OBS 直播與線上簽到系統，雖然半夜還在包防疫口罩箱，卻替組織守住了該年度最重要的會員服務與捐款基本盤。',
+          '雖然半夜還在包防疫口罩與乾糧箱，但看著阿嬤隔著鐵門揮手說「有你們送便當我就不怕了」，整季的疲憊瞬間有了重量。',
       },
       {
-        id: 'covid_relief_frontline',
-        label: '協助受創會員與弱勢家庭逐案申請勞動部／衛福部急難紓困',
-        sublabel: '把自己當成政策與民眾之間最後一哩的翻譯員',
+        id: 'covid_welfare_relief',
+        label: '逐案協助受創家庭整理文件、向區公所與衛福部申請急難紓困',
+        sublabel: '把自己當成政策與弱勢家庭之間最後一哩的翻譯員',
         effect: {
           statsDelta: { energy: -13, purpose: 12, capital: 6, life: -5, impactScore: 17 },
         },
         outcomeText:
-          '你替幾十位沒有薪資轉帳紀錄的零工師傅與單親家庭整理切結書送到區公所。電話打到喉嚨沙啞，卻在最恐慌的一年撐住很多人的房租。',
+          '你替幾十戶沒有薪資轉帳紀錄的單親與零工家庭補齊切結書送到區公所。電話打到喉嚨沙啞，卻在最恐慌的一年撐住很多人的房租。',
+      },
+    ],
+  },
+  {
+    id: 'era_2020_covid_union',
+    title: '2020 疫情海嘯：勞工紓困爆量、減班休息與防疫假攻防',
+    category: 'era',
+    tag: '台灣時代事件 · 2020',
+    weight: 40,
+    isEraEvent: true,
+    conditions: {
+      yearRange: [2020, 2021],
+      excludeOutsideNPO: true,
+      orgTypes: ['industrial_union', 'occupational_union'],
+    },
+    narrative:
+      '三級警戒重創各行各業，工會電話從早響到晚：職業工會會員急著問「勞工生活補貼三萬／一萬元怎麼申請」，產線與服務業會員則面臨資方片面放無薪假、扣防疫隔離假薪水與廠區群聚風險。',
+    choices: [
+      {
+        id: 'covid_union_relief_desk',
+        label: '緊急架設線上紓困查詢與表單分流，連夜替會員逐案核對加保資格與申辦補助',
+        sublabel: '工會櫃檯與 LINE 群組全面爆線，但守住基層勞工最急迫的救命錢',
+        effect: {
+          statsDelta: { energy: -13, purpose: 12, capital: 8, life: -5, impactScore: 17 },
+          milestoneTag: '疫情期間協助大批工會會員完成勞工紓困申辦',
+        },
+        outcomeText:
+          '你連續兩週加班核對數百份投保明細與帳戶資料，幫許多手停口停的師傅與輪班勞工順利領到補貼，會員對工會的向心力創下新高。',
+      },
+      {
+        id: 'covid_union_labor_defense',
+        label: '發函要求資方落實分艙分流與合法防疫假，針對違法無薪假火速向勞動局舉發',
+        sublabel: '站上防疫勞權第一線，扛住資方壓力替勞工守住薪資與健康底線',
+        effect: {
+          statsDelta: { energy: -11, purpose: 11, capital: 10, life: -4, impactScore: 16 },
+        },
+        outcomeText:
+          '在工會強硬介入與勞動局發函關切下，資方被迫撤回違法減薪並補發防疫隔離津貼，讓會員看見有工會撐腰的實質力量。',
+      },
+    ],
+  },
+  {
+    id: 'era_2020_covid_advocacy',
+    title: '2020 疫情海嘯：街頭與實體講座歸零，全面轉戰線上倡議',
+    category: 'era',
+    tag: '台灣時代事件 · 2020',
+    weight: 40,
+    isEraEvent: true,
+    conditions: {
+      yearRange: [2020, 2021],
+      excludeOutsideNPO: true,
+      orgTypes: ['advocacy_ngo', 'corp_intl_ngo'],
+    },
+    narrative:
+      '三級警戒下所有街頭集會、公聽會動員與實體倡議講座瞬間喊卡，新聞版面九成被每日確診數佔滿，原本關注的環境、人權或永續議題幾乎失去曝光。同時外送暴增帶來大量一次性垃圾、數位足跡隱私爭議也浮上檯面。',
+    choices: [
+      {
+        id: 'covid_advocacy_online_pivot',
+        label: '一週內架起線上直播論壇與社群圖卡戰隊，把議題扣連疫情下的結構漏洞重新發聲',
+        sublabel: '練就遠距倡議與數位募資技能，在媒體真空期守住公共討論空間',
+        effect: {
+          statsDelta: { energy: -10, capital: 11, purpose: 8, life: -3, impactScore: 15 },
+          milestoneTag: '帶領團隊完成疫情期間線上倡議與數位轉型',
+        },
+        outcomeText:
+          '你在一週內學會 OBS 直播與線上連署導流，單場線上座談意外吸引上千位跨縣市網友參與，也開拓出一批全新的年輕定捐支持者。',
+      },
+      {
+        id: 'covid_advocacy_policy_watch',
+        label: '趁實體活動暫停沉潛做深度政策研究，盯緊紓困特別條例的環保與人權把關條款',
+        sublabel: '聲量較低但累積扎實研究能量，替疫後倡議備妥彈藥',
+        effect: {
+          statsDelta: { energy: -6, purpose: 9, capital: 9, life: 0, impactScore: 13 },
+        },
+        outcomeText:
+          '你們發布的特別條例監督報告被多位立委引用，成功在預算審查中擋下數項趁疫情夾帶闖關的爭議開發條款。',
+      },
+    ],
+  },
+  {
+    id: 'era_2020_covid_society',
+    title: '2020 疫情海嘯：年度學術研討會喊卡與繼續教育學分斷鏈危機',
+    category: 'era',
+    tag: '台灣時代事件 · 2020',
+    weight: 40,
+    isEraEvent: true,
+    conditions: {
+      yearRange: [2020, 2021],
+      excludeOutsideNPO: true,
+      orgTypes: ['academic_society'],
+    },
+    narrative:
+      '三級警戒說來就來，原定五百人的年度學術研討會飯店場地訂金卡死，廠商贊助攤位紛紛喊退；同時數百位執業會員急著湊足年度繼續教育學分換發執照，焦急電話一通接一通打進秘書處。',
+    choices: [
+      {
+        id: 'covid_society_virtual_conf',
+        label: '連夜把實體年會全面改成線上視訊研討會，並向主管機關申請核定線上學分簽到',
+        sublabel: '一週內學會視訊導播與線上簽退機制，保住學會年度核心收入與會員換證權益',
+        effect: {
+          statsDelta: { energy: -12, capital: 12, purpose: 7, life: -4, impactScore: 15 },
+          milestoneTag: '成功將學會實體年會轉型為線上研討會與學分認證',
+        },
+        outcomeText:
+          '你邊跟飯店談判延用訂金、邊幫十幾位不熟視訊軟體的資深教授做彩排，年會當天零斷線順利落幕，連理監事都對你佩服得五體投地。',
+      },
+      {
+        id: 'covid_society_postpone_credits',
+        label: '先向主管機關爭取執業換證學分展延，並將年會延期、改推小型線上專題工作坊',
+        sublabel: '降低一次爆肝轉型的技術風險，但學會年度會費與贊助收入明顯縮水',
+        effect: {
+          orgFinanceDelta: -1,
+          statsDelta: { energy: -6, purpose: 5, capital: 6, life: 0, impactScore: 10 },
+        },
+        outcomeText:
+          '雖然今年度贊助費少了一大截，但成功爭取到會員學分展延緩衝期，也讓秘書處在最混亂的半年保住基本運作節奏。',
       },
     ],
   },
