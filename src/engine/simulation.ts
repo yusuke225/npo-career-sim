@@ -467,6 +467,12 @@ function interpolateEventForState(event: GameEvent, state: SimulationState): Gam
       label: interpolateText(ch.label, state),
       sublabel: interpolateText(ch.sublabel, state),
       outcomeText: interpolateText(ch.outcomeText, state),
+      effect: ch.effect.milestoneTag
+        ? {
+            ...ch.effect,
+            milestoneTag: interpolateText(ch.effect.milestoneTag, state),
+          }
+        : ch.effect,
     })),
   };
 }

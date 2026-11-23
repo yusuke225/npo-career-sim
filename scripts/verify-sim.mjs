@@ -1,0 +1,146 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { createRequire } from 'node:module';
+import { pathToFileURL } from 'node:url';
+
+const require = createRequire(import.meta.url);
+const esbuild = require('esbuild');
+
+const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'npo-career-sim-test-'));
+
+try {
+  await esbuild.build({
+    entryPoints: [
+      path.resolve('src/engine/simulation.ts'),
+      path.resolve('src/data/organizations.ts'),
+    ],
+    outdir: tmpDir,
+    bundle: true,
+    format: 'esm',
+    platform: 'node',
+    outExtension: { '.js': '.mjs' },
+    logLevel: 'silent',
+  });
+
+  const sim = await import(pathToFileURL(path.join(tmpDir, 'engine/simulation.mjs')).href);
+  const orgData = await import(pathToFileURL(path.join(tmpDir, 'data/organizations.mjs')).href);
+
+  // Ensure localStorage calls are safely no-oped in Node
+  globalThis.window = undefined;
+
+  // 1. Validate organization weights and context tokens
+  const totalWeight = orgData.ORG_TYPE_LIST.reduce((sum, o) => sum + o.weight, 0);
+  assert.equal(totalWeight, 100, `Expected ORG_TYPE_LIST weights to sum to 100, got ${totalWeight}`);
+
+  for (const org of orgData.ORG_TYPE_LIST) {
+    assert.ok(orgData.ORG_CONTEXT_TOKENS[org.id], `Missing ORG_CONTEXT_TOKENS for ${org.id}`);
+    assert.ok(org.allowedRoles.length > 0, `No allowedRoles for ${org.id}`);
+  }
+
+  // 2. Validate event catalog integrity
+  const eventIds = new Set();
+  const setFlags = new Set();
+  const requiredFlags = new Set();
+  const forbiddenFlags = new Set();
+
+  for (const ev of sim.ALL_EVENTS) {
+    assert.ok(!eventIds.has(ev.id), `Duplicate event ID: ${ev.id}`);
+    eventIds.add(ev.id);
+    assert.ok(Array.isArray(ev.choices) && ev.choices.length >= 2, `Event ${ev.id} should have >= 2 choices`);
+
+    const choiceIds = new Set();
+    for (const ch of ev.choices) {
+      assert.ok(!choiceIds.has(ch.id), `Duplicate choice ID ${ch.id} in event ${ev.id}`);
+      choiceIds.add(ch.id);
+      if (ch.effect?.setFlag) setFlags.add(ch.effect.setFlag);
+    }
+
+    if (ev.conditions?.requiredFlag) requiredFlags.add(ev.conditions.requiredFlag);
+    if (ev.conditions?.forbiddenFlag) forbiddenFlags.add(ev.conditions.forbiddenFlag);
+    if (ev.conditions?.orgTypes) {
+      assert.equal(
+        ev.conditions.excludeOutsideNPO,
+        true,
+        `Event ${ev.id} specifies orgTypes without excludeOutsideNPO: true`
+      );
+    }
+  }
+
+  for (const flag of requiredFlags) {
+    assert.ok(setFlags.has(flag), `requiredFlag "${flag}" is never set by any event choice`);
+  }
+  for (const flag of forbiddenFlags) {
+    assert.ok(setFlags.has(flag), `forbiddenFlag "${flag}" is never set by any event choice`);
+  }
+
+  // 3. Validate employment-type pension & expense rules
+  for (const empType of ['regular', 'multi_employment', 'contractor']) {
+    const startState = sim.buildStateFromConfig(
+      {
+        orgType: 'grassroots',
+        role: 'project_exec',
+        region: 'taipei_metro',
+        background: 'independent',
+        employmentType: empType,
+        startAge: 25,
+        pace: 'compact',
+      },
+      false,
+      () => 0.5
+    );
+    const afterOneQuarter = sim.advanceQuarter(startState, () => 0.99);
+    if (empType === 'regular') {
+      assert.ok(afterOneQuarter.laborPensionTotal > 0, 'Regular employment should accrue 6% labor pension');
+    } else {
+      assert.equal(
+        afterOneQuarter.laborPensionTotal,
+        0,
+        `${empType} should not accrue employer 6% labor pension`
+      );
+    }
+  }
+
+  // 4. Simulate 120 careers across both paces
+  const uninterpolated = [];
+  for (let i = 0; i < 120; i++) {
+    const pace = i < 60 ? 'standard' : 'compact';
+    let state = sim.generateRandomStart(pace);
+    let steps = 0;
+    while (!state.isEnded && steps < 200) {
+      if (state.pendingEvent) {
+        if (/\{[a-zA-Z0-9_]+\}/.test(JSON.stringify(state.pendingEvent))) {
+          uninterpolated.push(state.pendingEvent.id);
+        }
+        const idx = sim.pickAutoChoiceIndex(state.pendingEvent, state);
+        state = sim.resolveEventChoice(state, idx);
+      } else {
+        state = sim.advanceQuarter(state);
+      }
+      steps++;
+    }
+    assert.ok(state.isEnded, `Simulation ${i} failed to end within 200 steps`);
+    assert.ok(state.archiveRecord, `Simulation ${i} missing archiveRecord`);
+    for (const val of [
+      state.monthlySalary,
+      state.savings,
+      state.laborPensionTotal,
+      state.stats.energy,
+      state.stats.purpose,
+      state.stats.capital,
+      state.stats.life,
+      state.stats.impactScore,
+    ]) {
+      assert.ok(Number.isFinite(val), `Non-finite numeric state in simulation ${i}`);
+    }
+  }
+
+  assert.deepEqual(uninterpolated, [], `Found uninterpolated tokens in events: ${uninterpolated.join(', ')}`);
+
+  console.log(
+    `[verify-sim] OK: ${orgData.ORG_TYPE_LIST.length} org types (weight=${totalWeight}), ${sim.ALL_EVENTS.length} events, 120 simulated careers passed.`
+  );
+} finally {
+  fs.rmSync(tmpDir, { recursive: true, force: true });
+}
