@@ -1,12 +1,15 @@
 import { ArrowLeft, CheckCircle2, Dices } from 'lucide-react';
 import { EMPLOYMENT_TYPES, ORG_TYPES, REGIONS, ROLES } from '../data/organizations';
 import type { SimulationState, ThemeMode } from '../types/game';
+import { BgmToggle } from './BgmToggle';
 import { ThemeToggle } from './ThemeToggle';
 
 interface IntakeCertificateProps {
   state: SimulationState;
   theme: ThemeMode;
+  bgmOn: boolean;
   onToggleTheme: () => void;
+  onToggleBgm: () => void;
   onChangePlayerName: (name: string) => void;
   onConfirmStart: () => void;
   onReroll: () => void;
@@ -16,7 +19,9 @@ interface IntakeCertificateProps {
 export function IntakeCertificate({
   state,
   theme,
+  bgmOn,
   onToggleTheme,
+  onToggleBgm,
   onChangePlayerName,
   onConfirmStart,
   onReroll,
@@ -40,7 +45,10 @@ export function IntakeCertificate({
           <ArrowLeft size={14} />
           <span>返回首頁</span>
         </button>
-        <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+        <div style={{ display: 'flex', gap: 8 }}>
+          <BgmToggle enabled={bgmOn} onToggle={onToggleBgm} />
+          <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+        </div>
       </div>
 
       <article className="card certificate-doc">

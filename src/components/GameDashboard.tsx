@@ -12,15 +12,18 @@ import { EMPLOYMENT_TYPES, FOCUS_OPTIONS, ORG_TYPES, REGIONS } from '../data/org
 import { getPeerStatusBadge } from '../data/peers';
 import { getQuarterLabel, getRoleDisplayTitle } from '../engine/simulation';
 import type { BoardClimate, FocusId, SimulationState, ThemeMode } from '../types/game';
+import { BgmToggle } from './BgmToggle';
 import { ThemeToggle } from './ThemeToggle';
 
 interface GameDashboardProps {
   state: SimulationState;
   theme: ThemeMode;
+  bgmOn: boolean;
   isPlaying: boolean;
   speed: 1 | 2 | 4 | 8;
   autoDecide: boolean;
   onToggleTheme: () => void;
+  onToggleBgm: () => void;
   onTogglePlay: () => void;
   onChangeSpeed: (s: 1 | 2 | 4 | 8) => void;
   onFastForwardToEvent: () => void;
@@ -54,10 +57,12 @@ const REL_LABELS = {
 export function GameDashboard({
   state,
   theme,
+  bgmOn,
   isPlaying,
   speed,
   autoDecide,
   onToggleTheme,
+  onToggleBgm,
   onTogglePlay,
   onChangeSpeed,
   onFastForwardToEvent,
@@ -185,6 +190,7 @@ export function GameDashboard({
               <span>自動抉擇：{autoDecide ? '開' : '關'}</span>
             </button>
 
+            <BgmToggle enabled={bgmOn} onToggle={onToggleBgm} />
             <ThemeToggle theme={theme} onToggle={onToggleTheme} />
 
             <button

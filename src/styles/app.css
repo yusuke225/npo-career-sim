@@ -691,6 +691,14 @@ h3,
   }
 }
 
+@media (max-width: 640px) {
+  .cert-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
 .stack-col {
   display: flex;
   flex-direction: column;

@@ -1,5 +1,6 @@
 import { Trash2, X } from 'lucide-react';
 import { ORG_TYPE_LIST } from '../data/organizations';
+import { ALL_ENDING_CATALOG } from '../engine/simulation';
 import type { CareerArchiveRecord } from '../types/game';
 
 interface ArchiveDrawerProps {
@@ -20,9 +21,11 @@ export function ArchiveDrawer({
   if (!open) return null;
 
   const experiencedOrgTypes = new Set<string>();
+  const unlockedEndings = new Set<string>();
   records.forEach((r) => {
     experiencedOrgTypes.add(r.startOrgType);
     experiencedOrgTypes.add(r.endOrgType);
+    unlockedEndings.add(r.title);
   });
 
   return (
@@ -60,6 +63,25 @@ export function ArchiveDrawer({
                   <span>{org.shortLabel}</span>
                   <span className="font-mono" style={{ fontSize: 11 }}>
                     {unlocked ? '已入行' : '未抽中'}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <section>
+          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>
+            11 種結局稱號蒐集進度（{unlockedEndings.size} / {ALL_ENDING_CATALOG.length}）
+          </div>
+          <div className="collection-grid">
+            {ALL_ENDING_CATALOG.map((end) => {
+              const unlocked = unlockedEndings.has(end.title);
+              return (
+                <div key={end.title} className={`collection-cell ${unlocked ? 'unlocked' : ''}`}>
+                  <span>{unlocked ? end.title : '？？？'}</span>
+                  <span className="font-mono" style={{ fontSize: 11 }}>
+                    {unlocked ? end.stampLabel : '未解鎖'}
                   </span>
                 </div>
               );

@@ -20,6 +20,7 @@ import { LIFE_AND_ERA_EVENTS } from '../data/eventsLife';
 import type {
   CareerArchiveRecord,
   CareerEndReason,
+  CareerHistoryPoint,
   ChronicleEntry,
   EmploymentType,
   ExpenseBreakdown,
@@ -33,6 +34,24 @@ import type {
   StatDeltaMap,
   Stats,
 } from '../types/game';
+
+export const ALL_ENDING_CATALOG: Array<{
+  title: string;
+  stampLabel: string;
+  category: 'burnout' | 'financial' | 'pivot' | 'legacy' | 'milestone';
+}> = [
+  { title: '燃燒殆盡前的緊急撤離', stampLabel: '身心停損', category: 'burnout' },
+  { title: '敗給都會帳單的理想者', stampLabel: '財務離場', category: 'financial' },
+  { title: '離開現場卻還不知去向的人', stampLabel: '中途離場', category: 'burnout' },
+  { title: '理想磨損後的安靜轉身', stampLabel: '意義歸零', category: 'burnout' },
+  { title: '走進審查端的前線翻譯者', stampLabel: '轉戰公部門', category: 'pivot' },
+  { title: '帶著現場記憶的跨界翻譯者', stampLabel: '跨界轉場', category: 'pivot' },
+  { title: '人民團體的不動記憶庫', stampLabel: '制度守門人', category: 'legacy' },
+  { title: '從零刻出印章的拓荒者', stampLabel: '自立門戶', category: 'milestone' },
+  { title: '走完長路的現場長青樹', stampLabel: '圓滿交棒', category: 'legacy' },
+  { title: '撐住中生代斷層的現場骨幹', stampLabel: '中堅留任', category: 'legacy' },
+  { title: '在縫隙中補網的實務者', stampLabel: '在場證明', category: 'milestone' },
+];
 
 export const ARCHIVE_STORAGE_KEY = 'npo_1in100k_archives_v1';
 export const ACTIVE_SAVE_STORAGE_KEY = 'npo_1in100k_active_save_v1';
@@ -436,6 +455,18 @@ export function buildStateFromConfig(
     flags: [],
     milestones: [`${startYear} 入行於${orgName}`],
     chronicle: [initialChronicle],
+    historyPoints: [
+      {
+        year: startYear,
+        age: input.startAge,
+        salary: monthlySalary,
+        monthlyExpense: expense.totalMonthly,
+        energy: Math.round(stats.energy),
+        purpose: Math.round(stats.purpose),
+        capital: Math.round(stats.capital),
+        life: Math.round(stats.life),
+      },
+    ],
     pendingEvent: null,
     quartersSinceLastEvent: 0,
     lowEnergyStreak: 0,
@@ -600,13 +631,39 @@ function selectNextEvent(state: SimulationState, rng: () => number): GameEvent |
   return interpolateEventForState(weightedPool[weightedPool.length - 1].item, state);
 }
 
-function applyStatDelta(current: Stats, delta?: StatDeltaMap): { next: Stats; applied: StatDeltaMap } {
+function applyStatDelta(
+  current: Stats,
+  delta?: StatDeltaMap,
+  isQuarterlyDrift = false
+): { next: Stats; applied: StatDeltaMap } {
   if (!delta) return { next: { ...current }, applied: {} };
+  const scalePurpose = (cur: number, d?: number) => {
+    if (!d) return 0;
+    if (d < 0) return isQuarterlyDrift ? d : d * 1.3;
+    if (cur >= 88) return d * 0.15;
+    if (cur >= 75) return d * 0.35;
+    if (cur >= 60) return d * 0.6;
+    return d;
+  };
+  const scaleCapital = (cur: number, d?: number) => {
+    if (!d || d <= 0) return d ?? 0;
+    if (cur >= 92) return d * 0.08;
+    if (cur >= 85) return d * 0.15;
+    if (cur >= 75) return d * 0.3;
+    if (cur >= 60) return d * 0.55;
+    return d;
+  };
+  const scaleLife = (cur: number, d?: number) => {
+    if (!d || d <= 0) return d ?? 0;
+    if (cur >= 88) return d * 0.25;
+    if (cur >= 75) return d * 0.5;
+    return d;
+  };
   const next: Stats = {
     energy: clamp(current.energy + (delta.energy ?? 0), 0, 100),
-    purpose: clamp(current.purpose + (delta.purpose ?? 0), 0, 100),
-    capital: clamp(current.capital + (delta.capital ?? 0), 0, 100),
-    life: clamp(current.life + (delta.life ?? 0), 0, 100),
+    purpose: clamp(current.purpose + scalePurpose(current.purpose, delta.purpose), 0, 100),
+    capital: clamp(current.capital + scaleCapital(current.capital, delta.capital), 0, 100),
+    life: clamp(current.life + scaleLife(current.life, delta.life), 0, 100),
     impactScore: Math.max(0, Math.round(current.impactScore + (delta.impactScore ?? 0))),
   };
   return { next, applied: delta };
@@ -799,6 +856,32 @@ export function advanceQuarter(state: SimulationState, rng = Math.random): Simul
     dImpact *= 0.6;
   }
 
+  // 高分區與常態磨損、技能折舊，以及疲憊拖累生活連動
+  if (state.stats.purpose > 75) {
+    dPurpose -= 0.8;
+  } else if (state.stats.purpose > 50) {
+    dPurpose -= 0.45;
+  }
+  if (
+    state.stats.purpose > 50 &&
+    (state.org.boardClimate === 'bureaucratic' || state.org.boardClimate === 'factional' || state.org.isOutsideNPO)
+  ) {
+    dPurpose -= 0.2;
+  }
+  if (dPurpose < 0 && state.stats.purpose < 32) {
+    dPurpose *= 0.35;
+  }
+  if (state.stats.capital > 75) {
+    dCapital -= 0.75;
+  } else if (state.stats.capital > 55) {
+    dCapital -= 0.45;
+  }
+  if (state.stats.energy < 25) {
+    dLife -= 1.2;
+  } else if (state.stats.energy < 40) {
+    dLife -= 0.5;
+  }
+
   // 每季自然修復微調（避免非極端情境下線性墜谷）
   if (state.focus !== 'recovery' && state.stats.energy < 45) {
     dEnergy += 0.9;
@@ -812,11 +895,28 @@ export function advanceQuarter(state: SimulationState, rng = Math.random): Simul
     impactScore: Math.round(dImpact),
   };
 
-  const { next: nextStats } = applyStatDelta(state.stats, statDelta);
+  const { next: nextStats } = applyStatDelta(state.stats, statDelta, true);
 
   const lowEnergyStreak = nextStats.energy < 14 ? state.lowEnergyStreak + 1 : 0;
   const lowPurposeStreak = nextStats.purpose < 14 ? state.lowPurposeStreak + 1 : 0;
   const debtStreak = nextSavings < -40000 ? state.debtStreak + 1 : 0;
+
+  const baseHistory = state.historyPoints ?? [];
+  const nextHistoryPoints: CareerHistoryPoint[] = crossedNewYear
+    ? [
+        ...baseHistory,
+        {
+          year: nextYear,
+          age: nextAge,
+          salary: nextSalary,
+          monthlyExpense: expense.totalMonthly,
+          energy: Math.round(nextStats.energy),
+          purpose: Math.round(nextStats.purpose),
+          capital: Math.round(nextStats.capital),
+          life: Math.round(nextStats.life),
+        },
+      ]
+    : baseHistory;
 
   let nextState: SimulationState = {
     ...state,
@@ -839,6 +939,7 @@ export function advanceQuarter(state: SimulationState, rng = Math.random): Simul
     lastStatDelta: statDelta,
     lifeStatus: nextLifeStatus,
     peers: nextPeers,
+    historyPoints: nextHistoryPoints,
     quartersSinceLastEvent: state.quartersSinceLastEvent + 1,
     lowEnergyStreak,
     lowPurposeStreak,
@@ -1205,7 +1306,7 @@ export function buildCareerArchive(
     : `在台灣約十萬名社福、倡議、學會與工會受僱者中，低薪、一人多工與照顧壓力使得多數人尚未走到 55 歲退休便悄然離職摸索轉行。你這段長達 ${totalYears} 年的經歷累積 NT$ ${state.laborPensionTotal.toLocaleString()} 勞退專戶（${pensionLawNote}），精準映照了民間部門與人生現實之間的拉鋸。`;
 
   const shareText = [
-    `【做好事，是份好工作嗎？ v0.21｜台灣 NPO 與人民團體職涯結算】`,
+    `【做好事，是份好工作嗎？ v0.22｜台灣 NPO 與人民團體職涯結算】`,
     `檔案字號：${state.docNumber}`,
     `最終稱號：${title}（${stampLabel}）`,
     `經歷：${state.startYear}–${state.currentYear}（共 ${totalYears} 年｜${state.startAge} → ${state.age} 歲）`,
@@ -1214,6 +1315,23 @@ export function buildCareerArchive(
     `存款：NT$ ${state.savings.toLocaleString()} ｜ 勞退專戶：NT$ ${state.laborPensionTotal.toLocaleString()}（${state.age >= 60 ? '已滿60歲可領' : '未滿60歲還無法請領'}） ｜ 社會影響力：${state.stats.impactScore}`,
     `四維指標：能量 ${Math.round(state.stats.energy)} / 意義 ${Math.round(state.stats.purpose)} / 資本 ${Math.round(state.stats.capital)} / 生活 ${Math.round(state.stats.life)}`,
   ].join('\n');
+
+  const rawHistory = state.historyPoints ?? [];
+  const finalHistoryPoint: CareerHistoryPoint = {
+    year: state.currentYear,
+    age: state.age,
+    salary: state.monthlySalary,
+    monthlyExpense: state.lastExpenseBreakdown.totalMonthly,
+    energy: Math.round(state.stats.energy),
+    purpose: Math.round(state.stats.purpose),
+    capital: Math.round(state.stats.capital),
+    life: Math.round(state.stats.life),
+  };
+  const lastPoint = rawHistory[rawHistory.length - 1];
+  const historyPoints: CareerHistoryPoint[] =
+    lastPoint && lastPoint.year === state.currentYear
+      ? [...rawHistory.slice(0, -1), finalHistoryPoint]
+      : [...rawHistory, finalHistoryPoint];
 
   return {
     id: `arch_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
@@ -1247,6 +1365,7 @@ export function buildCareerArchive(
     finalStats: { ...state.stats },
     milestones: state.milestones,
     peers: state.peers,
+    historyPoints,
     statisticalNote,
     shareText,
   };

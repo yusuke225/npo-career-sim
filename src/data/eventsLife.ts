@@ -337,13 +337,13 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
   },
   {
     id: 'life20_reunion_comparison',
-    title: '大學同學會：大家聊股票與預售屋，你剛趕完活動場撤場',
+    title: '大學同學會：大家聊股票與預售屋，你剛忙完{weekendTask}',
     category: 'life',
     tag: '同儕差距感',
     weight: 15,
     conditions: { minAge: 24, maxAge: 33, excludeOutsideNPO: true },
     narrative:
-      '穿著皺掉的活動主辦方工作服衝進熱炒店時，已經遲到四十分鐘。同桌大學好友有人年薪破百萬正在看重劃區兩房，有人準備去外商報到。大家客氣地舉杯說「真的好佩服你有理想，不像我們都被資本主義綁架」，但結帳分攤每人一千二的聚餐費時，你還是下意識算了一下這個月剩多少預算。',
+      '剛結束加班趕在最後一刻衝進熱炒店時，已經遲到四十分鐘。同桌大學好友有人年薪破百萬正在看重劃區兩房，有人準備去外商報到。大家客氣地舉杯說「真的好佩服你待在{orgNoun}這麼有熱忱，不像我們都被資本主義綁架」，但結帳分攤每人一千二的聚餐費時，你還是下意識算了一下這個月剩多少預算。',
     choices: [
       {
         id: 'embrace_own_pace',
@@ -353,7 +353,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
           statsDelta: { energy: 1, purpose: 5, capital: 3, life: 4 },
         },
         outcomeText:
-          '聊開以後才發現當工程師的朋友其實也每天失眠、羨慕你工作真的看得到「人」。散場時一位好友說以後協會募款記得傳連結給他。',
+          '聊開以後才發現當工程師的朋友其實也每天失眠、羨慕你工作真的看得到「人」。散場時一位好友說下次聚餐一定要多聽你聊聊{orgNoun}現場的故事。',
       },
       {
         id: 'retreat_into_bubble',
@@ -586,7 +586,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
           milestoneTag: '離開雙北轉往區域組織深耕',
         },
         outcomeText:
-          '花三千塊台北雅房的價錢租到一整層兩房公寓，陽台終於照得到太陽。雖然少了不少大台北研討會交流，但下班騎十分鐘就能吃到熱騰騰的晚餐。',
+          '花三千塊台北雅房的價錢租到一整層兩房公寓，陽台終於照得到太陽。雖然少了不少大台北的跨界交流資源，但下班騎十分鐘就能吃到熱騰騰的晚餐。',
       },
       {
         id: 'stay_taipei_hub',
@@ -596,7 +596,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
           statsDelta: { energy: -4, capital: 6, life: -4, impactScore: 7 },
         },
         outcomeText:
-          '你還是繼續搭著板南線通勤。台北確實冷酷又貴，但每次去立法院或內政部開會走路二十分鐘就到，這份即時現場感讓你暫時捨不得離開。',
+          '你還是繼續搭著板南線通勤。台北確實冷酷又貴，但每次去中央部會、跨界協調會或大型論壇走路搭捷運就到，這份即時現場感讓你暫時捨不得離開。',
       },
     ],
   },
@@ -1030,24 +1030,24 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
   },
   {
     id: 'life50_physical_limit',
-    title: '歲月不饒人：再也扛不動整箱物資與整夜街頭守夜了',
+    title: '歲月不饒人：連日趕場備戰與長期熬夜的體力真的扛不住了',
     category: 'intertwined',
     tag: '體力轉折點',
     weight: 22,
     conditions: { minAge: 50, maxAge: 64, excludeOutsideNPO: true },
     narrative:
-      '又是一場大活動／大型抗爭現場。二十幾歲時你能自己搬十箱礦泉水走三層樓、熬兩夜寫新聞稿不眨眼；今天卻只是多站了四小時腰椎就隱隱作痛，回家還得貼兩片痠痛貼布。你突然承認，自己不再適合衝在體力消耗的最前排。',
+      '又是一個密集忙碌的{weekendTask}檔期。二十幾歲時你能連續跑點奔波、一次搬十幾箱資料與設備走三層樓、熬兩夜趕公文與簡報都不眨眼；今天卻只是多站了幾小時腰椎就隱隱作痛，回家還得貼兩片痠痛貼布。你突然承認，自己不再適合扛在體力消耗的最前排。',
     choices: [
       {
         id: 'mentor_young_leaders',
-        label: '退居二線專注策略指導、對外募資與把關法規細節，把舞台交給年輕一代',
+        label: '退居二線專注經驗傳承、策略協調與把關法規細節，把第一線執行交給年輕一代',
         sublabel: '角色成功轉型：從「親自做完」變成「讓團隊做得到」',
         effect: {
           statsDelta: { energy: 8, purpose: 8, capital: 7, life: 7, impactScore: 12 },
           milestoneTag: '順利完成第一線體力勞動退位與經驗傳承',
         },
         outcomeText:
-          '年輕幹部站上主舞台拿麥克風那天，你在台下後排幫大家顧著水壺與後勤聯絡。那種不必自己當主角卻看著制度延續下去的踏實，是年輕時體會不到的。',
+          '看著年輕同仁自信站上前線挑大樑的那天，你在後排默默替大家顧好後勤與聯絡細節。那種不必自己事必躬親卻看著組織制度延續下去的踏實，是年輕時體會不到的。',
       },
       {
         id: 'refuse_to_slow',
@@ -1409,19 +1409,19 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     weight: 14,
     conditions: { minAge: 36, maxAge: 56 },
     narrative:
-      '當年手把手教你寫第一個計畫書、帶你一起{fieldMove}的資深前輩住進了加護病房。他奉獻了三十年給台灣民間社會與基層現場，名下沒有房產、存款有限，病房外擠滿了各團體趕來輪班照顧的後輩。看著病床上的他，你彷彿看見某種版本的未來。',
+      '當年手把手帶你入行、陪你一起{fieldMove}的資深前輩住進了加護病房。他奉獻了三十年給台灣民間組織與基層現場，名下沒有房產、存款有限，病房外擠滿了各單位趕來輪班照顧的後輩。看著病床上的他，你彷彿看見某種版本的未來。',
     choices: [
       {
         id: 'organize_mutual_aid_fund',
-        label: '協助發起圈內前輩急難互助募資，同時立誓要替這一代建立合理的退休與待遇文化',
+        label: '協助揪同業發起前輩急難醫療互助，同時立誓要替這一代建立合理的退休與待遇文化',
         sublabel: '把震撼化為制度行動，拒絕讓奉獻者老無所終成為浪漫神話',
         effect: {
           savingsDelta: -6000,
           statsDelta: { energy: -5, purpose: 10, capital: 7, life: 2, impactScore: 13 },
-          milestoneTag: '發起非營利前輩醫療互助與同業保障倡議',
+          milestoneTag: '發起前輩醫療互助並推動同業勞動保障文化',
         },
         outcomeText:
-          '不到三天就募齊醫藥與看護費。那天傍晚你坐在醫院走廊寫下：「敬重前輩的最好方式，就是不讓下一代重複一樣的貧窮燃燒。」',
+          '不到三天大家就湊齊醫藥與看護費。那天傍晚你坐在醫院走廊寫下：「敬重前輩的最好方式，就是不讓下一代重複一樣的貧窮燃燒。」',
       },
       {
         id: 'rethink_own_safety_net',
@@ -1772,7 +1772,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     weight: 15,
     conditions: { excludeOutsideNPO: true, minTenure: 1 },
     narrative:
-      '週末傍晚，朋友拉你參加一場由工會舉辦的「民間組織與基層工作者聯誼餐會」。走進餐廳原本有點社恐，沒想到一聊起來，隔壁桌的學會秘書、社福社工、倡議專員跟工會幹部全都在吐一樣的苦水——凍薪、理監事會奇聞、年底核銷地獄。大家邊吃邊笑，反而有一種久違的被理解感。',
+      '週末傍晚，朋友拉你參加一場由工會舉辦的「民間組織與基層工作者聯誼餐會」。走進餐廳原本有點社恐，沒想到一聊起來，隔壁桌的學會秘書、社福社工、倡議專員跟工會幹部全都在吐一樣的苦水——凍薪、理監事會奇聞、評鑑核銷與永無止境的庶務地獄。大家邊吃邊笑，反而有一種久違的被理解感。',
     choices: [
       {
         id: 'join_union_mutual_aid',

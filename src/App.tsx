@@ -5,6 +5,7 @@ import { GameDashboard } from './components/GameDashboard';
 import { IntakeCertificate } from './components/IntakeCertificate';
 import { LandingScreen } from './components/LandingScreen';
 import { PLAYER_NAME_POOL, pickRandom } from './data/organizations';
+import { startJazzBgm, stopJazzBgm } from './engine/jazzAudio';
 import {
   ARCHIVE_STORAGE_KEY,
   advanceQuarter,
@@ -52,6 +53,7 @@ export function App() {
   const [autoDecide, setAutoDecide] = useState(false);
   const [lastCustomConfig, setLastCustomConfig] = useState<StartConfigInput | null>(null);
   const [customPlayerName, setCustomPlayerName] = useState('');
+  const [bgmOn, setBgmOn] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -60,6 +62,18 @@ export function App() {
 
   const toggleTheme = useCallback(() => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  }, []);
+
+  const toggleBgm = useCallback(() => {
+    setBgmOn((prev) => {
+      const next = !prev;
+      if (next) {
+        startJazzBgm();
+      } else {
+        stopJazzBgm();
+      }
+      return next;
+    });
   }, []);
 
   const refreshArchives = useCallback(() => {
@@ -252,11 +266,13 @@ export function App() {
       {screen === 'landing' && (
         <LandingScreen
           theme={theme}
+          bgmOn={bgmOn}
           pace={pace}
           playerName={customPlayerName}
           archiveCount={archives.length}
           savedCareer={savedCareer}
           onToggleTheme={toggleTheme}
+          onToggleBgm={toggleBgm}
           onChangePace={setPace}
           onChangePlayerName={setCustomPlayerName}
           onStartRandom={handleStartRandom}
@@ -271,7 +287,9 @@ export function App() {
         <IntakeCertificate
           state={simState}
           theme={theme}
+          bgmOn={bgmOn}
           onToggleTheme={toggleTheme}
+          onToggleBgm={toggleBgm}
           onChangePlayerName={handleChangePlayerName}
           onConfirmStart={handleConfirmStart}
           onReroll={handleReroll}
@@ -283,10 +301,12 @@ export function App() {
         <GameDashboard
           state={simState}
           theme={theme}
+          bgmOn={bgmOn}
           isPlaying={isPlaying}
           speed={speed}
           autoDecide={autoDecide}
           onToggleTheme={toggleTheme}
+          onToggleBgm={toggleBgm}
           onTogglePlay={handleTogglePlay}
           onChangeSpeed={setSpeed}
           onFastForwardToEvent={handleFastForwardToEvent}
@@ -302,7 +322,9 @@ export function App() {
         <CareerSummary
           record={viewingArchive}
           theme={theme}
+          bgmOn={bgmOn}
           onToggleTheme={toggleTheme}
+          onToggleBgm={toggleBgm}
           onPlayAgain={handleStartRandom}
           onOpenArchive={() => setDrawerOpen(true)}
           onBackHome={() => setScreen('landing')}

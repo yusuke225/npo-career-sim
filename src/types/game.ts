@@ -227,6 +227,17 @@ export type CareerEndReason =
   | 'pivoted_to_corp'
   | 'manual_close';
 
+export interface CareerHistoryPoint {
+  year: number;
+  age: number;
+  salary: number;
+  monthlyExpense: number;
+  energy?: number;
+  purpose?: number;
+  capital?: number;
+  life?: number;
+}
+
 export interface CareerArchiveRecord {
   id: string;
   completedAtIso: string;
@@ -259,6 +270,7 @@ export interface CareerArchiveRecord {
   finalStats: Stats;
   milestones: string[];
   peers: PeerWorker[];
+  historyPoints?: CareerHistoryPoint[];
   statisticalNote: string;
   shareText: string;
 }
@@ -320,6 +332,7 @@ export interface SimulationState {
   flags: string[];
   milestones: string[];
   chronicle: ChronicleEntry[];
+  historyPoints?: CareerHistoryPoint[];
   pendingEvent: GameEvent | null;
   quartersSinceLastEvent: number;
   lowEnergyStreak: number;

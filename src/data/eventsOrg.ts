@@ -521,7 +521,7 @@ export const ORG_EVENTS: GameEvent[] = [
   },
   {
     id: 'occ_occupational_injury_win',
-    title: '替外送／裝修師傅爭取到百萬職災失能給付',
+    title: '替基層自營會員爭取到百萬職災失能給付',
     category: 'work',
     tag: '職災權益現場',
     weight: 16,
@@ -1135,7 +1135,7 @@ export const ORG_EVENTS: GameEvent[] = [
     category: 'work',
     tag: '修法里程碑',
     weight: 13,
-    conditions: { orgTypes: ['advocacy_ngo', 'industrial_union'], excludeOutsideNPO: true, minTenure: 4 },
+    conditions: { orgTypes: ['advocacy_ngo'], excludeOutsideNPO: true, minTenure: 4 },
     narrative:
       '從第一場十人不到的小記者會、無數次冷門公聽會到三次政黨輪替，這部你們推動了五年的關鍵法規終於在今晚排上院會三讀。議場二樓旁聽席上坐著歷任離職和現任的戰友，不過你知道，三讀版本被偷偷刪掉了最重要的一項罰則。',
     choices: [
@@ -2303,7 +2303,7 @@ export const ORG_EVENTS: GameEvent[] = [
     category: 'work',
     tag: '圈內勞動覺醒',
     weight: 14,
-    conditions: { excludeOutsideNPO: true, minTenure: 2 },
+    conditions: { excludeOrgTypes: ['occupational_union'], excludeOutsideNPO: true, minTenure: 2 },
     narrative:
       '幾間大型社福與民團相繼爆出薪資回捐與承攬濫用醜聞，福爾摩沙非營利產業工會與島嶼社工人員職業工會聯合發起「要求衛福部與勞動部把核實給薪與 6% 勞退列為補助審查硬門檻」公開連署與部會外陳情，邀請現職工作者具名或匿名連署發聲。',
     choices: [
@@ -2864,35 +2864,46 @@ export const ORG_EVENTS: GameEvent[] = [
     ],
   },
   {
-    id: 'occ_union_vocational_training_audit',
-    title: '勞動部職訓計畫突襲點名：幾位師傅臨時接案缺席差點被扣補助',
+    id: 'occ_union_political_mobilization',
+    title: '選前動員要求：理事長要秘書處派車找會員「衝場充人數」',
     category: 'work',
-    tag: '職業工會職訓現場',
-    weight: 18,
+    tag: '會務與政治動員',
+    weight: 16,
     conditions: { orgTypes: ['occupational_union'], excludeOutsideNPO: true, minTenure: 1 },
     narrative:
-      '工會承辦的勞動部在職訓練班正在上課，評核委員突然不預警進教室點名。偏偏今天有四位自營師傅臨時接到大案子沒請假就缺席，還有一位上課滑手機報價，委員當場在訪視紀錄表上畫了紅線。',
+      '大選造勢黃金週前夕，理事長把你叫進辦公室，拿出一疊遊覽車調度單跟造勢背心：「某陣營的市黨部總幹事跟我們總會熟得很，週六下午要借我們工會的旗幟湊三台遊覽車的人氣，現場有發雙主菜便當跟一人五百車馬費，你拿會員名冊逐一打電話問誰有空去！」',
     choices: [
       {
-        id: 'tighten_attendance_and_appeal',
-        label: '立刻逐一聯繫學員補齊正式請假與從業證明，並建立開課前一天簡訊提醒機制',
-        sublabel: '保住補助核銷與工會評鑑等級，但也得承受部分師傅抱怨管太多',
+        id: 'follow_strict_consent',
+        label: '只整理近期曾登記聯誼旅遊的意願名單，避免拿投保資料打給一般會員',
+        sublabel: '依個資與會務界線低調配合，避免一般繳費會員反感客訴',
         effect: {
-          statsDelta: { energy: -9, purpose: 5, capital: 8, life: -1, impactScore: 11 },
+          statsDelta: { energy: -5, purpose: 1, capital: 4, life: 0, impactScore: 2 },
         },
         outcomeText:
-          '你趕在三日內補齊完整佐證說明，順利保住補助款不被扣減；下期開課改成開訓前先講清楚請假規則，出席率一口氣拉高到九成五。',
+          '你委婉提醒《個資法》風險，只問了平時熱衷團體活動的老班底，湊齊半台車交差。既沒正面衝撞理事長，也保住一般會員對工會的基本信任。',
       },
       {
-        id: 'adjust_class_schedule',
-        label: '向理事會與職訓承辦提案，把下期課程改成夜間與雨天彈性時段貼合師傅作息',
-        sublabel: '花心力重排講師與場地，但從根本解決基層師傅上課痛點',
+        id: 'all_out_mobilize',
+        label: '全力配合動員三台車，週末親自穿背心到造勢會場點名發便當與車馬費',
+        sublabel: '幫理事長做足地方政治人情與關係，但心裡對勞工組織定位感到迷惘',
         effect: {
-          statsDelta: { energy: -7, purpose: 8, capital: 9, life: 0, impactScore: 13 },
-          milestoneTag: '推動職業工會彈性時段職訓班改革',
+          statsDelta: { energy: -9, purpose: -5, capital: 4, life: -6, impactScore: -1 },
+          orgFinanceDelta: 1,
         },
         outcomeText:
-          '改成平日晚間開課後，師傅們白天接案、晚上安心學新技術，結訓滿意度拿到全縣最高分，連勞動部承辦都把你們當示範案例。',
+          '造勢現場旗海飄揚，主桌大老頻頻向理事長舉手致意。雖然理事長誇你懂人情世故、後續地方場地與補助關係更順，但回程在遊覽車上收拾便當盒時，你感到一陣強烈的疏離。',
+      },
+      {
+        id: 'refuse_with_boundary',
+        label: '婉拒掛工會旗幟動員，建議改由理事個人各自邀約、不經秘書處名冊派車',
+        sublabel: '守住工會會務中立與會員資料底線，但短期內在辦公室恐背黑鍋',
+        effect: {
+          statsDelta: { energy: -4, purpose: 6, capital: 2, life: 2, impactScore: 5 },
+          milestoneTag: '拒絕將職業工會會員名冊用於選舉動員',
+        },
+        outcomeText:
+          '理事長臉色沉了好幾天，但幾位務實派理事其實也怕捲入政黨紛爭而私下肯定你的拿捏。工會最後沒掛名動員，櫃檯也沒收到任何會員抗議電話。',
       },
     ],
   },

@@ -31,6 +31,7 @@ import type {
   StartConfigInput,
   ThemeMode,
 } from '../types/game';
+import { BgmToggle } from './BgmToggle';
 import { ThemeToggle } from './ThemeToggle';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -40,11 +41,13 @@ interface BeforeInstallPromptEvent extends Event {
 
 interface LandingScreenProps {
   theme: ThemeMode;
+  bgmOn: boolean;
   pace: PaceMode;
   playerName: string;
   archiveCount: number;
   savedCareer: SimulationState | null;
   onToggleTheme: () => void;
+  onToggleBgm: () => void;
   onChangePace: (pace: PaceMode) => void;
   onChangePlayerName: (name: string) => void;
   onStartRandom: () => void;
@@ -56,11 +59,13 @@ interface LandingScreenProps {
 
 export function LandingScreen({
   theme,
+  bgmOn,
   pace,
   playerName,
   archiveCount,
   savedCareer,
   onToggleTheme,
+  onToggleBgm,
   onChangePace,
   onChangePlayerName,
   onStartRandom,
@@ -146,13 +151,14 @@ export function LandingScreen({
           <strong className="font-serif" style={{ fontSize: 17 }}>
             做好事，是份好工作嗎？
           </strong>
-          <span className="brand-code">1 IN 100,000 · TW-NPO SIM v0.21</span>
+          <span className="brand-code">1 IN 100,000 · TW-NPO SIM v0.22</span>
         </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <button type="button" className="btn btn-sm" onClick={onOpenArchive}>
             <Archive size={15} />
             <span>職涯檔案 ({archiveCount})</span>
           </button>
+          <BgmToggle enabled={bgmOn} onToggle={onToggleBgm} />
           <ThemeToggle theme={theme} onToggle={onToggleTheme} />
         </div>
       </header>
@@ -482,7 +488,7 @@ export function LandingScreen({
           向《80億分之1》（1in8b.life）帶給我們的感動致敬，本作所有組織與案例是基於實務處境以虛構呈現，數據僅存於您自己的瀏覽器。
         </div>
         <div>
-          v0.21｜via{' '}
+          v0.22｜via{' '}
           <a
             href="mailto:yusuke225@gmail.com"
             style={{ color: 'var(--accent-teal)', textDecoration: 'underline', textUnderlineOffset: '3px' }}
