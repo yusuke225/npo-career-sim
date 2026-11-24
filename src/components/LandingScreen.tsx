@@ -39,6 +39,45 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
+const RELEASE_CHANGELOG: Array<{ version: string; tag: string; summary: string }> = [
+  {
+    version: 'v0.22',
+    tag: '最新',
+    summary:
+      '新增結算結局圖徽、收支長條＋四維指標折線圖、理想意義×身心能量軌跡象限圖與紀念卡 PNG 下載；加入背景音樂、擴充 24 間組織樣本與 64 組隨機姓名，並微調數值封頂與同梯營利事業去向／薪資對照。',
+  },
+  {
+    version: 'v0.21',
+    tag: '平衡更新',
+    summary:
+      '支援玩家自訂或修改姓名，依 2025 年物價重整日常開銷與生活事件，新增 NPO／勞研所在職進修及工會聯誼／勞教事件，並於結算頁加入臺灣非營利組織產業工會（NPOIU）關注連結。',
+  },
+  {
+    version: 'v0.2',
+    tag: '體驗優化',
+    summary:
+      '手機版新增頂部進度欄、事件／狀態雙分頁與加到主畫面提示；修正組織法制與工會用語、補齊 16 則各類型組織專屬事件，並規範全職獎金發放條件。',
+  },
+  {
+    version: 'v0.121',
+    tag: '事件校對',
+    summary:
+      '收斂各類組織專屬事件的觸發範圍，修正同梯夥伴薪資進程與「最終月薪／離職前月薪」標示，並建立自動化模擬驗證流程。',
+  },
+  {
+    version: 'v0.12',
+    tag: '制度修正',
+    summary:
+      '優化首頁排版與說明文案，並依台灣法制修正多元就業／自然人承攬無雇主 6% 勞退提撥規則。',
+  },
+  {
+    version: 'v0.1',
+    tag: '初版上線',
+    summary:
+      '建立 8 類台灣非營利與人民團體組織模型、四大職涯核心指標、季度收支與房租／扶養結構，以及多結局職涯紀事系統。',
+  },
+];
+
 interface LandingScreenProps {
   theme: ThemeMode;
   bgmOn: boolean;
@@ -75,6 +114,7 @@ export function LandingScreen({
   onOpenArchive,
 }: LandingScreenProps) {
   const [showCustom, setShowCustom] = useState(false);
+  const [showAllChangelog, setShowAllChangelog] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallGuide, setShowInstallGuide] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
@@ -478,6 +518,79 @@ export function LandingScreen({
                 </span>
               </div>
               <div className="ecology-chip-desc">{o.sizeLabel}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="card ecology-strip" aria-label="歷次部署版號與更新日誌">
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: 10,
+            flexWrap: 'wrap',
+          }}
+        >
+          <h2 style={{ fontSize: 16 }}>歷次部署版號與更新日誌</h2>
+          <button
+            type="button"
+            className="btn btn-sm"
+            onClick={() => setShowAllChangelog((prev) => !prev)}
+          >
+            <span>{showAllChangelog ? '收合較早版本' : '展開完整版號'}</span>
+            {showAllChangelog ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10,
+            marginTop: 14,
+          }}
+        >
+          {(showAllChangelog ? RELEASE_CHANGELOG : RELEASE_CHANGELOG.slice(0, 2)).map((item) => (
+            <div
+              key={item.version}
+              style={{
+                padding: '10px 12px',
+                borderRadius: 6,
+                border: '1px solid var(--border-hairline)',
+                background: 'var(--bg-elevated)',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  marginBottom: 4,
+                  flexWrap: 'wrap',
+                }}
+              >
+                <span
+                  className="font-mono"
+                  style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent-teal)' }}
+                >
+                  {item.version}
+                </span>
+                <span
+                  style={{
+                    fontSize: 11,
+                    padding: '1px 7px',
+                    borderRadius: 999,
+                    border: '1px solid var(--border-hairline)',
+                    color: 'var(--ink-secondary)',
+                  }}
+                >
+                  {item.tag}
+                </span>
+              </div>
+              <p style={{ fontSize: 12, color: 'var(--ink-secondary)', lineHeight: 1.6, margin: 0 }}>
+                {item.summary}
+              </p>
             </div>
           ))}
         </div>
