@@ -252,7 +252,7 @@ export const ORG_EVENTS: GameEvent[] = [
     weight: 18,
     conditions: { orgTypes: ['industrial_union'], excludeOutsideNPO: true },
     narrative:
-      '你協助某大型企業或院區單位秘密籌組企業工會已經三個月，距離三十人發起門檻只差最後五份連署書。不料昨晚有兩名熱心員工被單位主管個別叫進會議室「關心最近是不是下班跟外面工會的人走很近」，群組瞬間人心惶惶，已有三人私訊想撤回連署。',
+      '你協助集團尚未設分會的關係企業或外地據點秘密籌組工會／分會已經三個月，距離三十人發起門檻只差最後五份連署書。不料昨晚有兩名熱心員工被單位主管個別叫進會議室「關心最近是不是下班跟外面工會的人走很近」，群組瞬間人心惶惶，已有三人私訊想撤回連署。',
     choices: [
       {
         id: 'rush_register_and_protect',
@@ -319,7 +319,7 @@ export const ORG_EVENTS: GameEvent[] = [
     category: 'work',
     tag: '工會內部民主',
     weight: 16,
-    conditions: { orgTypes: ['industrial_union', 'occupational_union'], excludeOutsideNPO: true },
+    conditions: { orgTypes: ['industrial_union'], excludeOutsideNPO: true },
     narrative:
       '工會上週剛幫兩位被違法解僱的會員談回百萬資遣費，但當你在會員大群組公告這週六召開年度會員大會與團協草案說明時，底下連續十幾則回覆都在問：「秘書，沒辦法到可以託人代領超商禮券嗎？」「繳會費就是為了紀念品啊。」那一刻你盯著螢幕感到一陣深深的虛無。',
     choices: [
@@ -353,7 +353,7 @@ export const ORG_EVENTS: GameEvent[] = [
     weight: 17,
     conditions: { orgTypes: ['industrial_union', 'occupational_union'], excludeOutsideNPO: true },
     narrative:
-      '這季為了接兩件重大勞資爭議與週末勞教營，你已經連續 19 天沒有完整休假，月均工時突破 220 小時。你鼓起勇氣在工會理事會提出「秘書處也應落實一例一休與補休制度」，沒想到幾位本身也是基層勞工的理事卻皺眉說：「我們會費也是工人一塊一塊湊出來的，以前前輩做工運哪有在算幾點下班的？」',
+      '這季為了趕辦重大勞資爭議、會員大會與週末活動，你已經連續 19 天沒有完整休假，月均工時突破 220 小時。你鼓起勇氣在工會理事會提出「秘書處也應落實一例一休與補休制度」，沒想到幾位本身也是基層勞工的理事卻皺眉說：「我們會費也是會員一塊一塊繳出來的，以前前輩辦會務哪有在算幾點下班的？」',
     choices: [
       {
         id: 'negotiate_cba_inside',
@@ -1103,7 +1103,7 @@ export const ORG_EVENTS: GameEvent[] = [
     category: 'work',
     tag: '公共溝通危機',
     weight: 15,
-    conditions: { orgTypes: ['advocacy_ngo', 'industrial_union'], excludeOutsideNPO: true },
+    conditions: { orgTypes: ['advocacy_ngo'], excludeOutsideNPO: true },
     narrative:
       '昨天的立場聲明被特定粉專與政治側翼擷取其中一句話做梗圖，嘲諷你們是「收錢辦事的左膠／雙標團體」。一小時內 Google 評論被洗成一顆星，辦公電話甚至有人打來飆罵三字經，還出現十幾筆寫著「退捐」的來信。',
     choices: [
@@ -1420,42 +1420,82 @@ export const ORG_EVENTS: GameEvent[] = [
     ],
   },
   {
-    id: 'promo_mid_union',
-    title: '升遷的誘惑與代價：工會會務組長與資深秘書缺出缺',
+    id: 'promo_mid_ind_union',
+    title: '升遷的誘惑與代價：工會副總幹事暨資深組織秘書缺出缺',
     category: 'work',
     tag: '工會幹部升遷',
     weight: 16,
     conditions: {
-      orgTypes: ['industrial_union', 'occupational_union'],
+      orgTypes: ['industrial_union'],
       excludeOutsideNPO: true,
       minTenure: 3,
       maxRoleLevel: 1,
     },
     narrative:
-      '資深秘書退休或轉任勞工局，工會理事會決議推舉你升任組長級資深幹部，月薪加三千五百元，統籌全會勞資調解、職訓核銷與會員大會動員。只是接下去得同時面對資方壓力與理事會各派系的電話關切。',
+      '資深秘書退休或轉往勞動部門，工會理事會決議推舉你升任副總幹事暨資深組織秘書，月薪加三千五百元，統籌團體協約談判、勞資會議備戰與各部門申訴調解。只是接下去得同時扛起資方攻防與理事會內部的溝通壓力。',
     choices: [
       {
-        id: 'accept_union_mid',
-        label: '接下組長位置！把多年實戰的談判與會務制度化教給新人',
-        sublabel: '加薪 $3,500、職級晉升，成為工會秘書處的核心骨幹',
+        id: 'accept_ind_union_mid',
+        label: '接下資深組長／副總幹事位置！把多年實戰的談判與爭議處理制度化傳給新人',
+        sublabel: '加薪 $3,500、職級晉升，成為企業／產業工會秘書處的核心骨幹',
         effect: {
           roleLevelDelta: 1,
           salaryDelta: 3500,
           statsDelta: { energy: -10, purpose: 6, capital: 12, life: -6, impactScore: 14 },
-          milestoneTag: '晉升工會組長級資深秘書',
+          milestoneTag: '晉升工會資深組織秘書暨協商幹部',
         },
         outcomeText:
-          '你一面扛起重大爭議調解主談，一面替工會新人建立系統化的案件追蹤表，讓秘書處不再完全依賴個人經驗。',
+          '你一面扛起重大爭議調解主談，一面替工會新人建立標準化的談判紀錄與蒐證手冊，讓秘書處戰力穩穩傳承下去。',
       },
       {
-        id: 'stay_union_frontline',
-        label: '婉拒統籌管理缺，專心顧好手上的廠區服務或勞健保櫃檯',
+        id: 'stay_ind_union_frontline',
+        label: '婉拒統籌管理缺，專心顧好現有單位溝通與第一線會員權益諮詢',
+        sublabel: '避開理事會高張力協調漩渦，維持較穩定的下班時間',
+        effect: {
+          statsDelta: { energy: 4, purpose: 4, capital: 4, life: 7, impactScore: 8 },
+        },
+        outcomeText:
+          '你不碰管理調度，專心把每件部門爭議與申訴案辦到漂亮，成了第一線會員最信任的老戰友。',
+      },
+    ],
+  },
+  {
+    id: 'promo_mid_occ_union',
+    title: '升遷的誘惑與代價：職業工會會務組長與資深專員缺出缺',
+    category: 'work',
+    tag: '工會幹部升遷',
+    weight: 16,
+    conditions: {
+      orgTypes: ['occupational_union'],
+      excludeOutsideNPO: true,
+      minTenure: 3,
+      maxRoleLevel: 1,
+    },
+    narrative:
+      '資深會務主管退休，職業工會理事會決議推舉你升任會務組長，月薪加三千五百元，統籌數千名會員勞健保加退保內控、勞動部職訓計畫核銷與會員代表大會籌備。只是接下去得經常周旋在理事會各派系的關切之間。',
+    choices: [
+      {
+        id: 'accept_occ_union_mid',
+        label: '接下會務組長位置！把勞健保審核與職訓核銷流程系統化',
+        sublabel: '加薪 $3,500、職級晉升，成為職業工會會務運作核心',
+        effect: {
+          roleLevelDelta: 1,
+          salaryDelta: 3500,
+          statsDelta: { energy: -10, purpose: 5, capital: 12, life: -6, impactScore: 13 },
+          milestoneTag: '晉升職業工會會務組長',
+        },
+        outcomeText:
+          '你替櫃檯建立了加保檢核與欠費預警 SOP，大幅降低斷保糾紛，也讓職訓班核銷準確率名列前茅。',
+      },
+      {
+        id: 'stay_occ_union_frontline',
+        label: '婉拒統籌管理缺，專心守好手上的勞健保櫃檯與會員職災諮詢',
         sublabel: '避開理監事派系角力漩渦，維持生活穩定',
         effect: {
           statsDelta: { energy: 4, purpose: 4, capital: 4, life: 7, impactScore: 8 },
         },
         outcomeText:
-          '你不碰派系協調，專心把手邊每一件會員職災與調解辦到漂亮，成了會員心裡最踏實的老面孔。',
+          '你不捲入派系角力，專心幫每位自營會員把職災理賠與級距試算辦得妥妥當當，成了櫃檯最可靠的定心丸。',
       },
     ],
   },
@@ -1542,43 +1582,84 @@ export const ORG_EVENTS: GameEvent[] = [
     ],
   },
   {
-    id: 'promo_top_union',
+    id: 'promo_top_ind_union',
     title: '組織靈魂出缺：工會理事會推舉你接任「工會總幹事」',
     category: 'work',
     tag: '工會最高專職',
     weight: 15,
     conditions: {
-      orgTypes: ['industrial_union', 'occupational_union'],
+      orgTypes: ['industrial_union'],
       excludeOutsideNPO: true,
       minTenure: 6,
       maxRoleLevel: 2,
       minCapital: 45,
     },
     narrative:
-      '多年來陪著會員打調解、守櫃檯與衝抗爭，如今工會總幹事缺出。理監事會推舉你正式升任工會總幹事，統籌秘書處預算、勞動政策發聲與跨工會串聯，但也得全面承接工會內部民主政治的砲火。',
+      '多年來陪著會員打勞資調解、談團體協約與守住勞權底線，如今工會總幹事缺出。理監事會推舉你正式升任工會總幹事，統籌秘書處預算、集體協商策略與跨部門幹部培訓，但也得全面承接公司高層攻防與工會內部民主政治的砲火。',
     choices: [
       {
-        id: 'take_union_chief',
-        label: '接任工會總幹事！把秘書處勞動保障與抗爭基金制度一起拉起來',
-        sublabel: '登頂工會專職核心，撐起更多基層勞工的安全網',
+        id: 'take_ind_union_chief',
+        label: '接任工會總幹事！把秘書處勞動保障與爭議互助基金制度一起拉起來',
+        sublabel: '登頂企業／產業工會專職核心，撐起更多受僱者的集體談判力量',
         effect: {
           roleLevelDelta: 2,
           salaryDelta: 6500,
           statsDelta: { energy: -12, purpose: 11, capital: 14, life: -7, impactScore: 22 },
-          milestoneTag: '接任工會專任總幹事',
+          milestoneTag: '接任企業／產業工會專任總幹事',
         },
         outcomeText:
-          '接任當天你先替秘書處同事簽下明確補休與加班保障條款，然後才回過頭帶領全會迎戰下一場勞資談判。',
+          '接任當天你先替秘書處同事簽下明確補休與加班保障條款，然後才回過頭帶領全會迎戰下一輪團體協約談判。',
       },
       {
-        id: 'decline_union_chief',
-        label: '婉拒總幹事政治風暴位置，專注守住勞教培力與實務諮詢角色',
-        sublabel: '減少內部派系耗損，細水長流陪勞工走下去',
+        id: 'decline_ind_union_chief',
+        label: '婉拒總幹事高張力位置，專注守住勞教培力與實務諮詢角色',
+        sublabel: '減少內部派系耗損，細水長流陪會員走下去',
         effect: {
           statsDelta: { energy: 6, purpose: 3, capital: 5, life: 9, impactScore: 9 },
         },
         outcomeText:
-          '你退回實務顧問位置，少了無止盡的理監事電話協調，反而更能專心培訓新世代年輕工運秘書。',
+          '你退回資深諮詢位置，少了無止盡的理監事協調電話，反而更能專心培訓新世代工會幹部。',
+      },
+    ],
+  },
+  {
+    id: 'promo_top_occ_union',
+    title: '組織靈魂出缺：職業工會理事會推舉你接任「總幹事」',
+    category: 'work',
+    tag: '工會最高專職',
+    weight: 15,
+    conditions: {
+      orgTypes: ['occupational_union'],
+      excludeOutsideNPO: true,
+      minTenure: 6,
+      maxRoleLevel: 2,
+      minCapital: 45,
+    },
+    narrative:
+      '多年來穩住數千名自營會員的勞健保櫃檯、欠費風控與職災給付服務，如今職業工會總幹事缺出。理監事會推舉你升任總幹事，統籌會務預算、勞動部職訓標案與理監事會協調，但也得隨時消化工會選務與人情角力。',
+    choices: [
+      {
+        id: 'take_occ_union_chief',
+        label: '接任職業工會總幹事！把秘書處工作保障與會務數位風控制度一起建立起來',
+        sublabel: '登頂職業工會最高專職，守住基層自營會員的保險與服務品質',
+        effect: {
+          roleLevelDelta: 2,
+          salaryDelta: 6500,
+          statsDelta: { energy: -12, purpose: 10, capital: 14, life: -7, impactScore: 20 },
+          milestoneTag: '接任職業工會專任總幹事',
+        },
+        outcomeText:
+          '接任後你推動線上對帳與秘書處休假代理制度，讓員工不必再獨自扛下上百通焦慮會員電話。',
+      },
+      {
+        id: 'decline_occ_union_chief',
+        label: '婉拒總幹事政治協調位置，繼續擔任資深會務顧問守好核心業務',
+        sublabel: '避開選舉派系壓力，保留下班與家庭時間',
+        effect: {
+          statsDelta: { energy: 6, purpose: 3, capital: 5, life: 9, impactScore: 9 },
+        },
+        outcomeText:
+          '你婉拒總幹事頭銜，只替會務團隊把關職災難症與重大法規案件，終於擁有多年來最平穩的生活節奏。',
       },
     ],
   },
@@ -1812,7 +1893,7 @@ export const ORG_EVENTS: GameEvent[] = [
       minCapital: 45,
     },
     narrative:
-      '多年在{orgNoun}與公部門承辦窗口打交道的專業能力被局處主管看見。縣市政府社會局或勞工局私下詢問你有沒有意願應徵約聘督導與專案專員——依照公部門薪點起敘立刻加薪七千五百元、見紅就休、不用再靠小額募款擔心組織斷炊，但從此必須改坐在公部門審查桌的另一側。',
+      '多年在{orgNoun}與公部門承辦窗口打交道的專業能力被局處主管看見。縣市政府社會局或勞工局私下詢問你有沒有意願應徵約聘督導與專案專員——依照公部門薪點起敘立刻加薪七千五百元、見紅就休、不用再整天為組織財源與人手吃緊發愁，但從此必須改坐在公部門審查桌的另一側。',
     choices: [
       {
         id: 'pivot_to_public_sector_end',
@@ -1951,7 +2032,7 @@ export const ORG_EVENTS: GameEvent[] = [
   },
   {
     id: 'common_whistleblower_dilemma',
-    title: '組織內部帳務瑕疵：發現資深主管把個人餐敘混進專案核銷',
+    title: '組織內部帳務瑕疵：發現資深主管把個人餐敘混進會務經費與專案核銷',
     category: 'work',
     tag: '職場倫理底線',
     weight: 14,
@@ -2904,6 +2985,181 @@ export const ORG_EVENTS: GameEvent[] = [
         },
         outcomeText:
           '理事長臉色沉了好幾天，但幾位務實派理事其實也怕捲入政黨紛爭而私下肯定你的拿捏。工會最後沒掛名動員，櫃檯也沒收到任何會員抗議電話。',
+      },
+    ],
+  },
+  {
+    id: 'ind_union_year_end_bonus_clash',
+    title: '公司獲利創高卻縮水年終與分紅：會員群組炸鍋要求工會出手',
+    category: 'work',
+    tag: '企業工會談判',
+    weight: 16,
+    conditions: { orgTypes: ['industrial_union'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '公司年度財報與每股盈餘雙雙創新高，資方卻突然公告以「保留轉型資本支出」為由，把固定月數以外的績效分紅對半砍，還順帶縮水各單位尾牙餐費。工會聊天群組一夜湧入上千則怒吼，各廠區／營業單位代表紛紛要求秘書處立刻發文交涉。',
+    choices: [
+      {
+        id: 'demand_bonus_transparency',
+        label: '連夜彙整歷年財報與人事成本佔比，發函要求召開臨時勞資會議公開獎金公式',
+        sublabel: '用公開透明的數字與資方正面交鋒，凝聚白領與基層會員的共同戰線',
+        effect: {
+          statsDelta: { energy: -10, purpose: 10, capital: 10, life: -4, impactScore: 15 },
+          milestoneTag: '迫使資方公開年度分紅與獎金分配公式',
+        },
+        outcomeText:
+          '人資與財務主管原本想靠「商業機密」打發，但在工會亮出公開財報比例後只好交出部門級距說明，並吐回兩成被砍掉的績效分紅預算。',
+      },
+      {
+        id: 'launch_badge_and_petition',
+        label: '發起全員「爭取合理分紅」識別證貼紙與午休靜默集結，拉高集體議價壓力',
+        sublabel: '不必直接罷工就能展現組織動員力，考驗跨部門會員的團結度',
+        effect: {
+          statsDelta: { energy: -12, purpose: 11, capital: 8, life: -5, impactScore: 17 },
+          setFlag: 'union_won_bonus_rally',
+        },
+        outcomeText:
+          '午餐時段總部一樓大廳站滿貼著工會標語貼紙的員工，高階主管下樓看見陣仗當場臉色大變，三天後董事會就加碼發出每人額外半個月慰勞金。',
+      },
+      {
+        id: 'persuade_selective_compensation',
+        label: '務實折衝資方擴張計畫，優先替基層低薪職等談回定額生活津貼與加班加給',
+        sublabel: '減少公司極端對立，幫最弱勢職級會員拿到確定落袋的補貼',
+        effect: {
+          statsDelta: { energy: -6, purpose: 5, capital: 7, life: 1, impactScore: 10 },
+        },
+        outcomeText:
+          '雖然中高階職等的分紅還是縮水了，但你幫所有基層專員守住每人每月加發兩千元津貼寫進工作規則，算是穩健守住基本盤。',
+      },
+    ],
+  },
+  {
+    id: 'ind_union_union_leave_dispute',
+    title: '《工會法》第 36 條會務假攻防：部門主管卡住幹部公假並暗示影響考績',
+    category: 'work',
+    tag: '會務假與勞權防線',
+    weight: 16,
+    conditions: { orgTypes: ['industrial_union'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '幾位兼任工會理事與會員代表的在職員工依《工會法》第 36 條申請會務公假出席團體協約預備會議，不料部門經理以「業務吃緊」為由全數退回，私下還傳話「常跑工會的話，今年年度考核乙等自己心裡有數」。年輕幹部打進工會辦公室時聲音都在發抖。',
+    choices: [
+      {
+        id: 'file_ulp_and_protect_leave',
+        label: '正式寄發工會函文援引《工會法》第 35、36 條警告不當勞動行為，並啟動裁決蒐證',
+        sublabel: '用法律底線替兼任幹部撐起保護傘，不讓資方私下秋後算帳得逞',
+        effect: {
+          statsDelta: { energy: -9, purpose: 11, capital: 10, life: -3, impactScore: 15 },
+          milestoneTag: '成功替企業工會幹部捍衛法定會務公假權益',
+        },
+        outcomeText:
+          '公司法務收到公文後深知主管踩到不當勞動行為紅線，隔天立刻介入要求部門經理簽准公假，並把考績核對權改列工會監察備查清單。',
+      },
+      {
+        id: 'negotiate_shift_coverage_rules',
+        label: '出面與人資處建立「會務假提前通報暨部門人力調度機制」，兼顧法規與現場運作',
+        sublabel: '化解第一線單位主管敵意，把衝突轉化為可長期運作的制度約定',
+        effect: {
+          statsDelta: { energy: -7, purpose: 7, capital: 9, life: 0, impactScore: 12 },
+        },
+        outcomeText:
+          '人資點頭同意只要提前五天通報即可不扣部門績效點數，部門主管也終於願意放人，少了許多無謂的職場摩擦。',
+      },
+      {
+        id: 'move_meetings_after_hours',
+        label: '為保住幹部今年升等與考績，暫時把過半工會會議改到晚上七點與週末舉行',
+        sublabel: '保護兼任幹部的職涯安全，卻無形增加全職秘書的加班與消耗',
+        effect: {
+          statsDelta: { energy: -11, purpose: -3, capital: 3, life: -6, impactScore: 6 },
+        },
+        outcomeText:
+          '幹部們鬆了口氣保住考績，但從此你的工作日從晚上七點才算第二場開始，連續兩季幾乎沒有完整週末。',
+      },
+    ],
+  },
+  {
+    id: 'ind_union_dues_checkoff_battle',
+    title: '資方片面中止「薪資代扣工會會費」：企圖切斷工會常態財源',
+    category: 'work',
+    tag: '工會財務命脈',
+    weight: 15,
+    conditions: { orgTypes: ['industrial_union'], excludeOutsideNPO: true, minTenure: 2 },
+    narrative:
+      '工會在協商桌上越來越有份量後，公司人資處突然發函通知：「因應薪資系統改版與個資法風險，下月起全面中止代扣轉撥工會常年會費。」一旦沒有薪資代扣（check-off），工會將不得不自行聯繫上千名會員改辦轉帳或現金繳費，會費收繳率恐怕立刻腰斬。',
+    choices: [
+      {
+        id: 'sue_ulp_for_checkoff',
+        label: '認定資方惡意打壓與支配介入工會，立刻向勞動部申請不當勞動行為裁決',
+        sublabel: '依法守住企業工會行之有年的代扣慣例與財務穩定',
+        effect: {
+          statsDelta: { energy: -10, purpose: 10, capital: 11, life: -3, impactScore: 15 },
+          orgFinanceDelta: 1,
+          milestoneTag: '透過裁決戰守住企業工會薪資代扣會費權',
+        },
+        outcomeText:
+          '裁決委員會明確指出既有書面授權下的代扣屬勞資誠信義務與工會活動必要基礎，責令資方恢復代扣，徹底打亂管理層斷銀根的算盤。',
+      },
+      {
+        id: 'build_independent_autopay',
+        label: '趁機徹底擺脫資方系統卡脖子！兩個月內建置會員線上自動扣款與專屬資料庫',
+        sublabel: '前期行政負擔爆表且會流失一成觀望會員，但換來永遠不受制於資方的財務自主',
+        effect: {
+          statsDelta: { energy: -13, purpose: 9, capital: 12, life: -5, impactScore: 16 },
+          milestoneTag: '完成企業工會獨立金流與自主會員系統建置',
+        },
+        outcomeText:
+          '你跑遍金流廠商又在各單位設攤收件兩個月，總算把八成五會員轉進工會自主授權扣款。從此人資再也拿捏不到工會的帳本與名單。',
+      },
+      {
+        id: 'rally_member_solidarity_collection',
+        label: '動員各部門代表發起「守住自己的工會」現場補簽授權暨自主繳費週',
+        sublabel: '把危機當成面對面組織再動員，測驗工會到底有多少真實死忠會員',
+        effect: {
+          statsDelta: { energy: -11, purpose: 8, capital: 7, life: -4, impactScore: 13 },
+        },
+        outcomeText:
+          '雖然少掉了兩成只把工會當背景的冷感會員，留下來補簽授權的八百多人反而成了最堅定挺工會的核心部隊。',
+      },
+    ],
+  },
+  {
+    id: 'ind_union_merger_layoff_defense',
+    title: '集團組織重整啟動「優退／合意離職方案」：變相裁員壓力下的安置攻防',
+    category: 'work',
+    tag: '重整與就業保障',
+    weight: 15,
+    conditions: { orgTypes: ['industrial_union'], excludeOutsideNPO: true, minTenure: 3 },
+    narrative:
+      '集團公告部分事業群將整併外包，並由人資分批約談數十位中高齡與部門員工，端出限期七天考慮的「優離方案」，甚至暗示「不簽下個月就跨縣市調職」。好幾位年資超過十五年的老同事紅著眼眶走進工會辦公室求援。',
+    choices: [
+      {
+        id: 'negotiate_retrenchment_package',
+        label: '主張依法適用大量解僱協商精神，談出高於法定標準的優離金與內部轉調優先審查期',
+        sublabel: '全面進入緊急高張力協商，替被鎖定裁撤單位爭取實質生計保障',
+        effect: {
+          statsDelta: { energy: -12, purpose: 12, capital: 12, life: -5, impactScore: 19 },
+          milestoneTag: '成功替受重整影響會員談判優離安置協議',
+        },
+        outcomeText:
+          '工會拒絕讓員工單獨在七天期限內被各個擊破，最終逼出資方延長考慮期一個月，並追加數個月薪資補償與同縣市優先轉職名單。',
+      },
+      {
+        id: 'defend_refusers_against_forced_transfer',
+        label: '發出禁止強制簽約與不當調動聲明，派秘書逐案陪同不願離職的會員面對人資約談',
+        sublabel: '徹底守住想留下來的工作權，但可能被迫打一場跨年的調解訴訟戰',
+        effect: {
+          statsDelta: { energy: -13, purpose: 11, capital: 9, life: -6, impactScore: 16 },
+        },
+        outcomeText:
+          '看到工會代表坐進約談室拿出錄音筆與調動五原則條文，主管立刻收起跨縣市調職威脅，順利讓十幾位堅持留任的老同事保住原區工作權。',
+      },
+      {
+        id: 'help_members_audit_terms',
+        label: '成立臨時精算協助櫃檯，替每位受約談會員試算資遣費、舊制／新制退休金與失業給付',
+        sublabel: '確保沒人因資訊不對稱誤簽吃虧文件，節奏較可控但未能動搖資方重整決策',
+        effect: {
+          statsDelta: { energy: -7, purpose: 5, capital: 8, life: 0, impactScore: 11 },
+        },
+        outcomeText:
+          '你替三十多位老會員找出人資原本算漏的特休未休折算與年資差額，每人平均多拿回好幾萬元應得補償。',
       },
     ],
   },

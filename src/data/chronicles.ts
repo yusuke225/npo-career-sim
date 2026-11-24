@@ -75,8 +75,8 @@ const ROUTINE_LINES: RoutineLine[] = [
   // === 產業／企業工會專屬日常 ===
   {
     tag: '工會組織',
-    title: '廠區換班門口的傳單',
-    text: '傍晚五點半站在單位側門風口發入會簡章，警衛一直盯著你的背心，但總算有兩位剛下班的基層員工偷偷接過去。',
+    title: '公司與廠區出入口的入會簡章',
+    text: '傍晚五點半站在單位側門或辦公大樓出口發入會簡章，警衛一直盯著你的背心，但總算有兩位剛下班的基層員工偷偷接過去。',
     orgTypes: ['industrial_union'],
   },
   {
@@ -112,8 +112,8 @@ const ROUTINE_LINES: RoutineLine[] = [
   },
   {
     tag: '組織擴張',
-    title: '跨夜班輪班座談',
-    text: '配合醫院與工廠大夜班下班時間，清晨七點在早餐店辦小型勞教說明會。',
+    title: '下班與換班時段的權益座談',
+    text: '配合各班別與外勤同仁下班交接時段，清晨或傍晚在公司附近辦小型勞教與權益說明會。',
     orgTypes: ['industrial_union'],
   },
 
@@ -276,6 +276,7 @@ const ROUTINE_LINES: RoutineLine[] = [
     tag: '年節壓力',
     title: '除夕飯桌上的職涯問候',
     text: '親戚又在問「你們協會是做義工的嗎？一個月有沒有五萬？」你夾了一塊蘿蔔糕笑著帶過。',
+    orgTypes: ['grassroots', 'large_welfare', 'local_foundation', 'advocacy_ngo', 'corp_intl_ngo'],
     quarters: [1],
     excludeOutsideNPO: true,
   },
@@ -311,6 +312,15 @@ const ROUTINE_LINES: RoutineLine[] = [
     tag: '外部資源',
     title: '跨組織募款聯名與企劃',
     text: '為了明年不斷炊，整季密集拜訪企業 CSR 窗口與小型基金會，練就十分鐘把理念講進人心的本事。',
+    orgTypes: ['grassroots', 'large_welfare', 'local_foundation', 'advocacy_ngo', 'corp_intl_ngo'],
+    focuses: ['advocacy'],
+    excludeOutsideNPO: true,
+  },
+  {
+    tag: '跨會串聯',
+    title: '跨工會拜會與勞動法規交流',
+    text: '這季密集拜訪友好工會與地方勞工局處窗口，交流最新調解實務與勞動法規判解。',
+    orgTypes: ['industrial_union', 'occupational_union'],
     focuses: ['advocacy'],
     excludeOutsideNPO: true,
   },
@@ -332,7 +342,7 @@ const ROUTINE_LINES: RoutineLine[] = [
   {
     tag: '資深視角',
     title: '成為新人的避風港',
-    text: '看見剛進來三個月的專員因為被捐款人或會員罵而躲在茶水間哭，你默默遞上衛生紙想起十年前的自己。',
+    text: '看見剛進來三個月的專員因為被服務對象或會員罵而躲在茶水間哭，你默默遞上衛生紙想起十年前的自己。',
     minAge: 36,
     excludeOutsideNPO: true,
   },
@@ -345,7 +355,7 @@ const ROUTINE_LINES: RoutineLine[] = [
   {
     tag: '颱風季備災',
     title: '豪雨停班課的遠端待命',
-    text: '外面宣布停班停課，但社區長輩送餐協調、工會停班出勤爭議詢問或個案安置電話依然一個接一個進來。',
+    text: '外面宣布停班停課，但緊急業務協調、停班出勤爭議或臨時現場突發狀況的訊息依然一個接一個進來。',
     quarters: [3],
     excludeOutsideNPO: true,
   },
@@ -359,7 +369,7 @@ const ROUTINE_LINES: RoutineLine[] = [
   {
     tag: '春季開局',
     title: '會員大會暨年度計畫啟動',
-    text: '年度第一季工作計畫正式上路，白板上寫滿了補助申請期限、理監事會日期與預定募款目標。',
+    text: '年度第一季工作計畫正式上路，白板上寫滿了補助申請期限、理監事會日期與年度工作目標與財務規劃。',
     quarters: [1],
     excludeOutsideNPO: true,
   },
@@ -367,6 +377,7 @@ const ROUTINE_LINES: RoutineLine[] = [
     tag: '報稅季',
     title: '五月捐款與會費收據查詢潮',
     text: '報稅季到來，電話與信箱塞滿「我去年捐的兩千元怎麼沒上傳國稅局」的急切詢問。',
+    orgTypes: ['grassroots', 'large_welfare', 'local_foundation', 'advocacy_ngo', 'corp_intl_ngo'],
     quarters: [2],
     excludeOutsideNPO: true,
   },
@@ -437,6 +448,7 @@ const ROUTINE_LINES: RoutineLine[] = [
     tag: '同溫層外',
     title: '搭計程車時司機的一句話',
     text: '司機問起你在哪高就，聽完後說「你們做這種工作的真的很有愛心啦，雖然薪水不高齁」——你禮貌微笑沒接話。',
+    orgTypes: ['grassroots', 'large_welfare', 'local_foundation', 'advocacy_ngo', 'corp_intl_ngo'],
     excludeOutsideNPO: true,
   },
   {
@@ -482,7 +494,7 @@ const EXTRA_SEASONAL_LINES: RoutineLine[] = [
     tag: '工會諮詢',
     title: '下班後的 LINE 法律救急',
     text: '剛洗完澡就收到會員傳來「公司明天要逼我簽自願離職書怎麼辦」，立刻打過去逐句教對方怎麼保留證據與拒絕。',
-    orgTypes: ['industrial_union', 'occupational_union'],
+    orgTypes: ['industrial_union'],
   },
   {
     tag: '學會日常',

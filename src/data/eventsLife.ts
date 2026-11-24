@@ -43,8 +43,8 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     ],
   },
   {
-    id: 'era_2020_covid_union',
-    title: '2020 疫情海嘯：勞工紓困爆量、減班休息與防疫假攻防',
+    id: 'era_2020_covid_occ_union',
+    title: '2020 疫情海嘯：自營勞工生活補貼爆量與加保資格急審',
     category: 'era',
     tag: '台灣時代事件 · 2020',
     weight: 40,
@@ -52,31 +52,69 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     conditions: {
       yearRange: [2020, 2021],
       excludeOutsideNPO: true,
-      orgTypes: ['industrial_union', 'occupational_union'],
+      orgTypes: ['occupational_union'],
     },
     narrative:
-      '三級警戒重創各行各業，工會電話從早響到晚：職業工會會員急著問「勞工生活補貼三萬／一萬元怎麼申請」，第一線輪班與服務業會員則面臨資方片面放無薪假、扣防疫隔離假薪水與職場群聚風險。',
+      '三級警戒重創基層接案與餐飲服務生計，職業工會櫃檯電話從早響到晚：會員急著問「勞工生活補貼三萬／一萬元怎麼申請」、有沒有符合無一定雇主投保資格；同時欠費斷保的人數也因收入歸零而迅速增加。',
     choices: [
       {
-        id: 'covid_union_relief_desk',
-        label: '緊急架設線上紓困查詢與表單分流，連夜替會員逐案核對加保資格與申辦補助',
-        sublabel: '工會櫃檯與 LINE 群組全面爆線，但守住基層勞工最急迫的救命錢',
+        id: 'covid_occ_relief_desk',
+        label: '緊急架設線上紓困查詢與表單收件分流，連夜替會員逐案核對加保年資並申辦補貼',
+        sublabel: '工會櫃檯與 LINE 群組全面爆線，但守住基層自營勞工最急迫的救命錢',
         effect: {
           statsDelta: { energy: -13, purpose: 12, capital: 8, life: -5, impactScore: 17 },
-          milestoneTag: '疫情期間協助大批工會會員完成勞工紓困申辦',
+          milestoneTag: '疫情期間協助大批職業工會會員完成勞工生活補貼申辦',
         },
         outcomeText:
-          '你連續兩週加班核對數百份投保明細與帳戶資料，幫許多手停口停的師傅與輪班勞工順利領到補貼，會員對工會的向心力創下新高。',
+          '你連續兩週加班核對數百份投保明細與帳戶資料，幫許多手停口停的自營會員順利領到補貼，會員對工會的向心力創下新高。',
       },
       {
-        id: 'covid_union_labor_defense',
-        label: '發函要求資方落實分艙分流與合法防疫假，針對違法無薪假火速向勞動局舉發',
-        sublabel: '站上防疫勞權第一線，扛住資方壓力替勞工守住薪資與健康底線',
+        id: 'covid_occ_installment_aid',
+        label: '向理事會提案疫情期欠費緩繳分期並轉介地方急難補助，避免會員在最需要時斷保',
+        sublabel: '替收入斷炊的會員守住勞健保安全網，工會行政協調負擔大增',
         effect: {
-          statsDelta: { energy: -11, purpose: 11, capital: 10, life: -4, impactScore: 16 },
+          statsDelta: { energy: -10, purpose: 11, capital: 9, life: -3, impactScore: 15 },
         },
         outcomeText:
-          '在工會強硬介入與勞動局發函關切下，資方被迫撤回違法減薪並補發防疫隔離津貼，讓會員看見有工會撐腰的實質力量。',
+          '理事會順利通過三個月彈性緩繳方案，許多差點停保的會員保住了健保與職災身分，事後繳費期回來時紛紛特地致謝。',
+      },
+    ],
+  },
+  {
+    id: 'era_2020_covid_ind_union',
+    title: '2020 疫情海嘯：減班休息（無薪假）、防疫假給薪與排班攻防',
+    category: 'era',
+    tag: '台灣時代事件 · 2020',
+    weight: 40,
+    isEraEvent: true,
+    conditions: {
+      yearRange: [2020, 2021],
+      excludeOutsideNPO: true,
+      orgTypes: ['industrial_union'],
+    },
+    narrative:
+      '三級警戒衝擊企業營收與營運調度，工會申訴信箱瞬間塞爆：資方未經勞資協商就要求單位放減班休息（無薪假）、逼居家隔離同仁改用自己的特休扣薪、甚至片面調整出勤津貼與遠距辦公規範。',
+    choices: [
+      {
+        id: 'covid_ind_negotiate_furlough',
+        label: '發函要求資方公開營運衝擊數據並召開臨時協商，守住減班休息底薪保障與反對強制扣特休',
+        sublabel: '扛住「共體時艱」情緒勒索，替全體受僱會員守住法定薪資與特休假底線',
+        effect: {
+          statsDelta: { energy: -12, purpose: 12, capital: 10, life: -5, impactScore: 17 },
+          milestoneTag: '疫情期間代表會員協商減班休息與防疫假保障方案',
+        },
+        outcomeText:
+          '經過三輪密集視訊協商，資方撤回強制先扣特休的公告並簽下防疫津貼不縮水協議，讓員工看見組織協商的實質份量。',
+      },
+      {
+        id: 'covid_ind_report_violation',
+        label: '迅速蒐集各部門違法減薪與片面改班公文證據，直接向地方勞動局舉發並聲請調解',
+        sublabel: '採強硬法制對決路線，迫使資方在公權力壓力下立即止血',
+        effect: {
+          statsDelta: { energy: -11, purpose: 11, capital: 9, life: -4, impactScore: 16 },
+        },
+        outcomeText:
+          '勞動局兩天內發函要求公司限期說明，人資處隨即改口撤回原辦法並補發爭議差額，會員群組頓時士氣大振。',
       },
     ],
   },

@@ -91,6 +91,47 @@ try {
     'labor_illegal_termination must not trigger for unions'
   );
 
+  // Ensure enterprise/industrial union vs occupational union role & event separation
+  assert.ok(
+    !orgData.ORG_TYPES.industrial_union.allowedRoles.includes('union_admin'),
+    'industrial_union allowedRoles must exclude union_admin'
+  );
+  assert.ok(
+    !orgData.ORG_TYPES.occupational_union.allowedRoles.includes('union_organizer'),
+    'occupational_union allowedRoles must exclude union_organizer'
+  );
+
+  const isEligibleOrgType = (ev, orgType) => {
+    const c = ev.conditions;
+    if (c?.onlyOutsideNPO) return false;
+    if (c?.orgTypes && !c.orgTypes.includes(orgType)) return false;
+    if (c?.excludeOrgTypes && c.excludeOrgTypes.includes(orgType)) return false;
+    return true;
+  };
+  for (const ev of sim.ALL_EVENTS) {
+    const bodyText = JSON.stringify({
+      title: ev.title,
+      narrative: ev.narrative,
+      choices: ev.choices,
+    });
+    if (isEligibleOrgType(ev, 'industrial_union')) {
+      for (const forbidden of ['職業工會會員', '勞工生活補貼', '分艙分流']) {
+        assert.ok(
+          !bodyText.includes(forbidden),
+          `Event ${ev.id} eligible for industrial_union must not contain "${forbidden}"`
+        );
+      }
+    }
+    if (isEligibleOrgType(ev, 'occupational_union')) {
+      for (const forbidden of ['團體協約', '罷工投票']) {
+        assert.ok(
+          !bodyText.includes(forbidden),
+          `Event ${ev.id} eligible for occupational_union must not contain "${forbidden}"`
+        );
+      }
+    }
+  }
+
   // 3. Validate employment-type pension & expense rules
   for (const empType of ['regular', 'multi_employment', 'contractor']) {
     const startState = sim.buildStateFromConfig(
