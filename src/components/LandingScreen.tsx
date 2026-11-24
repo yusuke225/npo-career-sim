@@ -41,8 +41,14 @@ interface BeforeInstallPromptEvent extends Event {
 
 const RELEASE_CHANGELOG: Array<{ version: string; tag: string; summary: string }> = [
   {
-    version: 'v0.22',
+    version: 'v0.221',
     tag: '最新',
+    summary:
+      '徹底區分企業／產業工會與職業工會的事件與職務生態（拆分疫情紓困與無薪假攻防、升遷線等），新增 4 則企業工會專屬事件，並修正工會結算適用《工會法》用語及首頁標題／音樂按鈕精簡。',
+  },
+  {
+    version: 'v0.22',
+    tag: '視覺與平衡',
     summary:
       '新增結算結局圖徽、收支長條＋四維指標折線圖、理想意義×身心能量軌跡象限圖與紀念卡 PNG 下載；加入背景音樂、擴充 24 間組織樣本與 64 組隨機姓名，並微調數值封頂與同梯營利事業去向／薪資對照。',
   },
@@ -191,7 +197,7 @@ export function LandingScreen({
           <strong className="font-serif" style={{ fontSize: 17 }}>
             做好事，是份好工作嗎？
           </strong>
-          <span className="brand-code">1 IN 100,000 · TW-NPO SIM v0.22</span>
+          <span className="brand-code">1 IN 100,000 · TW-NPO SIM v0.221</span>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <button type="button" className="btn btn-sm" onClick={onOpenArchive}>
@@ -601,7 +607,7 @@ export function LandingScreen({
           向《80億分之1》（1in8b.life）帶給我們的感動致敬，本作所有組織與案例是基於實務處境以虛構呈現，數據僅存於您自己的瀏覽器。
         </div>
         <div>
-          v0.22｜via{' '}
+          v0.221｜via{' '}
           <a
             href="mailto:yusuke225@gmail.com"
             style={{ color: 'var(--accent-teal)', textDecoration: 'underline', textUnderlineOffset: '3px' }}

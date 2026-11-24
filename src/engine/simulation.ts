@@ -1274,9 +1274,10 @@ export function buildCareerArchive(
       state.org.type === 'occupational_union') &&
     totalYears >= 8
   ) {
+    const isUnion = state.org.type === 'industrial_union' || state.org.type === 'occupational_union';
     title = '人民團體的不動記憶庫';
     stampLabel = '制度守門人';
-    epilogue = `理事長與理監事換了一屆又一屆，只有你撐起了這間${ORG_TYPES[state.org.type].shortLabel}的帳本、人團法程序、會員尊嚴與集體記憶。沒有閃光燈照著你，但整個專業社群與會員都在你的日常行政裡受惠。`;
+    epilogue = `理事長與理監事換了一屆又一屆，只有你撐起了這間${ORG_TYPES[state.org.type].shortLabel}的帳本、${isUnion ? '工會法' : '人團法'}程序、會員尊嚴與集體記憶。沒有閃光燈照著你，但整個專業社群與會員都在你的日常行政裡受惠。`;
   } else if (state.milestones.some((m) => m.includes('立案'))) {
     title = '從零刻出印章的拓荒者';
     stampLabel = '自立門戶';
@@ -1306,7 +1307,7 @@ export function buildCareerArchive(
     : `在台灣約十萬名社福、倡議、學會與工會受僱者中，低薪、一人多工與照顧壓力使得多數人尚未走到 55 歲退休便悄然離職摸索轉行。你這段長達 ${totalYears} 年的經歷累積 NT$ ${state.laborPensionTotal.toLocaleString()} 勞退專戶（${pensionLawNote}），精準映照了民間部門與人生現實之間的拉鋸。`;
 
   const shareText = [
-    `【做好事，是份好工作嗎？ v0.22｜台灣 NPO 與人民團體職涯結算】`,
+    `【做好事，是份好工作嗎？ v0.221｜台灣 NPO 與人民團體職涯結算】`,
     `檔案字號：${state.docNumber}`,
     `最終稱號：${title}（${stampLabel}）`,
     `經歷：${state.startYear}–${state.currentYear}（共 ${totalYears} 年｜${state.startAge} → ${state.age} 歲）`,
