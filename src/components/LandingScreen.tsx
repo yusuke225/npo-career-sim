@@ -357,7 +357,7 @@ export function LandingScreen({
       {showCustom && (
         <section className="card custom-panel">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h2 style={{ fontSize: 18 }}>自訂入行起點設定</h2>
+            <h2 style={{ fontSize: 18 }}>入行起點</h2>
             <span className="tag">體驗指定組織／職務生態</span>
           </div>
 
@@ -506,7 +506,7 @@ export function LandingScreen({
 
       <section className="card ecology-strip">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2 style={{ fontSize: 16 }}>非營利組織隨機抽樣權重</h2>
+          <h2 style={{ fontSize: 16 }}>抽樣權重</h2>
         </div>
         <div className="ecology-grid">
           {ORG_TYPE_LIST.map((o) => (
@@ -523,7 +523,7 @@ export function LandingScreen({
         </div>
       </section>
 
-      <section className="card ecology-strip" aria-label="歷次部署版號與更新日誌">
+      <section className="card ecology-strip" aria-label="更新日誌">
         <div
           style={{
             display: 'flex',
@@ -533,7 +533,7 @@ export function LandingScreen({
             flexWrap: 'wrap',
           }}
         >
-          <h2 style={{ fontSize: 16 }}>歷次部署版號與更新日誌</h2>
+          <h2 style={{ fontSize: 16 }}>更新日誌</h2>
           <button
             type="button"
             className="btn btn-sm"
