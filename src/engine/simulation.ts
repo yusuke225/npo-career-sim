@@ -730,10 +730,14 @@ function selectNextEvent(state: SimulationState, rng: () => number): GameEvent |
       w *= 1.15;
     }
     if (ev.id === 'life40_parent_ltc_crisis') {
-      if (state.age >= 50) {
-        w *= 2.6;
-      } else if (state.age >= 43) {
-        w *= 1.8;
+      if (state.age >= 55) {
+        w *= 3.8;
+      } else if (state.age >= 50) {
+        w *= 3.0;
+      } else if (state.age >= 45) {
+        w *= 2.1;
+      } else if (state.age >= 40) {
+        w *= 1.4;
       }
     }
     return { item: ev, weight: w };
@@ -1535,7 +1539,7 @@ export function buildCareerArchive(
     : `在台灣約十萬名社福、倡議、學會與工會受僱者中，低薪、一人多工與照顧壓力使得多數人尚未走到 55 歲退休便悄然離職摸索轉行。你這段長達 ${totalYears} 年的經歷累積 NT$ ${state.laborPensionTotal.toLocaleString()} 勞退專戶（${pensionLawNote}），精準映照了民間部門與人生現實之間的拉鋸。`;
 
   const shareText = [
-    `【做好事，是份好工作嗎？ v0.231｜台灣 NPO 與人民團體職涯結算】`,
+    `【做好事，是份好工作嗎？ v0.232｜台灣 NPO 與人民團體職涯結算】`,
     `檔案字號：${state.docNumber}`,
     `最終稱號：${title}（${stampLabel}）`,
     `經歷：${state.startYear}–${state.currentYear}（共 ${totalYears} 年｜${state.startAge} → ${state.age} 歲）`,

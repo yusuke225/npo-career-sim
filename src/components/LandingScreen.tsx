@@ -41,8 +41,14 @@ interface BeforeInstallPromptEvent extends Event {
 
 const RELEASE_CHANGELOG: Array<{ version: string; tag: string; summary: string }> = [
   {
-    version: 'v0.231',
+    version: 'v0.232',
     tag: '最新',
+    summary:
+      '降低日常事件重複率（取消「計程車司機」高頻加權並擴充 8 則日常生活與職場切片），並微幅提高 45、50、55 歲以後長照危機事件的發生機率。',
+  },
+  {
+    version: 'v0.231',
+    tag: '體驗修正',
     summary:
       '修正升任執行長／秘書長等最高專職後不會再抽到下屬對主管對話，並提高中高齡長照危機事件遇見機率與放寬觸發年齡區間。',
   },
@@ -215,7 +221,7 @@ export function LandingScreen({
           <strong className="font-serif" style={{ fontSize: 17 }}>
             做好事，是份好工作嗎？
           </strong>
-          <span className="brand-code">1 IN 100,000 · TW-NPO SIM v0.231</span>
+          <span className="brand-code">1 IN 100,000 · TW-NPO SIM v0.232</span>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <button type="button" className="btn btn-sm" onClick={onOpenArchive}>
@@ -625,7 +631,7 @@ export function LandingScreen({
           向《80億分之1》（1in8b.life）帶給我們的感動致敬，本作所有組織與案例是基於實務處境以虛構呈現，數據僅存於您自己的瀏覽器。
         </div>
         <div>
-          v0.231｜via{' '}
+          v0.232｜via{' '}
           <a
             href="mailto:yusuke225@gmail.com"
             style={{ color: 'var(--accent-teal)', textDecoration: 'underline', textUnderlineOffset: '3px' }}

@@ -473,7 +473,7 @@ const ROUTINE_LINES: RoutineLine[] = [
     tag: '同溫層外',
     title: '搭計程車時司機的一句話',
     text: '司機問起你在哪高就，聽完後說「你們做這種工作的真的很有愛心啦，雖然薪水不高齁」——你禮貌微笑沒接話。',
-    orgTypes: ['grassroots', 'large_welfare', 'local_foundation', 'advocacy_ngo', 'corp_intl_ngo'],
+    excludeOrgTypes: ['industrial_union', 'occupational_union', 'academic_society'],
     excludeOutsideNPO: true,
   },
   {
@@ -779,6 +779,51 @@ const EXTRA_SEASONAL_LINES: RoutineLine[] = [
     title: '老戰友打來詢問企業贊助窗口',
     text: '接到以前圈內夥伴的電話，語氣多了一點客氣與試探；聊完流程後你把可申請的公益預算窗口一次整理給對方。',
     onlyOutsideNPO: true,
+  },
+  // === 多樣化日常生活與職場切片 ===
+  {
+    tag: '日常對話',
+    title: '理髮廳設計師的職業好奇',
+    text: '剪頭髮時設計師聊起「你們平常都在辦活動喔？感覺每天都在幫助別人很開心欸」，你一邊看鏡子一邊簡單解釋組織的日常其實是無止盡的開會與公文。',
+    excludeOutsideNPO: true,
+  },
+  {
+    tag: '午休片刻',
+    title: '巷口咖啡店十五分鐘放空',
+    text: '難得在午餐後偷得一刻鐘空檔，坐在騎樓喝一杯冰美式看著路人走過，暫時不去想下午兩點要審核的計畫案。',
+  },
+  {
+    tag: '外勤日常',
+    title: '梅雨季穿著雨衣騎車跑現場',
+    text: '雨衣內層早已反潮貼在手臂上，背包套著防水罩護住筆電和蓋過章的公文，進到現場擦乾眼鏡後繼續笑著打招呼。',
+    excludeOutsideNPO: true,
+  },
+  {
+    tag: '晚歸日常',
+    title: '九點半的超商與安靜公車',
+    text: '錯過晚餐尖峰時段，拿著友善時光貼紙的便當走進空蕩蕩的公車末班區間，戴上耳機聽完兩首歌才覺得神經慢慢鬆下來。',
+  },
+  {
+    tag: '跨團互助',
+    title: '友會專員私訊求救的表格範本',
+    text: '別家剛入行的專員傳訊息問核銷附件怎麼貼才不會被退件，你二話不說把整理好的萬用範本壓縮包直接寄給對方。',
+    excludeOutsideNPO: true,
+  },
+  {
+    tag: '辦公細節',
+    title: '白板角落越貼越厚的便利貼',
+    text: '週一早會新增的待辦事項、臨時接到的申訴窗口與忘記補簽的名單一層疊過一層，你決定花半小時全部撕下來重整成待辦清單。',
+    excludeOutsideNPO: true,
+  },
+  {
+    tag: '假日充電',
+    title: '在獨立書店翻一本與工作無關的小說',
+    text: '刻意繞過政策與社科區，在文學架前站著讀了四十分鐘，久違地讓腦袋離開實務現場與數字表格。',
+  },
+  {
+    tag: '生活節奏',
+    title: '難得十一點前關燈躺平的一晚',
+    text: '把待回信件設成明日排程後關掉電腦，喝完一杯溫開水就上床，心裡暗自許願這週至少能這樣睡滿三天。',
   },
 ];
 
