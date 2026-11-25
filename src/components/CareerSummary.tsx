@@ -980,6 +980,7 @@ export function CareerSummary({
 
         <div className="cert-percentile" style={{ marginBottom: 18 }}>
           <strong>這只是十萬分之一的其中一種可能。</strong>
+          <br />
           想體驗不同組織、地區與人生處境的交織，歡迎點擊下方「再抽一段新的職涯」；如果你也在關注非營利組織工作者的真實勞動處境，歡迎追蹤{' '}
           <a
             href="https://www.facebook.com/NPOWIU/"
@@ -1007,8 +1008,8 @@ export function CareerSummary({
             }}
           >
             輔大非營利組織管理碩士學程（在職班）
-          </a>{' '}
-          認識更多NPO工作者。
+          </a>
+          ，認識更多NPO工作者。
         </div>
 
         <div
