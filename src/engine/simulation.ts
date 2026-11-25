@@ -25,6 +25,8 @@ import type {
   EmploymentType,
   ExpenseBreakdown,
   GameEvent,
+  IncomeBreakdown,
+  OrgState,
   OrgTypeId,
   PaceMode,
   RegionId,
@@ -84,34 +86,97 @@ function getEraNote(year: number): string {
 }
 
 export function getRoleDisplayTitle(state: SimulationState): string {
+  if (state.customRoleTitle) return state.customRoleTitle;
   const roleCfg = ROLES[state.role];
   return roleCfg.titles[state.roleLevel] || roleCfg.label;
+}
+
+export function calculateMonthlyIncome(
+  state: Pick<
+    SimulationState,
+    'monthlySalary' | 'roleLevel' | 'employmentType' | 'org' | 'focus' | 'currentQuarter' | 'stats' | 'flags'
+  >
+): IncomeBreakdown {
+  const baseSalary = state.monthlySalary;
+  let managementAllowance = 0;
+  if (state.employmentType === 'regular') {
+    if (state.org.isOutsideNPO) {
+      if (state.roleLevel >= 2) managementAllowance = 5000;
+    } else if (state.roleLevel >= 3) {
+      managementAllowance = 7000;
+    } else if (state.roleLevel === 2) {
+      managementAllowance = 3500;
+    }
+  }
+
+  let overtimePay = 0;
+  let overtimeNote: string | undefined;
+  const isBusy =
+    state.focus === 'fieldwork' ||
+    state.currentQuarter === 3 ||
+    state.currentQuarter === 4 ||
+    state.stats.energy < 55;
+  if (isBusy && state.employmentType === 'regular') {
+    const paysOvertime =
+      state.org.isOutsideNPO ||
+      state.org.type === 'corp_intl_ngo' ||
+      state.org.type === 'industrial_union' ||
+      state.flags.includes('defended_healthy_boundary') ||
+      state.org.financeLevel >= 4;
+    if (paysOvertime) {
+      overtimePay =
+        (state.focus === 'fieldwork' ? 1800 : 1000) +
+        (state.stats.energy < 48 ? 1400 : 600) +
+        (state.currentQuarter >= 3 ? 800 : 0);
+    } else {
+      overtimeNote = '責任制／補休';
+    }
+  }
+
+  const sideIncome =
+    state.focus === 'finance'
+      ? roundToHundred(2200 + Math.min(1800, state.stats.capital * 18))
+      : 0;
+
+  return {
+    baseSalary,
+    managementAllowance,
+    overtimePay,
+    overtimeNote,
+    sideIncome,
+    grossMonthly: baseSalary + managementAllowance + overtimePay + sideIncome,
+  };
 }
 
 export function getQuarterLabel(q: 1 | 2 | 3 | 4): string {
   switch (q) {
     case 1:
-      return 'Q1 春（會員與年度啟動）';
+      return '1–3 月';
     case 2:
-      return 'Q2 夏（會期／報稅／期中）';
+      return '4–6 月';
     case 3:
-      return 'Q3 秋（年會／評鑑備戰）';
+      return '7–9 月';
     case 4:
-      return 'Q4 冬（核銷／年終結算）';
+      return '10–12 月';
   }
 }
 
-function getSalaryCap(roleLevel: 0 | 1 | 2 | 3, isOutsideNPO: boolean): number {
-  if (isOutsideNPO) return 85000;
+function getSalaryCap(
+  roleLevel: 0 | 1 | 2 | 3,
+  isOutsideNPO: boolean,
+  yearsElapsed = 0
+): number {
+  const eraScale = Math.min(1.35, 1 + Math.max(0, yearsElapsed) * 0.015);
+  if (isOutsideNPO) return Math.round(85000 * Math.min(1.2, 1 + Math.max(0, yearsElapsed) * 0.01));
   switch (roleLevel) {
     case 0:
-      return 43000;
+      return roundToHundred(43000 * eraScale);
     case 1:
-      return 50000;
+      return roundToHundred(50000 * eraScale);
     case 2:
-      return 58000;
+      return roundToHundred(58000 * eraScale);
     case 3:
-      return 72000;
+      return roundToHundred(72000 * eraScale);
   }
 }
 
@@ -138,8 +203,9 @@ function drawEmploymentTypeForOrg(orgType: OrgTypeId, rng: () => number): Employ
 export function computeMonthlyExpense(
   state: Pick<
     SimulationState,
-    'region' | 'lifeStatus' | 'currentYear' | 'startYear' | 'monthlySalary' | 'employmentType'
-  >
+    'region' | 'lifeStatus' | 'currentYear' | 'startYear' | 'monthlySalary' | 'employmentType' | 'age'
+  >,
+  managementAllowance = 0
 ): ExpenseBreakdown {
   const regionCfg = REGIONS[state.region];
   const yearsElapsed = Math.max(0, state.currentYear - state.startYear);
@@ -161,10 +227,18 @@ export function computeMonthlyExpense(
       break;
   }
 
-  const living = regionCfg.baseLiving;
+  let ageLivingAdj = state.age > 30 ? Math.min(3600, (state.age - 30) * 150) : 0;
+  if (state.lifeStatus.studentLoanRemaining > 0) {
+    ageLivingAdj = Math.round(ageLivingAdj * 0.5);
+  }
+  const living = regionCfg.baseLiving + ageLivingAdj;
   const studentLoan =
     state.lifeStatus.studentLoanRemaining > 0
       ? Math.min(state.lifeStatus.monthlyStudentLoan, state.lifeStatus.studentLoanRemaining)
+      : 0;
+  const carLoan =
+    state.lifeStatus.carLoanRemaining > 0
+      ? Math.min(state.lifeStatus.monthlyCarLoan, state.lifeStatus.carLoanRemaining)
       : 0;
   const filialCare = state.lifeStatus.monthlyFilialAllowance;
 
@@ -176,28 +250,35 @@ export function computeMonthlyExpense(
     else childCare = 2000;
   }
 
-  const longTermCare = state.lifeStatus.parentCare === 'long_term_care' ? 18500 : 0;
+  const longTermCare =
+    state.lifeStatus.parentCare === 'long_term_care'
+      ? state.lifeStatus.partTimeReduced
+        ? 6000
+        : 12000
+      : 0;
 
+  const insurableSalary = state.monthlySalary + managementAllowance;
   let payrollDeduction = 0;
   let selfPaidInsurance = 0;
   if (state.employmentType === 'contractor') {
     selfPaidInsurance =
-      2600 + (state.monthlySalary >= 20000 ? Math.round(state.monthlySalary * 0.0211) : 0);
+      2600 + (insurableSalary >= 20000 ? Math.round(insurableSalary * 0.0211) : 0);
   } else if (state.employmentType === 'multi_employment') {
     // 多元方案有勞保（含職災）與健保，但不適用就業保險法與勞退提撥
-    payrollDeduction = Math.round(state.monthlySalary * 0.068);
+    payrollDeduction = Math.round(insurableSalary * 0.068);
   } else {
-    payrollDeduction = Math.round(state.monthlySalary * 0.08);
+    payrollDeduction = Math.round(insurableSalary * 0.08);
   }
 
   const inflatedCore = Math.round((housing + living + childCare + longTermCare) * inflationFactor);
   const totalMonthly =
-    inflatedCore + studentLoan + filialCare + payrollDeduction + selfPaidInsurance;
+    inflatedCore + studentLoan + carLoan + filialCare + payrollDeduction + selfPaidInsurance;
 
   return {
     housing: Math.round(housing * inflationFactor),
     living: Math.round(living * inflationFactor),
     studentLoan,
+    carLoan,
     filialCare,
     childCare: Math.round(childCare * inflationFactor),
     longTermCare: Math.round(longTermCare * inflationFactor),
@@ -292,7 +373,7 @@ export function buildStateFromConfig(
     monthlySalary = Math.max(28590, roundToHundred(rawSalary));
   }
 
-  const initialSavings = roundToHundred(
+  let initialSavings = roundToHundred(
     randomInt(bgCfg.initialSavingsRange[0], bgCfg.initialSavingsRange[1], rng)
   );
   const studentLoanRemaining = roundToHundred(
@@ -314,6 +395,9 @@ export function buildStateFromConfig(
     parentAge: input.startAge + randomInt(26, 33, rng),
     studentLoanRemaining,
     monthlyStudentLoan: studentLoanRemaining > 0 ? bgCfg.monthlyStudentLoan : 0,
+    mortgageMonthsRemaining: 0,
+    carLoanRemaining: 0,
+    monthlyCarLoan: 0,
     monthlyFilialAllowance: bgCfg.monthlyFilialAllowance,
     hasProfessionalCert: validRole === 'social_worker' && rng() < 0.45,
     healthAlert: false,
@@ -378,6 +462,29 @@ export function buildStateFromConfig(
 
   const peers = generateCohortPeers(input.startAge, orgCfg.id, startYear, playerName, rng);
 
+  const initialOrgState: OrgState = {
+    type: orgCfg.id,
+    name: orgName,
+    issueArea,
+    sizeLabel: orgCfg.sizeLabel,
+    fundingModel: orgCfg.fundingModel,
+    financeLevel: orgCfg.defaultFinanceLevel,
+    boardClimate,
+    yearsInCurrentOrg: 0,
+    isOutsideNPO: false,
+  };
+
+  const income = calculateMonthlyIncome({
+    monthlySalary,
+    roleLevel: 0,
+    employmentType,
+    org: initialOrgState,
+    focus: 'fieldwork',
+    currentQuarter: 1,
+    stats,
+    flags: [],
+  });
+
   const draftForExpense = {
     region: input.region,
     lifeStatus,
@@ -385,8 +492,19 @@ export function buildStateFromConfig(
     startYear,
     monthlySalary,
     employmentType,
+    age: input.startAge,
   };
-  const expense = computeMonthlyExpense(draftForExpense);
+  let expense = computeMonthlyExpense(draftForExpense, income.managementAllowance);
+  if (expense.totalMonthly - income.grossMonthly > 3500) {
+    if (employmentType === 'multi_employment' && lifeStatus.housing !== 'with_parents') {
+      lifeStatus.housing = 'with_parents';
+      expense = computeMonthlyExpense(draftForExpense, income.managementAllowance);
+    }
+    const remainingDeficit = expense.totalMonthly - income.grossMonthly;
+    if (remainingDeficit > 3500) {
+      initialSavings = Math.max(initialSavings, roundToHundred(remainingDeficit * 18));
+    }
+  }
 
   const initialChronicle: ChronicleEntry = {
     id: `chr_init_${startYear}_1`,
@@ -422,17 +540,7 @@ export function buildStateFromConfig(
     startSalary: monthlySalary,
     startEmploymentType: employmentType,
 
-    org: {
-      type: orgCfg.id,
-      name: orgName,
-      issueArea,
-      sizeLabel: orgCfg.sizeLabel,
-      fundingModel: orgCfg.fundingModel,
-      financeLevel: orgCfg.defaultFinanceLevel,
-      boardClimate,
-      yearsInCurrentOrg: 0,
-      isOutsideNPO: false,
-    },
+    org: initialOrgState,
     role: validRole,
     roleLevel: 0,
     employmentType,
@@ -441,7 +549,8 @@ export function buildStateFromConfig(
     peakSalary: monthlySalary,
     savings: initialSavings,
     laborPensionTotal: 0,
-    lastQuarterlyNet: monthlySalary * 3 - expense.totalMonthly * 3,
+    lastQuarterlyNet: income.grossMonthly * 3 - expense.totalMonthly * 3,
+    lastIncomeBreakdown: income,
     lastExpenseBreakdown: expense,
 
     focus: 'fieldwork',
@@ -536,6 +645,7 @@ function isEventEligible(event: GameEvent, state: SimulationState): boolean {
   if (c.minTenure !== undefined && tenureYears < c.minTenure) return false;
   if (c.maxTenure !== undefined && tenureYears > c.maxTenure) return false;
   if (c.minOrgYears !== undefined && state.org.yearsInCurrentOrg < c.minOrgYears) return false;
+  if (c.maxOrgYears !== undefined && state.org.yearsInCurrentOrg > c.maxOrgYears) return false;
   if (c.minRoleLevel !== undefined && state.roleLevel < c.minRoleLevel) return false;
   if (c.maxRoleLevel !== undefined && state.roleLevel > c.maxRoleLevel) return false;
 
@@ -618,6 +728,13 @@ function selectNextEvent(state: SimulationState, rng: () => number): GameEvent |
     }
     if (ev.category === 'life' || ev.category === 'intertwined') {
       w *= 1.15;
+    }
+    if (ev.id === 'life40_parent_ltc_crisis') {
+      if (state.age >= 50) {
+        w *= 2.2;
+      } else if (state.age >= 44) {
+        w *= 1.5;
+      }
     }
     return { item: ev, weight: w };
   });
@@ -702,6 +819,7 @@ export function advanceQuarter(state: SimulationState, rng = Math.random): Simul
   let nextLifeStatus = { ...state.lifeStatus };
   let nextPeers = state.peers;
   let nextSalary = state.monthlySalary;
+  let nextRoleLevel = state.roleLevel;
   let nextFreezeYears = state.consecutiveFreezeYears;
 
   if (crossedNewYear) {
@@ -726,10 +844,41 @@ export function advanceQuarter(state: SimulationState, rng = Math.random): Simul
     const yearsElapsed = nextYear - state.startYear;
     nextPeers = advancePeersForYear(state.peers, nextYear, yearsElapsed, rng);
 
-    // 每年 Q1 真實凍薪與天花板模型
-    const cap = getSalaryCap(state.roleLevel, state.org.isOutsideNPO);
+    // 任職滿 5 年且為正職基層者，自然晉升資深專職（不再永久卡在 0 級薪資天花板）
+    if (
+      state.employmentType === 'regular' &&
+      !state.org.isOutsideNPO &&
+      yearsElapsed >= 5 &&
+      nextRoleLevel === 0
+    ) {
+      nextRoleLevel = 1;
+    }
+
+    // 每年 1–3 月：最低工資連動調整（0%–5%，貼近通膨、低薪者優先跟漲）與凍薪／天花板模型
+    const cap = getSalaryCap(nextRoleLevel, state.org.isOutsideNPO, yearsElapsed);
+    const minWageRate = ((rng() + rng()) / 2) * 0.05;
+    const minWageInflation = Math.min(1.55, 1 + yearsElapsed * 0.02);
+    const minWageFloor = Math.min(42000, roundToHundred(28590 * minWageInflation));
+    let minWageLiftRate = 0;
+
+    if (nextSalary < minWageFloor) {
+      nextSalary = Math.min(cap, minWageFloor);
+      minWageLiftRate = minWageRate;
+    } else if (!state.org.isOutsideNPO && nextSalary < cap) {
+      if (nextSalary <= 34000 && rng() < 0.85) {
+        minWageLiftRate = minWageRate;
+      } else if (nextSalary <= 40000 && rng() < 0.55) {
+        minWageLiftRate = minWageRate * 0.75;
+      } else if (nextSalary <= 46000 && rng() < 0.25) {
+        minWageLiftRate = minWageRate * 0.5;
+      }
+      if (minWageLiftRate > 0) {
+        nextSalary = Math.min(cap, roundToHundred(nextSalary * (1 + minWageLiftRate)));
+      }
+    }
+
     if (state.employmentType === 'multi_employment' || state.employmentType === 'contractor') {
-      nextFreezeYears += 1;
+      if (minWageLiftRate < 0.02) nextFreezeYears += 1;
     } else if (state.org.isOutsideNPO) {
       if (rng() < 0.75 && nextSalary < cap) {
         nextSalary = Math.min(cap, roundToHundred(nextSalary * 1.025));
@@ -738,41 +887,57 @@ export function advanceQuarter(state: SimulationState, rng = Math.random): Simul
         nextFreezeYears += 1;
       }
     } else if (state.org.financeLevel >= 3) {
-      if (rng() < 0.25 && nextSalary < cap) {
-        nextSalary = Math.min(cap, roundToHundred(nextSalary * 1.015));
+      if (rng() < 0.35 && nextSalary < cap) {
+        nextSalary = Math.min(cap, roundToHundred(nextSalary * 1.018));
+        nextFreezeYears = 0;
+      } else if (minWageLiftRate >= 0.02) {
         nextFreezeYears = 0;
       } else {
         nextFreezeYears += 1;
       }
     } else if (state.org.financeLevel === 2) {
-      if (rng() < 0.1 && nextSalary < cap) {
-        nextSalary = Math.min(cap, roundToHundred(nextSalary * 1.012));
+      if (rng() < 0.18 && nextSalary < cap) {
+        nextSalary = Math.min(cap, roundToHundred(nextSalary * 1.014));
+        nextFreezeYears = 0;
+      } else if (minWageLiftRate >= 0.02) {
         nextFreezeYears = 0;
       } else {
         nextFreezeYears += 1;
       }
-    } else {
+    } else if (minWageLiftRate < 0.02) {
       nextFreezeYears += 1;
     }
   }
 
-  const peakSalary = Math.max(state.peakSalary, nextSalary);
-
-  // 本季收支結算（3 個月）
-  const expense = computeMonthlyExpense({
-    region: state.region,
-    lifeStatus: nextLifeStatus,
-    currentYear: nextYear,
-    startYear: state.startYear,
+  const income = calculateMonthlyIncome({
     monthlySalary: nextSalary,
+    roleLevel: nextRoleLevel,
     employmentType: state.employmentType,
+    org: state.org,
+    focus: state.focus,
+    currentQuarter: nextQuarter as 1 | 2 | 3 | 4,
+    stats: state.stats,
+    flags: state.flags,
   });
 
+  const peakSalary = Math.max(state.peakSalary, nextSalary + income.managementAllowance);
+
+  // 本季收支結算（3 個月）
+  const expense = computeMonthlyExpense(
+    {
+      region: state.region,
+      lifeStatus: nextLifeStatus,
+      currentYear: nextYear,
+      startYear: state.startYear,
+      monthlySalary: nextSalary,
+      employmentType: state.employmentType,
+      age: nextAge,
+    },
+    income.managementAllowance
+  );
+
   const focusCfg = FOCUS_OPTIONS.find((f) => f.id === state.focus) || FOCUS_OPTIONS[0];
-  let quarterlyIncome = nextSalary * 3;
-  if (state.focus === 'finance') {
-    quarterlyIncome += 6500;
-  }
+  let quarterlyIncome = income.grossMonthly * 3;
 
   // Q4 年終獎金（依僱用型態與組織財力寫實發放）
   if (nextQuarter === 4) {
@@ -791,7 +956,7 @@ export function advanceQuarter(state: SimulationState, rng = Math.random): Simul
     } else if (state.org.financeLevel === 2) {
       bonusMonths = 0.5;
     }
-    quarterlyIncome += Math.round(nextSalary * bonusMonths);
+    quarterlyIncome += Math.round((nextSalary + income.managementAllowance) * bonusMonths);
   }
 
   const quarterlyNet = quarterlyIncome - expense.totalMonthly * 3;
@@ -808,11 +973,22 @@ export function advanceQuarter(state: SimulationState, rng = Math.random): Simul
     }
   }
 
+  // 償還房貸期數與車貸本金
+  if (nextLifeStatus.housing === 'mortgage' && nextLifeStatus.mortgageMonthsRemaining > 0) {
+    nextLifeStatus.mortgageMonthsRemaining = Math.max(0, nextLifeStatus.mortgageMonthsRemaining - 3);
+  }
+  if (nextLifeStatus.carLoanRemaining > 0 && expense.carLoan > 0) {
+    nextLifeStatus.carLoanRemaining = Math.max(0, nextLifeStatus.carLoanRemaining - expense.carLoan * 3);
+    if (nextLifeStatus.carLoanRemaining === 0) {
+      nextLifeStatus.monthlyCarLoan = 0;
+    }
+  }
+
   // 勞退 6% 提撥累計（多元就業方案屬公法救助關係、自然人承攬非僱傭，皆無雇主 6% 勞退提撥！）
   const pensionContrib =
     state.employmentType === 'contractor' || state.employmentType === 'multi_employment'
       ? 0
-      : Math.round(nextSalary * 0.06 * 3);
+      : Math.round((nextSalary + income.managementAllowance) * 0.06 * 3);
   let nextPension = state.laborPensionTotal + pensionContrib;
   if (nextQuarter === 4) {
     nextPension = Math.round(nextPension * 1.022);
@@ -908,7 +1084,7 @@ export function advanceQuarter(state: SimulationState, rng = Math.random): Simul
         {
           year: nextYear,
           age: nextAge,
-          salary: nextSalary,
+          salary: nextSalary + income.managementAllowance,
           monthlyExpense: expense.totalMonthly,
           energy: Math.round(nextStats.energy),
           purpose: Math.round(nextStats.purpose),
@@ -928,12 +1104,14 @@ export function advanceQuarter(state: SimulationState, rng = Math.random): Simul
       ...state.org,
       yearsInCurrentOrg: nextOrgYears,
     },
+    roleLevel: nextRoleLevel,
     consecutiveFreezeYears: nextFreezeYears,
     monthlySalary: nextSalary,
     peakSalary,
     savings: nextSavings,
     laborPensionTotal: nextPension,
     lastQuarterlyNet: quarterlyNet,
+    lastIncomeBreakdown: income,
     lastExpenseBreakdown: expense,
     stats: nextStats,
     lastStatDelta: statDelta,
@@ -955,7 +1133,7 @@ export function advanceQuarter(state: SimulationState, rng = Math.random): Simul
     endReason = 'burnout_exit';
   } else if (nextStats.purpose <= 0 || lowPurposeStreak >= 5) {
     endReason = 'meaning_exit';
-  } else if (nextSavings <= -120000 || debtStreak >= 6) {
+  } else if (totalQuartersElapsed >= 8 && (nextSavings <= -120000 || debtStreak >= 6)) {
     endReason = 'financial_exit';
   } else if (nextAge >= 65) {
     endReason = 'retired_gracefully';
@@ -1024,6 +1202,7 @@ export function resolveEventChoice(
 
   let nextRole = state.role;
   let nextRoleLevel = state.roleLevel;
+  let nextCustomRoleTitle = state.customRoleTitle;
   if (eff.roleLevelDelta) {
     nextRoleLevel = clamp(nextRoleLevel + eff.roleLevelDelta, 0, 3) as 0 | 1 | 2 | 3;
   }
@@ -1035,6 +1214,7 @@ export function resolveEventChoice(
 
   let nextOrg = { ...state.org };
   if (eff.changeOrgType) {
+    nextCustomRoleTitle = undefined;
     const newCfg = ORG_TYPES[eff.changeOrgType];
     nextOrg = {
       type: eff.changeOrgType,
@@ -1063,6 +1243,7 @@ export function resolveEventChoice(
   }
 
   if (eff.enterOutsideNPO) {
+    nextCustomRoleTitle = undefined;
     nextOrg.isOutsideNPO = true;
     nextOrg.outsideOrgLabel = eff.enterOutsideNPO.orgName;
     nextOrg.name = eff.enterOutsideNPO.orgName;
@@ -1073,6 +1254,7 @@ export function resolveEventChoice(
   }
 
   if (eff.returnToNPO) {
+    nextCustomRoleTitle = undefined;
     const targetCfg = ORG_TYPES[eff.returnToNPO.orgType];
     nextOrg = {
       type: eff.returnToNPO.orgType,
@@ -1090,7 +1272,15 @@ export function resolveEventChoice(
     nextEmploymentType = 'regular';
   }
 
-  const salaryCap = getSalaryCap(nextRoleLevel, nextOrg.isOutsideNPO);
+  if (eff.setRoleTitle) {
+    nextCustomRoleTitle = eff.setRoleTitle;
+  }
+
+  const salaryCap = getSalaryCap(
+    nextRoleLevel,
+    nextOrg.isOutsideNPO,
+    Math.max(0, state.currentYear - state.startYear)
+  );
   if (nextSalary > salaryCap && !eff.enterOutsideNPO) {
     nextSalary = salaryCap;
   }
@@ -1101,7 +1291,21 @@ export function resolveEventChoice(
 
   const nextLifeStatus = { ...state.lifeStatus };
   if (eff.relationship) nextLifeStatus.relationship = eff.relationship;
-  if (eff.housing) nextLifeStatus.housing = eff.housing;
+  if (eff.housing) {
+    nextLifeStatus.housing = eff.housing;
+    if (eff.housing === 'mortgage') {
+      if ((nextLifeStatus.mortgageMonthsRemaining ?? 0) <= 0) {
+        nextLifeStatus.mortgageMonthsRemaining = 360;
+      }
+    } else {
+      nextLifeStatus.mortgageMonthsRemaining = 0;
+    }
+  }
+  if (eff.addCarLoan) {
+    nextLifeStatus.carLoanRemaining =
+      (nextLifeStatus.carLoanRemaining ?? 0) + eff.addCarLoan.totalAmount;
+    nextLifeStatus.monthlyCarLoan = eff.addCarLoan.monthlyPayment;
+  }
   if (eff.hasChild !== undefined) nextLifeStatus.hasChild = eff.hasChild;
   if (eff.childAge !== undefined) nextLifeStatus.childAge = eff.childAge;
   if (eff.parentCare) nextLifeStatus.parentCare = eff.parentCare;
@@ -1121,7 +1325,6 @@ export function resolveEventChoice(
   }
 
   const nextSavings = Math.round(state.savings + (eff.savingsDelta ?? 0));
-  const peakSalary = Math.max(state.peakSalary, nextSalary);
 
   let nextFlags = [...state.flags];
   if (eff.setFlag && !nextFlags.includes(eff.setFlag)) {
@@ -1132,8 +1335,14 @@ export function resolveEventChoice(
   }
 
   const nextMilestones = [...state.milestones];
+  const orgChanged = nextOrg.name !== state.org.name;
   if (eff.milestoneTag) {
-    nextMilestones.push(`${state.currentYear}｜${interpolateText(eff.milestoneTag, state)}`);
+    const tagged = interpolateText(eff.milestoneTag, state);
+    const withOrgName =
+      orgChanged && !tagged.includes(nextOrg.name) ? `${tagged}（${nextOrg.name}）` : tagged;
+    nextMilestones.push(`${state.currentYear}｜${withOrgName}`);
+  } else if (orgChanged) {
+    nextMilestones.push(`${state.currentYear}｜轉任「${nextOrg.name}」`);
   }
 
   const deltaSummary = formatDeltaSummary(eff.statsDelta, eff.salaryDelta, eff.savingsDelta);
@@ -1150,26 +1359,45 @@ export function resolveEventChoice(
     deltaSummary,
   };
 
-  const expense = computeMonthlyExpense({
-    region: nextRegion,
-    lifeStatus: nextLifeStatus,
-    currentYear: state.currentYear,
-    startYear: state.startYear,
+  const income = calculateMonthlyIncome({
     monthlySalary: nextSalary,
+    roleLevel: nextRoleLevel,
     employmentType: nextEmploymentType,
+    org: nextOrg,
+    focus: state.focus,
+    currentQuarter: state.currentQuarter,
+    stats: nextStats,
+    flags: nextFlags,
   });
+
+  const peakSalary = Math.max(state.peakSalary, nextSalary + income.managementAllowance);
+
+  const expense = computeMonthlyExpense(
+    {
+      region: nextRegion,
+      lifeStatus: nextLifeStatus,
+      currentYear: state.currentYear,
+      startYear: state.startYear,
+      monthlySalary: nextSalary,
+      employmentType: nextEmploymentType,
+      age: state.age,
+    },
+    income.managementAllowance
+  );
 
   const updatedState: SimulationState = {
     ...state,
     org: nextOrg,
     role: nextRole,
     roleLevel: nextRoleLevel,
+    customRoleTitle: nextCustomRoleTitle,
     employmentType: nextEmploymentType,
     consecutiveFreezeYears: nextFreezeYears,
     region: nextRegion,
     monthlySalary: nextSalary,
     peakSalary,
     savings: nextSavings,
+    lastIncomeBreakdown: income,
     lastExpenseBreakdown: expense,
     stats: nextStats,
     lastStatDelta: eff.statsDelta ?? {},
@@ -1191,7 +1419,7 @@ export function resolveEventChoice(
   if (nextStats.purpose <= 0) {
     return finalizeCareer(updatedState, 'meaning_exit');
   }
-  if (nextSavings <= -120000) {
+  if (state.totalQuartersElapsed >= 8 && nextSavings <= -120000) {
     return finalizeCareer(updatedState, 'financial_exit');
   }
 
@@ -1307,7 +1535,7 @@ export function buildCareerArchive(
     : `在台灣約十萬名社福、倡議、學會與工會受僱者中，低薪、一人多工與照顧壓力使得多數人尚未走到 55 歲退休便悄然離職摸索轉行。你這段長達 ${totalYears} 年的經歷累積 NT$ ${state.laborPensionTotal.toLocaleString()} 勞退專戶（${pensionLawNote}），精準映照了民間部門與人生現實之間的拉鋸。`;
 
   const shareText = [
-    `【做好事，是份好工作嗎？ v0.222｜台灣 NPO 與人民團體職涯結算】`,
+    `【做好事，是份好工作嗎？ v0.23｜台灣 NPO 與人民團體職涯結算】`,
     `檔案字號：${state.docNumber}`,
     `最終稱號：${title}（${stampLabel}）`,
     `經歷：${state.startYear}–${state.currentYear}（共 ${totalYears} 年｜${state.startAge} → ${state.age} 歲）`,
@@ -1321,7 +1549,7 @@ export function buildCareerArchive(
   const finalHistoryPoint: CareerHistoryPoint = {
     year: state.currentYear,
     age: state.age,
-    salary: state.monthlySalary,
+    salary: state.monthlySalary + (state.lastIncomeBreakdown?.managementAllowance ?? 0),
     monthlyExpense: state.lastExpenseBreakdown.totalMonthly,
     energy: Math.round(state.stats.energy),
     purpose: Math.round(state.stats.purpose),

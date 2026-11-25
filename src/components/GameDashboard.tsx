@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { EMPLOYMENT_TYPES, FOCUS_OPTIONS, ORG_TYPES, REGIONS } from '../data/organizations';
 import { getPeerStatusBadge } from '../data/peers';
-import { getQuarterLabel, getRoleDisplayTitle } from '../engine/simulation';
+import { calculateMonthlyIncome, getQuarterLabel, getRoleDisplayTitle } from '../engine/simulation';
 import type { BoardClimate, FocusId, SimulationState, ThemeMode } from '../types/game';
 import { BgmToggle } from './BgmToggle';
 import { ThemeToggle } from './ThemeToggle';
@@ -93,6 +93,13 @@ export function GameDashboard({
   const yearsText = (state.totalQuartersElapsed / 4).toFixed(1);
   const roleTitle = getRoleDisplayTitle(state);
   const exp = state.lastExpenseBreakdown;
+  const inc = state.lastIncomeBreakdown ?? calculateMonthlyIncome(state);
+  const monthlyNet = inc.grossMonthly - exp.totalMonthly;
+  const yearEndBonus =
+    state.currentQuarter === 4
+      ? Math.max(0, Math.round(state.lastQuarterlyNet - monthlyNet * 3))
+      : 0;
+  const mortgageYearsLeft = Math.max(1, Math.ceil((state.lifeStatus.mortgageMonthsRemaining || 360) / 12));
 
   const statItems: Array<{
     key: 'energy' | 'purpose' | 'capital' | 'life';
@@ -216,7 +223,7 @@ export function GameDashboard({
         <section className="card horizon-bar-wrap">
           <div className="horizon-meta">
             <span>
-              職涯進度：第 {state.totalQuartersElapsed} / {maxQuarters} 季（{progressPct}%）
+              職涯進度：第 {state.totalQuartersElapsed * 3} / {maxQuarters * 3} 個月（{progressPct}%）
             </span>
             <span className="font-mono">{state.docNumber}</span>
           </div>
@@ -339,15 +346,46 @@ export function GameDashboard({
             </div>
 
             <div className="finance-line">
-              <span>表定月薪</span>
+              <span>表定本薪</span>
               <strong className="font-mono" style={{ color: 'var(--accent-teal)' }}>
-                NT$ {state.monthlySalary.toLocaleString()}
+                NT$ {inc.baseSalary.toLocaleString()}
               </strong>
             </div>
+            {inc.managementAllowance > 0 && (
+              <div className="finance-subline">
+                <span>主管加給</span>
+                <span className="font-mono" style={{ color: 'var(--accent-teal)' }}>
+                  + NT$ {inc.managementAllowance.toLocaleString()}
+                </span>
+              </div>
+            )}
+            {(inc.overtimePay > 0 || inc.overtimeNote) && (
+              <div className="finance-subline">
+                <span>加班費收入</span>
+                <span
+                  className="font-mono"
+                  style={{
+                    color: inc.overtimePay > 0 ? 'var(--accent-teal)' : 'var(--ink-muted)',
+                  }}
+                >
+                  {inc.overtimePay > 0
+                    ? `+ NT$ ${inc.overtimePay.toLocaleString()}`
+                    : `NT$ 0（${inc.overtimeNote}）`}
+                </span>
+              </div>
+            )}
+            {inc.sideIncome > 0 && (
+              <div className="finance-subline">
+                <span>兼差／外快收入</span>
+                <span className="font-mono" style={{ color: 'var(--accent-teal)' }}>
+                  + NT$ {inc.sideIncome.toLocaleString()}
+                </span>
+              </div>
+            )}
             <div className="finance-line">
               <span>實領預估淨薪（扣勞健保）</span>
               <span className="font-mono">
-                NT$ {(state.monthlySalary - exp.payrollDeduction - exp.selfPaidInsurance).toLocaleString()}
+                NT$ {(inc.grossMonthly - exp.payrollDeduction - exp.selfPaidInsurance).toLocaleString()}
               </span>
             </div>
             <div className="finance-line">
@@ -355,18 +393,25 @@ export function GameDashboard({
               <span className="font-mono">NT$ {exp.totalMonthly.toLocaleString()}</span>
             </div>
             <div className="finance-line">
-              <span>上季淨現金流</span>
+              <span>每月淨結餘</span>
               <span
                 className="font-mono"
                 style={{
-                  color:
-                    state.lastQuarterlyNet >= 0 ? 'var(--accent-green)' : 'var(--accent-crimson)',
+                  color: monthlyNet >= 0 ? 'var(--accent-green)' : 'var(--accent-crimson)',
                 }}
               >
-                {state.lastQuarterlyNet >= 0 ? '+' : ''}
-                {state.lastQuarterlyNet.toLocaleString()}
+                {monthlyNet >= 0 ? '+' : ''}
+                {monthlyNet.toLocaleString()}
               </span>
             </div>
+            {yearEndBonus > 0 && (
+              <div className="finance-subline">
+                <span>10–12 月年終入帳</span>
+                <span className="font-mono" style={{ color: 'var(--accent-green)' }}>
+                  + NT$ {yearEndBonus.toLocaleString()}
+                </span>
+              </div>
+            )}
 
             <div className="finance-divider" />
 
@@ -389,13 +434,25 @@ export function GameDashboard({
               </div>
             )}
             <div className="finance-subline">
-              <span>居住（{HOUSING_LABELS[state.lifeStatus.housing]}）</span>
+              <span>
+                {state.lifeStatus.housing === 'mortgage'
+                  ? `房屋貸款月繳（餘 ${mortgageYearsLeft} 年）`
+                  : `居住（${HOUSING_LABELS[state.lifeStatus.housing]}）`}
+              </span>
               <span className="font-mono">{exp.housing.toLocaleString()}</span>
             </div>
             <div className="finance-subline">
               <span>生活、交通與保險雜支</span>
               <span className="font-mono">{exp.living.toLocaleString()}</span>
             </div>
+            {exp.carLoan > 0 && (
+              <div className="finance-subline">
+                <span>
+                  車貸月繳（餘 {Math.round(state.lifeStatus.carLoanRemaining / 1000)}k）
+                </span>
+                <span className="font-mono">{exp.carLoan.toLocaleString()}</span>
+              </div>
+            )}
             {exp.studentLoan > 0 && (
               <div className="finance-subline">
                 <span>
@@ -507,7 +564,7 @@ export function GameDashboard({
 
           <section className="card panel-card">
             <div className="panel-heading">
-              <span>本季生活與工作重心</span>
+              <span>近期生活與工作重心</span>
               <span style={{ fontSize: 11, color: 'var(--ink-muted)' }}>隨時切換</span>
             </div>
             <div className="focus-list">
@@ -531,7 +588,7 @@ export function GameDashboard({
           <section className="card horizon-bar-wrap desktop-horizon-card">
             <div className="horizon-meta">
               <span>
-                職涯進度：第 {state.totalQuartersElapsed} / {maxQuarters} 季（{progressPct}%）
+                職涯進度：第 {state.totalQuartersElapsed * 3} / {maxQuarters * 3} 個月（{progressPct}%）
               </span>
               <span className="font-mono">{state.docNumber}</span>
             </div>
@@ -558,7 +615,7 @@ export function GameDashboard({
                 </span>
                 <span className="tag">{state.pendingEvent.tag}</span>
                 <span className="font-mono" style={{ fontSize: 12, color: 'var(--ink-muted)' }}>
-                  {state.currentYear} Q{state.currentQuarter} · {state.age} 歲
+                  {state.currentYear} 年 {getQuarterLabel(state.currentQuarter)} · {state.age} 歲
                 </span>
               </div>
 
@@ -594,7 +651,7 @@ export function GameDashboard({
                 <article key={item.id} className={`chronicle-item kind-${item.kind}`}>
                   <div className="chronicle-head">
                     <span className="chronicle-date">
-                      {item.year} Q{item.quarter}（{item.age} 歲）
+                      {item.year} 年 {getQuarterLabel(item.quarter)}（{item.age} 歲）
                     </span>
                     <span className="tag">{item.tag}</span>
                   </div>

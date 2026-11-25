@@ -1360,6 +1360,7 @@ export const ORG_EVENTS: GameEvent[] = [
         sublabel: '加薪 $3,500、職級晉升，從實務執行蛻變為團隊守門人',
         effect: {
           roleLevelDelta: 1,
+          setRoleTitle: '社工督導／組長',
           salaryDelta: 3500,
           statsDelta: { energy: -10, purpose: 5, capital: 12, life: -6, impactScore: 14 },
           milestoneTag: '晉升社福組織督導管理職',
@@ -1400,6 +1401,7 @@ export const ORG_EVENTS: GameEvent[] = [
         sublabel: '加薪 $3,500、職級晉升，開始參與組織核心決策',
         effect: {
           roleLevelDelta: 1,
+          setRoleTitle: '副秘書長',
           salaryDelta: 3500,
           statsDelta: { energy: -10, purpose: 5, capital: 12, life: -6, impactScore: 14 },
           milestoneTag: '晉升副秘書長與部門主管職',
@@ -1440,6 +1442,7 @@ export const ORG_EVENTS: GameEvent[] = [
         sublabel: '加薪 $3,500、職級晉升，成為企業／產業工會秘書處的核心骨幹',
         effect: {
           roleLevelDelta: 1,
+          setRoleTitle: '工會副總幹事',
           salaryDelta: 3500,
           statsDelta: { energy: -10, purpose: 6, capital: 12, life: -6, impactScore: 14 },
           milestoneTag: '晉升工會資深組織秘書暨協商幹部',
@@ -1480,6 +1483,7 @@ export const ORG_EVENTS: GameEvent[] = [
         sublabel: '加薪 $3,500、職級晉升，成為職業工會會務運作核心',
         effect: {
           roleLevelDelta: 1,
+          setRoleTitle: '會務組長',
           salaryDelta: 3500,
           statsDelta: { energy: -10, purpose: 5, capital: 12, life: -6, impactScore: 13 },
           milestoneTag: '晉升職業工會會務組長',
@@ -1521,6 +1525,7 @@ export const ORG_EVENTS: GameEvent[] = [
         sublabel: '登頂基金會最高專職位置，為整個機構定調未來十年',
         effect: {
           roleLevelDelta: 2,
+          setRoleTitle: '執行長',
           salaryDelta: 6500,
           statsDelta: { energy: -12, purpose: 10, capital: 14, life: -7, impactScore: 22 },
           milestoneTag: '接任基金會專任執行長',
@@ -1562,6 +1567,7 @@ export const ORG_EVENTS: GameEvent[] = [
         sublabel: '成為真正握有決策權與制度記憶的核心舵手',
         effect: {
           roleLevelDelta: 2,
+          setRoleTitle: '專任秘書長',
           salaryDelta: 6500,
           statsDelta: { energy: -12, purpose: 10, capital: 14, life: -7, impactScore: 22 },
           milestoneTag: '接任社團法人專任秘書長',
@@ -1603,6 +1609,7 @@ export const ORG_EVENTS: GameEvent[] = [
         sublabel: '登頂企業／產業工會專職核心，撐起更多受僱者的集體談判力量',
         effect: {
           roleLevelDelta: 2,
+          setRoleTitle: '工會總幹事',
           salaryDelta: 6500,
           statsDelta: { energy: -12, purpose: 11, capital: 14, life: -7, impactScore: 22 },
           milestoneTag: '接任企業／產業工會專任總幹事',
@@ -1644,6 +1651,7 @@ export const ORG_EVENTS: GameEvent[] = [
         sublabel: '登頂職業工會最高專職，守住基層自營會員的保險與服務品質',
         effect: {
           roleLevelDelta: 2,
+          setRoleTitle: '職業工會總幹事',
           salaryDelta: 6500,
           statsDelta: { energy: -12, purpose: 10, capital: 14, life: -7, impactScore: 20 },
           milestoneTag: '接任職業工會專任總幹事',
@@ -1738,6 +1746,7 @@ export const ORG_EVENTS: GameEvent[] = [
             role: 'corp_esg_officer',
             newSalary: 62000,
           },
+          setRoleTitle: 'ESG 永續經理',
           statsDelta: { energy: 8, purpose: -8, capital: 10, life: 12, impactScore: 6 },
           setFlag: 'entered_corp_esg',
           milestoneTag: '轉戰上市企業 ESG 永續部門',
@@ -1795,6 +1804,7 @@ export const ORG_EVENTS: GameEvent[] = [
             newSalary: 48000,
           },
           roleLevelDelta: 1,
+          setRoleTitle: '專任秘書長',
           statsDelta: { energy: -6, purpose: 18, capital: 8, life: -4, impactScore: 20 },
           milestoneTag: '自企業永續部門帶著資本重返民間組織',
         },
@@ -2417,7 +2427,7 @@ export const ORG_EVENTS: GameEvent[] = [
     category: 'work',
     tag: '低薪凍漲撞牆',
     weight: 22,
-    conditions: { excludeOutsideNPO: true, minTenure: 3 },
+    conditions: { excludeOutsideNPO: true, minTenure: 3, minOrgYears: 2 },
     narrative:
       '在{orgNoun}待了好幾年，物價跟房租早不知漲了多少輪，你的本薪卻幾乎原地踏步，甚至比剛進來的新進人員還低。你整理好過去一年的實績紀錄與業務成果，決定找{bossTitle}正式談一次調薪。對方聽完沉吟半晌說：「我們知道你很辛苦，但今年組織真的沒多餘財源……」',
     choices: [
@@ -2867,7 +2877,7 @@ export const ORG_EVENTS: GameEvent[] = [
       },
       {
         id: 'survey_members_first',
-        label: '先發起 48 小時匿名會員問卷盤點各廠區痛點，凝聚共識後再正式發函要求協商',
+        label: '先發起 48 小時匿名會員問卷盤點各單位痛點，凝聚共識後再正式發函要求協商',
         sublabel: '步調穩健、降低內部雜音，但部分激進會員嫌動作太慢',
         effect: {
           statsDelta: { energy: -6, purpose: 6, capital: 8, life: 1, impactScore: 11 },
@@ -2879,7 +2889,7 @@ export const ORG_EVENTS: GameEvent[] = [
   },
   {
     id: 'ind_union_anti_union_transfer',
-    title: '工會幹部遭公司調往偏遠廠區：赤裸裸的不當勞動行為打壓',
+    title: '工會幹部遭公司調往偏遠據點：赤裸裸的不當勞動行為打壓',
     category: 'work',
     tag: '工會法裁決戰',
     weight: 18,
@@ -2896,7 +2906,7 @@ export const ORG_EVENTS: GameEvent[] = [
           milestoneTag: '打贏不當勞動行為裁決守住工會幹部',
         },
         outcomeText:
-          '你跑了四次裁決庭整理上百頁事證，勞動部最終裁定資方構成打壓工會、調職無效！勝訴消息傳回廠區，全體幹部士氣大振。',
+          '你跑了四次裁決庭整理上百頁事證，勞動部最終裁定資方構成打壓工會、調職無效！勝訴消息傳回各工作單位，全體幹部士氣大振。',
       },
       {
         id: 'negotiate_transfer_revoke',
@@ -2996,7 +3006,7 @@ export const ORG_EVENTS: GameEvent[] = [
     weight: 16,
     conditions: { orgTypes: ['industrial_union'], excludeOutsideNPO: true, minTenure: 1 },
     narrative:
-      '公司年度財報與每股盈餘雙雙創新高，資方卻突然公告以「保留轉型資本支出」為由，把固定月數以外的績效分紅對半砍，還順帶縮水各單位尾牙餐費。工會聊天群組一夜湧入上千則怒吼，各廠區／營業單位代表紛紛要求秘書處立刻發文交涉。',
+      '公司年度財報與每股盈餘雙雙創新高，資方卻突然公告以「保留轉型資本支出」為由，把固定月數以外的績效分紅對半砍，還順帶縮水各單位尾牙餐費。工會聊天群組一夜湧入上千則怒吼，各營業據點與工作單位代表紛紛要求秘書處立刻發文交涉。',
     choices: [
       {
         id: 'demand_bonus_transparency',
@@ -3160,6 +3170,470 @@ export const ORG_EVENTS: GameEvent[] = [
         },
         outcomeText:
           '你替三十多位老會員找出人資原本算漏的特休未休折算與年資差額，每人平均多拿回好幾萬元應得補償。',
+      },
+    ],
+  },
+
+  // =========================================================================
+  // v0.23 新增：新手期／剛到職專屬事件（maxTenure <= 2, maxOrgYears <= 1）
+  // =========================================================================
+  {
+    id: 'rookie_chaotic_handover',
+    title: '報到第一週沒有交接手冊：面對前手留下的四百個「最終定稿」資料夾',
+    category: 'work',
+    tag: '新手到職震撼',
+    weight: 22,
+    conditions: { excludeOutsideNPO: true, maxTenure: 2, maxOrgYears: 1 },
+    narrative:
+      '興沖沖報到準備大展身手，打開共用雲端卻發現前手半年前就已離職，留下四百多個「最終版_v3_確認版_真的最後」的未分類檔案與沒密碼的帳號表。下週就要開本季第一場會議，{bossTitle}只說了一句：「你年輕人電腦比較熟，邊做邊摸索一下。」',
+    choices: [
+      {
+        id: 'build_clean_sop_from_scratch',
+        label: '週末加班先砍掉重練整理出樹狀歸檔索引與簡易 SOP，替自己也替組織打底',
+        sublabel: '消耗體力把混亂接住，建立起組織第一套透明交接架構（日後可能發揮關鍵作用）',
+        effect: {
+          setFlag: 'rookie_built_sop',
+          statsDelta: { energy: -7, purpose: 4, capital: 8, life: -4, impactScore: 6 },
+          milestoneTag: '到職初期從零整理組織共享檔案與交接索引',
+        },
+        outcomeText:
+          '雖然第一個週末都在幫前人的檔案重新命名中度過，但當會計與同事第一次能三秒找到去年公文時，你心裡悄悄記下這筆制度的成就感。',
+      },
+      {
+        id: 'just_get_through_meeting',
+        label: '先不管歷史遺產了，只翻出本週開會要用的三份檔案硬著頭皮上陣',
+        sublabel: '保留下班休息時間避免開局就過勞，但舊帳先埋在雲端深處',
+        effect: {
+          statsDelta: { energy: -2, purpose: 1, capital: 3, life: 2 },
+        },
+        outcomeText:
+          '會議總算有驚無險度過，只是往後每次要調舊資料都還是得像考古一樣翻箱倒櫃。',
+      },
+    ],
+  },
+  {
+    id: 'rookie_probation_review',
+    title: '試用期滿三個月面談：{bossTitle}稱讚你「很有熱忱」卻隻字不提調薪',
+    category: 'work',
+    tag: '菜鳥職場試煉',
+    weight: 20,
+    conditions: { excludeOutsideNPO: true, maxTenure: 2, maxOrgYears: 1 },
+    narrative:
+      '終於熬過三個月試用期考核。面談時{bossTitle}笑著誇你學習很快、對{targetNoun}很有耐心，但講到當初面試時口頭提過「過試用期看表現微調」時，對方卻話鋒一轉：「今年大環境不容易，我們還是把心力放在理想實踐上，明年再一起看。」',
+    choices: [
+      {
+        id: 'ask_for_written_criteria',
+        label: '禮貌但堅定地請對方寫下明年調薪或轉正的具體指標與時程，不讓口頭支票蒸發',
+        sublabel: '練習為自己爭取制度白紙黑字，難免讓氣氛微僵但守住底線',
+        effect: {
+          statsDelta: { energy: -3, purpose: 2, capital: 6, life: 1 },
+          salaryDelta: 800,
+        },
+        outcomeText:
+          '空氣安靜了五秒，對方有些意外一個新人這麼看重程序，最後仍勉為其難替你加上八百元職務加給並承諾年底再評一次。',
+      },
+      {
+        id: 'swallow_and_prove_worth',
+        label: '剛入行不好意思第一季就談錢，笑笑點頭想說再用半年實績證明自己',
+        sublabel: '維持表面和氣與職場好感度，但心裡對組織的信任悄悄裂了一道縫',
+        effect: {
+          statsDelta: { energy: -2, purpose: -3, capital: 2, life: 0 },
+        },
+        outcomeText:
+          '走出會議室那天你安慰自己「先把經驗值刷起來要緊」，只是打開薪資條時還是覺得哪裡怪怪的。',
+      },
+    ],
+  },
+  {
+    id: 'rookie_first_rejection_shock',
+    title: '第一次獨立扛業務就被退件三次：理想與行政流程的正面撞擊',
+    category: 'work',
+    tag: '新手實務震撼',
+    weight: 20,
+    conditions: { excludeOutsideNPO: true, maxTenure: 2, maxOrgYears: 1 },
+    narrative:
+      '原以為在{orgNoun}上班主要是跟人接觸、推動改變，沒想到這週第一次自己送出的計畫請款與公文因為格式、簽核順序與經費科目認知落差，連續被主管與會計退件三次，連對外窗口的回信語氣都比想像中冰冷。',
+    choices: [
+      {
+        id: 'study_rules_systematically',
+        label: '泡杯茶虛心請教資深會計與行政前輩，把每一條核銷與公文地雷做成筆記',
+        sublabel: '初期挫敗感重，但快速補齊進入民間組織必備的行政硬實力',
+        effect: {
+          statsDelta: { energy: -5, purpose: 2, capital: 7, life: -1, impactScore: 4 },
+        },
+        outcomeText:
+          '你突然懂了為什麼前輩總說「行政沒過關，再偉大的現場也動不了」，第四次送件終於一次簽准。',
+      },
+      {
+        id: 'vent_and_rush_resubmit',
+        label: '心裡覺得「形式主義真浪費生命」，匆匆改完字面錯誤再送一次交差',
+        sublabel: '省下深究細節的時間，但埋下未來容易出行政紕漏的風險',
+        effect: {
+          statsDelta: { energy: -3, purpose: -2, capital: 1, life: 1 },
+        },
+        outcomeText:
+          '勉強過關了，但往後每個月月底看到簽呈表格還是會反射性胃痛。',
+      },
+    ],
+  },
+  {
+    id: 'rookie_mentor_sudden_exit',
+    title: '剛帶你進門的前輩突然提離職：剩你一個人接住半個部門業務',
+    category: 'work',
+    tag: '新人留守戰',
+    weight: 18,
+    conditions: { excludeOutsideNPO: true, maxTenure: 2, maxOrgYears: 1 },
+    narrative:
+      '當初面試你、每天教你怎麼應對{targetNoun}的資深專員突然遞出辭呈，只留下兩週交接期就要去休息或轉行。組織短時間補不到人，{bossTitle}拍拍你肩膀說：「先由你暫代他原本一半的案子跟窗口，這是最快成長的機會。」',
+    choices: [
+      {
+        id: 'take_over_and_negotiate_priority',
+        label: '接下關鍵核心業務，但明確跟主管排序「哪些非急迫項目必須暫緩」',
+        sublabel: '在人員缺口下展現專業承擔與工時界線，實質提升組織話語權',
+        effect: {
+          statsDelta: { energy: -7, purpose: 4, capital: 9, life: -2, impactScore: 8 },
+        },
+        outcomeText:
+          '雖然連著兩個月忙到快分身乏術，但因為一開始就講清楚停損線，沒有被無底洞吞沒，還迅速站穩了部門位置。',
+      },
+      {
+        id: 'absorb_all_without_saying_no',
+        label: '怕被說抗壓性不夠，咬牙把前輩留下的所有會議與雜事全盤吞下',
+        sublabel: '替組織撐住表面平靜，代價是菜鳥期就提早透支能量',
+        effect: {
+          statsDelta: { energy: -11, purpose: 1, capital: 5, life: -6, impactScore: 6 },
+        },
+        outcomeText:
+          '大家誇你像海綿一樣超罩，只有你自己知道連續兩週十一點回家後，已經開始懷疑自己能不能撐滿一年。',
+      },
+    ],
+  },
+
+  // =========================================================================
+  // v0.23 新增：補齊五大偏少組織專屬事件（每類 +2 則，共 +10 則）
+  // =========================================================================
+  {
+    id: 'grass_local_resource_turf',
+    title: '社區關懷據點與在地里長／廟口系統的資源角力',
+    category: 'work',
+    tag: '草根在地生態',
+    weight: 18,
+    conditions: { orgTypes: ['grassroots'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '你們新爭取到的社區共餐與長輩陪伴點剛開張，隔壁長年經營的里長系統卻認為協會「搶了選民服務版圖」，不僅場地借用突然卡關，幾位熱心地方媽媽也開始兩邊傳話。沒有地方配合，很多偏鄉與巷弄工作根本推不動。',
+    choices: [
+      {
+        id: 'co_host_share_credit',
+        label: '提著水果禮盒親自去里辦公處喝茶談合作，把舞台與致詞版面讓給地方',
+        sublabel: '放下文青身段換取在地信任，社區工作終於順暢落地',
+        effect: {
+          statsDelta: { energy: -5, purpose: 5, capital: 8, life: 1, impactScore: 11 },
+        },
+        outcomeText:
+          '喝了三泡高山茶後里長主動借出活動中心冷氣與廣播系統，條件只是開幕式要印他的名字——社區孩子和長輩順利開飯了。',
+      },
+      {
+        id: 'stay_independent_no_politics',
+        label: '不想捲入地方派系人情，寧願自己另外租小空間獨立辦活動',
+        sublabel: '守住組織自主性與清爽界線，但場地費與宣傳成本大增',
+        effect: {
+          orgFinanceDelta: -1,
+          statsDelta: { energy: -6, purpose: 7, capital: 3, life: -1, impactScore: 7 },
+        },
+        outcomeText:
+          '少了地方樁腳動員，前幾場活動小貓兩三隻，但留下來的居民反而都是真正認同協會理念的種子。',
+      },
+    ],
+  },
+  {
+    id: 'grass_volunteer_gap_fill',
+    title: '長期志工突然集體請假：週六據點只剩你和一車物資撐場',
+    category: 'work',
+    tag: '草根人力極限',
+    weight: 18,
+    conditions: { orgTypes: ['grassroots'], excludeOutsideNPO: true },
+    narrative:
+      '禮拜五晚上七點半，原本排班的五位核心志工因為連假出遊與家裡臨時有事同時請假。明天早上八點社區長輩與弱勢家庭就要來領餐與上課，協會帳上又沒錢請臨時工。',
+    choices: [
+      {
+        id: 'improvise_and_build_backup_pool',
+        label: '週六一早親自搬貨備餐撐完場，下週立刻建立「大學生與鄰里機動備援群組」',
+        sublabel: '先救現場再補制度洞，累到腰痠但防止下次再單點崩潰',
+        effect: {
+          statsDelta: { energy: -9, purpose: 6, capital: 7, life: -4, impactScore: 10 },
+        },
+        outcomeText:
+          '那天你同時當司機、廚助兼主持人，收工後躺在摺疊椅上動彈不得，但也從此建立起二十人的彈性志工名單。',
+      },
+      {
+        id: 'shrink_scale_honestly',
+        label: '誠實通知社區改為簡單發放餐點與簡化活動，不拿自己肝硬扛所有缺口',
+        sublabel: '對外口碑略有落差，但守住專職人員可持續的體力極限',
+        effect: {
+          statsDelta: { energy: -3, purpose: 1, capital: 2, life: 4, impactScore: 5 },
+        },
+        outcomeText:
+          '長輩們收到便當還是笑著道謝，你第一次承認「少辦一場遊戲不會天塌下來，但自己倒了協會才真的完蛋」。',
+      },
+    ],
+  },
+  {
+    id: 'large_hq_branch_disconnect',
+    title: '總會推出「全體系統一新 KPI 系統」：與地方分會第一線完全脫節',
+    category: 'work',
+    tag: '大型機構內耗',
+    weight: 18,
+    conditions: { orgTypes: ['large_welfare'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '總會顧問花百萬買了套全新數位個案追蹤系統，要求第一線每次訪視後兩小時內必須用手機填完 35 欄量化指標，否則影響分會考評。但偏鄉訊號微弱、弱勢阿嬤家裡根本不適合一直滑手機問卷，全組社工集體炸鍋。',
+    choices: [
+      {
+        id: 'collect_field_evidence_pushback',
+        label: '彙整第一線實際耗時數據與訪視困境，正式寫簽呈要求總會調整免填欄位',
+        sublabel: '替團隊當「麻煩的吹哨者」，有望改善全機構不必要的行政折磨',
+        effect: {
+          statsDelta: { energy: -7, purpose: 7, capital: 9, life: 0, impactScore: 12 },
+        },
+        outcomeText:
+          '總會主秘一開始不太高興，但看到你附上的「填表時間超過實際訪視時間」統計圖後，終於同意將表單減半並開放 48 小時補登。',
+      },
+      {
+        id: 'create_shadow_shortcuts',
+        label: '默默教同事建標準罐頭模板快速交差，表面配合總會要求換取耳根清淨',
+        sublabel: '省去向上衝撞的政治風險，但大家都活在「兩套帳」的疲憊裡',
+        effect: {
+          statsDelta: { energy: -4, purpose: -4, capital: 2, life: 1, impactScore: 4 },
+        },
+        outcomeText:
+          '總會簡報裡的系統上線率高達 99%，只是沒人敢點開看裡面有一半欄位寫著「無異常、持續追蹤」。',
+      },
+    ],
+  },
+  {
+    id: 'large_charity_run_mobilization',
+    title: '年度「萬人公益路跑／大型勸募園遊會」：全機構連總機都要下海拉贊助',
+    category: 'work',
+    tag: '大社福動員令',
+    weight: 18,
+    conditions: { orgTypes: ['large_welfare'], excludeOutsideNPO: true },
+    narrative:
+      '每年秋季的機構品牌旗艦公益活動又來了。總會下令各部門認領園遊會攤位營收或報名人數指標，明明這不是你的本業，卻被分配到「每人至少推銷十張愛心園遊券」與週末頂著太陽站一整天服務台。',
+    choices: [
+      {
+        id: 'turn_booth_into_advocacy',
+        label: '配合認領現場站班，但把攤位改造成讓民眾看見真實服務脈絡的互動體驗區',
+        sublabel: '既完成大型組織動員責任，也不讓活動淪為純粹消耗體力的買賣',
+        effect: {
+          statsDelta: { energy: -8, purpose: 6, capital: 6, life: -3, impactScore: 11 },
+        },
+        outcomeText:
+          '好幾位原本只想來買園遊券抽獎的企業員工，在你的攤位前停下來聽了十分鐘個案故事，還當場簽了定期定額。',
+      },
+      {
+        id: 'protect_core_caseload_pay_quota',
+        label: '自掏腰包買幾張券交差並請同事代班部分時段，把體力留給週一的個案處遇',
+        sublabel: '小額破財消災但避免核心服務品質因大型造勢活動崩盤',
+        effect: {
+          savingsDelta: -3000,
+          statsDelta: { energy: -2, purpose: -1, capital: 1, life: 2, impactScore: 5 },
+        },
+        outcomeText:
+          '少吃幾頓大餐換來週末在家補眠，週一早上面對危機家庭通話時腦袋總算還是清醒的。',
+      },
+    ],
+  },
+  {
+    id: 'local_second_gen_rebrand',
+    title: '創辦家族二代接班董事：要把三十年老基金會全面改造成「潮牌文創與短影音」',
+    category: 'work',
+    tag: '地方基金會轉型',
+    weight: 18,
+    conditions: { orgTypes: ['local_foundation'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '從海外念完設計回來的創辦家族二代進入董事會，第一把火就要把行之有年的在地獎助學金與鄉土讀書會預算砍半，改拍百支 Reels 短影音跟聯名文創咖啡包：「傳統那套太老土了，沒有流量誰看得到我們！」',
+    choices: [
+      {
+        id: 'bridge_old_roots_new_media',
+        label: '接住二代想創新的熱情，提案用短影音紀錄「受獎學子與地方匠人真實故事」',
+        sublabel: '費心翻譯兩代語言，既保住地方深耕命脈又帶進年輕捐款與關注度',
+        effect: {
+          statsDelta: { energy: -8, purpose: 7, capital: 10, life: -2, impactScore: 13 },
+        },
+        outcomeText:
+          '老董事長看到孫女拍出的地方阿公製茶紀錄片紅了眼眶，年輕二代也終於體會「內容有根，流量才留得住」。',
+      },
+      {
+        id: 'stick_to_safe_execution',
+        label: '少碰路線之爭，配合董事指示找外包行銷團隊趕出一波形象影片交卷',
+        sublabel: '省下說服家族內部的消耗，但看著在地補助縮水心裡有些遺憾',
+        effect: {
+          orgFinanceDelta: 0,
+          statsDelta: { energy: -3, purpose: -4, capital: 4, life: 2, impactScore: 5 },
+        },
+        outcomeText:
+          '短影音破了十萬觀看卻幾乎沒帶來地方實質連結，半年後二代董事也悄悄失去了新鮮感。',
+      },
+    ],
+  },
+  {
+    id: 'local_council_favor_pressure',
+    title: '地方議員與縣府專案配合款暗示：「活動文宣要把某幾位長官照片放最大」',
+    category: 'work',
+    tag: '地方政商眉角',
+    weight: 18,
+    conditions: { orgTypes: ['local_foundation'], excludeOutsideNPO: true },
+    narrative:
+      '基金會與縣府合辦的年度地方藝術教育節即將開跑，承辦單位私下轉達幾位重要地方民代與局處首長的期待：希望開幕手冊封面、背板和致詞順序特別禮遇特定政治人物，明年補助款才會好說話。',
+    choices: [
+      {
+        id: 'protocol_neutral_keep_focus',
+        label: '訂出「依職銜比例一致排版、主角留給地方師生」的公開視覺規範，笑著擋下特權要求',
+        sublabel: '考驗政治手腕與溝通智慧，守住基金會不淪為地方派系宣傳看板的底線',
+        effect: {
+          statsDelta: { energy: -6, purpose: 8, capital: 8, life: 0, impactScore: 12 },
+        },
+        outcomeText:
+          '你先私下把孩子作品集送給各議員辦公室致意再說明版面原則，現場照樣風光開幕，還被地方文化圈讚賞有格調。',
+      },
+      {
+        id: 'accommodate_local_protocol',
+        label: '地方生存不易，照政壇默契把貴賓名單排滿、忍住台上四十分鐘致詞秀',
+        sublabel: '確保明年地方配合款與場地行政順利過關，只是工作尊嚴打了一點折',
+        effect: {
+          orgFinanceDelta: 1,
+          statsDelta: { energy: -4, purpose: -4, capital: 4, life: 1, impactScore: 6 },
+        },
+        outcomeText:
+          '主舞台上十幾位政治人物輪流拿麥克風拍大合照，你站在側台提醒自己「忍過這兩小時，後面一整年偏鄉課程才發得出講師費」。',
+      },
+    ],
+  },
+  {
+    id: 'adv_coalition_split_compromise',
+    title: '跨團體修法聯盟意見撕裂：接受「只過一半的妥協版」還是全體退席抗議？',
+    category: 'work',
+    tag: '倡議路線決裂',
+    weight: 19,
+    conditions: { orgTypes: ['advocacy_ngo'], excludeOutsideNPO: true, minTenure: 2 },
+    narrative:
+      '朝野黨團協商前夕，執政黨總召拋出折衷條文：願意納管你們訴求的核心門檻，但關鍵罰則縮水、過渡期延後三年。聯盟裡偏體制協商派的團體主張「先求有再求好」，草根激進派則痛批「簽了就是替假改革背書」。身為聯盟共同秘書處的你們被推上火線表態。',
+    choices: [
+      {
+        id: 'accept_partial_with_sunset_clause',
+        label: '促成聯盟附帶「強制公布落實進度＋兩年檢討條款」有條件過關，不讓十年心血歸零',
+        sublabel: '左右不討好、得承受激進派朋友在臉書點名批判，但制度真往前推了半步',
+        effect: {
+          statsDelta: { energy: -10, purpose: 5, capital: 11, life: -4, impactScore: 18 },
+          milestoneTag: '在聯盟分裂壓力下促成關鍵過渡條款立法',
+        },
+        outcomeText:
+          '法案三讀當晚社群上罵聲與祝賀各半。兩年後正是靠你當初硬塞進去的檢討條款，把原本被拿掉的罰則重新追了回來。',
+      },
+      {
+        id: 'hold_bottom_line_walkout',
+        label: '拒絕替打折版本背書，召開聯合記者會撤回支持並把運動拉回社會對話',
+        sublabel: '守住倡議純度與當事人信任，代價是可能再等好幾年才重啟修法窗口',
+        effect: {
+          statsDelta: { energy: -9, purpose: 11, capital: 5, life: -3, impactScore: 14 },
+        },
+        outcomeText:
+          '雖然這會期沒拿到三讀照片，但一群原本失望的當事人反而緊緊握住你們的手：「謝謝你們沒有為了結案把我們賣掉。」',
+      },
+    ],
+  },
+  {
+    id: 'adv_election_neutrality_test',
+    title: '大選前九十天：各黨候選人同時找上門要你們「公開評比或站台背書」',
+    category: 'work',
+    tag: '公民團體中立界線',
+    weight: 18,
+    conditions: { orgTypes: ['advocacy_ngo'], excludeOutsideNPO: true },
+    narrative:
+      '選戰進入白熱化，某候選人陣營主動釋出願意把你們的白皮書整本放進政見，條件是希望秘書處派員出席他的造勢記者會站台；對手陣營也透過人脈暗示「如果選邊站，未來四年都不用想進部會開會」。',
+    choices: [
+      {
+        id: 'publish_nonpartisan_scorecard',
+        label: '拒絕幫任何單一候選人站台，改辦全黨派「政見承諾度公開問卷與對照表」',
+        sublabel: '累翻整個研究組去追每個陣營回覆，但守住公民團體最珍貴的公共公信力',
+        effect: {
+          statsDelta: { energy: -8, purpose: 10, capital: 9, life: -2, impactScore: 16 },
+        },
+        outcomeText:
+          '三個主要陣營最後不得不乖乖交回政策承諾書。選後不管誰執政，你們都能拿著白紙黑字的成績單走進部會監督。',
+      },
+      {
+        id: 'quiet_lobby_without_public_clash',
+        label: '選舉期間刻意降低音量專心做內部研究，等選後再低調找新內閣談合作',
+        sublabel: '大幅降低被網軍出征與貼政治標籤的風險，但也錯過大選議題黃金窗口',
+        effect: {
+          statsDelta: { energy: -2, purpose: -3, capital: 4, life: 3, impactScore: 6 },
+        },
+        outcomeText:
+          '避開了選前兩個月的漫天口水戰，團隊安穩度過選舉季，只是支持者社群裡有人問：「這陣子怎麼都沒看到你們聲音？」',
+      },
+    ],
+  },
+  {
+    id: 'corp_global_kpi_mismatch',
+    title: '國際／企業總部下達全球統一 ESG 指標：與台灣在地脈絡嚴重水土不服',
+    category: 'work',
+    tag: '跨國在地落差',
+    weight: 18,
+    conditions: { orgTypes: ['corp_intl_ngo'], excludeOutsideNPO: true, minTenure: 1 },
+    narrative:
+      '新加坡或歐美總部寄來新版全球影響力報表範本，要求台灣分部今年必須把公益資源集中在特定全球標籤（例如全數導入英文 AI 學習平台），否則明年不核撥預算。但台灣合作學校和社福夥伴明明最缺的是本土專業輔導人力與翻譯教材。',
+    choices: [
+      {
+        id: 'translate_local_need_into_global_sroi',
+        label: '熬夜寫英文情境備忘錄說服亞太總監「先有在地基礎才能接軌全球指標」',
+        sublabel: '高度考驗雙語說服與向上管理功力，替台灣第一線守住真正可用的資源',
+        effect: {
+          statsDelta: { energy: -8, purpose: 7, capital: 11, life: -3, impactScore: 14 },
+        },
+        outcomeText:
+          '跨時區視訊簡報打動了總部評審委員，破例同意將四成預算改列為「本土輔導師資培力」，英文簡報功力也因此暴漲。',
+      },
+      {
+        id: 'adapt_projects_to_fit_template',
+        label: '先把在地計畫包裝成總部聽得懂的全球關鍵字申請過關，私下再彈性支應現場',
+        sublabel: '短期最快拿到年度經費，但長期要在報表翻譯與現實間走鋼索',
+        effect: {
+          statsDelta: { energy: -4, purpose: -2, capital: 5, life: 1, impactScore: 7 },
+        },
+        outcomeText:
+          '總部對台灣區的漂亮數據大為讚賞，只有你跟在地老師心照不宣這份英文報告背後繞了多大一圈。',
+      },
+    ],
+  },
+  {
+    id: 'corp_parent_scandal_pr',
+    title: '母企業或主要捐贈大廠爆出勞資／環境爭議：公益基金會瞬間被網友出征「漂綠」',
+    category: 'work',
+    tag: '企業公益公關危機',
+    weight: 18,
+    conditions: { orgTypes: ['corp_intl_ngo'], excludeOutsideNPO: true },
+    narrative:
+      '週刊凌晨爆出母公司工廠排污或勞資糾紛新聞，隔天基金會粉專留言區瞬間被灌爆：「花幾百萬辦公益洗白，不如先對自己員工好一點！」本來已經談好的兩個公民團體合作案，也打電話來詢問是否暫緩聯名。',
+    choices: [
+      {
+        id: 'separate_governance_honest_dialogue',
+        label: '向董事會主張獨立治理立場，主動向合作民間團體坦誠溝通並檢視自家供應鏈責任',
+        sublabel: '可能惹惱企業公關部門，但唯有不當橡皮圖章才保得住組織長期公信力',
+        effect: {
+          statsDelta: { energy: -9, purpose: 9, capital: 8, life: -3, impactScore: 13 },
+        },
+        outcomeText:
+          '你頂住母公司法務壓力把合作計畫調整成「公開第三方檢核機制」，雖然損失了一個高曝光案，卻留住最重要的一群民間實務夥伴。',
+      },
+      {
+        id: 'freeze_social_media_wait_storm',
+        label: '配合企業公關危機管控，暫停社群更新兩週、改為低調執行既定撥款',
+        sublabel: '安全度過公關風暴核心期，避免火燒到整個公益部門預算',
+        effect: {
+          statsDelta: { energy: -4, purpose: -5, capital: 3, life: 1, impactScore: 4 },
+        },
+        outcomeText:
+          '新聞熱度三週後退燒了，預算沒被砍，但你自己看著鏡子問了好幾次：「我們到底是在補洞，還是在幫人擦脂抹粉？」',
       },
     ],
   },

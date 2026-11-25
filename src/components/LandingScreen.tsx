@@ -19,7 +19,7 @@ import {
   REGIONS,
   ROLES,
 } from '../data/organizations';
-import { getRoleDisplayTitle } from '../engine/simulation';
+import { getQuarterLabel, getRoleDisplayTitle } from '../engine/simulation';
 import type {
   BackgroundTierId,
   EmploymentType,
@@ -41,8 +41,14 @@ interface BeforeInstallPromptEvent extends Event {
 
 const RELEASE_CHANGELOG: Array<{ version: string; tag: string; summary: string }> = [
   {
-    version: 'v0.222',
+    version: 'v0.23',
     tag: '最新',
+    summary:
+      '新增 30 則事件（含新手報到、五大組織專屬、6 條跨年度劇情線、車貸與居住／孝親協商、長照減壓）及 20 則日常切片；全介面改以月份呈現與「每月淨結餘」帳本（含主管加給、加班費／責任制、房貸／車貸）；新增最低工資每年 0–5%（貼近通膨）連動調薪、開局緩衝與升遷職稱／轉職節點同步。',
+  },
+  {
+    version: 'v0.222',
+    tag: '宣導連結',
     summary:
       '結算畫面底部新增「輔大非營利組織管理碩士學程（在職班）」粉專宣傳連結，並與非營利組織產業工會臉書專頁並列呈現。',
   },
@@ -203,7 +209,7 @@ export function LandingScreen({
           <strong className="font-serif" style={{ fontSize: 17 }}>
             做好事，是份好工作嗎？
           </strong>
-          <span className="brand-code">1 IN 100,000 · TW-NPO SIM v0.222</span>
+          <span className="brand-code">1 IN 100,000 · TW-NPO SIM v0.23</span>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <button type="button" className="btn btn-sm" onClick={onOpenArchive}>
@@ -246,8 +252,8 @@ export function LandingScreen({
                 {savedCareer.org.name} · {getRoleDisplayTitle(savedCareer)}
               </div>
               <div className="resume-career-meta font-mono">
-                進度：{savedCareer.currentYear} 年 Q{savedCareer.currentQuarter}（第{' '}
-                {savedCareer.totalQuartersElapsed} / {savedCareer.maxYears * 4} 季）｜ 存款 NT${' '}
+                進度：{savedCareer.currentYear} 年 {getQuarterLabel(savedCareer.currentQuarter)}（第{' '}
+                {savedCareer.totalQuartersElapsed * 3} / {savedCareer.maxYears * 12} 個月）｜ 存款 NT${' '}
                 {savedCareer.savings.toLocaleString()}
                 {savedCareer.pendingEvent ? ' ｜ 待處理事件抉擇' : ''}
               </div>
@@ -613,7 +619,7 @@ export function LandingScreen({
           向《80億分之1》（1in8b.life）帶給我們的感動致敬，本作所有組織與案例是基於實務處境以虛構呈現，數據僅存於您自己的瀏覽器。
         </div>
         <div>
-          v0.222｜via{' '}
+          v0.23｜via{' '}
           <a
             href="mailto:yusuke225@gmail.com"
             style={{ color: 'var(--accent-teal)', textDecoration: 'underline', textUnderlineOffset: '3px' }}

@@ -1,4 +1,12 @@
-import type { FocusId, OrgTypeId, RegionId, RoleId, SimulationState } from '../types/game';
+import type {
+  FocusId,
+  HousingType,
+  OrgTypeId,
+  RegionId,
+  RelationshipStatus,
+  RoleId,
+  SimulationState,
+} from '../types/game';
 import { pickRandom } from './organizations';
 
 interface RoutineLine {
@@ -6,6 +14,7 @@ interface RoutineLine {
   text: string;
   tag: string;
   orgTypes?: OrgTypeId[];
+  excludeOrgTypes?: OrgTypeId[];
   roles?: RoleId[];
   onlyOutsideNPO?: boolean;
   excludeOutsideNPO?: boolean;
@@ -15,6 +24,13 @@ interface RoutineLine {
   regions?: RegionId[];
   minAge?: number;
   maxAge?: number;
+  minTenure?: number;
+  maxTenure?: number;
+  minOrgYears?: number;
+  maxOrgYears?: number;
+  minRoleLevel?: number;
+  housing?: HousingType[];
+  relationship?: RelationshipStatus[];
 }
 
 const ROUTINE_LINES: RoutineLine[] = [
@@ -75,8 +91,8 @@ const ROUTINE_LINES: RoutineLine[] = [
   // === 產業／企業工會專屬日常 ===
   {
     tag: '工會組織',
-    title: '公司與廠區出入口的入會簡章',
-    text: '傍晚五點半站在單位側門或辦公大樓出口發入會簡章，警衛一直盯著你的背心，但總算有兩位剛下班的基層員工偷偷接過去。',
+    title: '公司大樓出入口的入會簡章',
+    text: '傍晚五點半站在公司大樓或單位出口發入會簡章，警衛一直盯著你的背心，但總算有兩位剛下班的基層員工偷偷接過去。',
     orgTypes: ['industrial_union'],
   },
   {
@@ -258,6 +274,7 @@ const ROUTINE_LINES: RoutineLine[] = [
     title: '捷運站外的小套房帳單',
     text: '扣掉房租、電費與通勤月票後，看著手機網銀餘額發呆了十秒，把原本想點的外送改回超商微波便當。',
     regions: ['taipei_metro'],
+    housing: ['studio_rent', 'shared_room'],
     maxAge: 34,
   },
   {
@@ -304,7 +321,7 @@ const ROUTINE_LINES: RoutineLine[] = [
   {
     tag: '斜槓止血',
     title: '週六下午的接案校稿',
-    text: '用週末幫出版案校對兼寫文案多賺了幾千元，至少這個月的學貸與房租不必再動到預備金。',
+    text: '用週末幫出版案校對兼寫文案多賺了幾千元，至少這個月的固定開銷與生活費不必再動到預備金。',
     focuses: ['finance'],
     excludeOutsideNPO: true,
   },
@@ -337,6 +354,8 @@ const ROUTINE_LINES: RoutineLine[] = [
     text: '一方面要替年輕專員擋掉不合理的臨時交辦，另一方面還要消化組織高層「以前我們都這樣做」的堅持。',
     minAge: 33,
     maxAge: 46,
+    minTenure: 3,
+    minOrgYears: 2,
     excludeOutsideNPO: true,
   },
   {
@@ -344,13 +363,15 @@ const ROUTINE_LINES: RoutineLine[] = [
     title: '成為新人的避風港',
     text: '看見剛進來三個月的專員因為被服務對象或會員罵而躲在茶水間哭，你默默遞上衛生紙想起十年前的自己。',
     minAge: 36,
+    minTenure: 6,
     excludeOutsideNPO: true,
   },
   {
     tag: '歲月紀錄',
     title: '重新整理五年來的活動照片',
     text: '在雲端硬碟深處翻出剛入行時的場勘照，才發現原來一路上自己真的陪著這個組織走過這麼多關卡。',
-    minAge: 32,
+    minOrgYears: 5,
+    excludeOutsideNPO: true,
   },
   {
     tag: '颱風季備災',
@@ -398,6 +419,9 @@ const ROUTINE_LINES: RoutineLine[] = [
     title: '把隱性知識寫成 SOP',
     text: '意識到如果明天自己請長假就沒人知道主管機關公文怎麼回，開始把十年積累的眉角整理成交接手冊。',
     minAge: 42,
+    minTenure: 8,
+    minOrgYears: 3,
+    excludeOutsideNPO: true,
   },
   {
     tag: '商界日常',
@@ -461,6 +485,7 @@ const ROUTINE_LINES: RoutineLine[] = [
     tag: '方案創新',
     title: '把舊活動改造成新試點',
     text: '說服主管把沿用八年的制式活動砍掉一半，騰出預算試做更貼近當代需求的小型試驗。',
+    minOrgYears: 1,
     excludeOutsideNPO: true,
   },
   {
@@ -563,7 +588,7 @@ const EXTRA_SEASONAL_LINES: RoutineLine[] = [
   {
     tag: '政策變動',
     title: '勞動與社福新法規研讀',
-    text: '主管機關又公告新版補助辦法或人團會務規範，你把 40 頁 PDF 下載下來用螢光筆畫滿重點。',
+    text: '主管機關又公告新版補助辦法或會務法規，你把 40 頁 PDF 下載下來用螢光筆畫滿重點。',
     excludeOutsideNPO: true,
   },
   {
@@ -576,18 +601,22 @@ const EXTRA_SEASONAL_LINES: RoutineLine[] = [
     tag: '親密關係',
     title: '差點忘記的紀念日與遲到晚餐',
     text: '因為臨時突發狀況晚了四十分鐘才到餐廳，幸好對方沒有發脾氣，只是提醒你手機可以開飛航模式一小時。',
+    relationship: ['dating', 'married'],
   },
   {
     tag: '職業認同',
     title: '在演講台下看見自己的影子',
     text: '參加跨界論壇時聽見剛入行兩年的年輕人提問，突然發覺那些你走過的困惑正在下一代身上重演。',
     minAge: 34,
+    minTenure: 5,
   },
   {
     tag: '資深日常',
     title: '替年輕同事爭取合理補休',
     text: '把原本大家習慣「無償奉獻」的週末活動排班重寫一遍，堅持讓所有同仁確實拿到補休時數。',
     minAge: 35,
+    minTenure: 4,
+    minRoleLevel: 1,
     excludeOutsideNPO: true,
   },
   // === 轉任企業 ESG 永續部門專屬日常 ===
@@ -615,12 +644,146 @@ const EXTRA_SEASONAL_LINES: RoutineLine[] = [
     text: '連續兩週跟會計師與外包顧問核對溫室氣體盤查數據與 SROI 模型，深怕一個小數點誤植影響公司評等。',
     onlyOutsideNPO: true,
   },
+  // === 新手報到／第一年專屬日常 ===
+  {
+    tag: '到職報到',
+    title: '摸索辦公室印表機與雲端資料夾',
+    text: '剛進單位花了一整週才搞懂哪台影印機專吃雙面列印、哪個資料夾裡的表格才是真正能用的最新版本。',
+    maxOrgYears: 1,
+    excludeOutsideNPO: true,
+  },
+  {
+    tag: '初登會議',
+    title: '第一次在理事會或董事會旁聽紀錄',
+    text: '手指在鍵盤上飛快敲著會議紀錄，一邊偷偷在筆記本把哪幾位理監事常互槓、誰在意哪個字眼畫成關係圖。',
+    maxOrgYears: 1,
+    excludeOutsideNPO: true,
+  },
+  {
+    tag: '新人震撼',
+    title: '搞懂憑證與內部簽呈的眉角',
+    text: '同一張交通費憑證因為少了附件說明或抬頭寫法不符被會計退回三次，你從此養成送審前先核對清單的習慣。',
+    maxOrgYears: 1,
+    excludeOutsideNPO: true,
+  },
+  {
+    tag: '窗口認臉',
+    title: '通訊錄一口氣多出三十個窗口',
+    text: '到職滿一季，手機裡突然多了主管機關承辦、友好團體與社區合作夥伴的聯絡人，終於不再對著分機表發呆。',
+    maxOrgYears: 1,
+    excludeOutsideNPO: true,
+  },
+  // === 工作重心：深耕現場 (fieldwork) ===
+  {
+    tag: '現場深耕',
+    title: '把政策語言翻譯成日常對話',
+    text: '走出會議室進到現場，才發現簡報裡寫得漂漂亮亮的專有名詞，換成台語和白話文講出口時得全部重寫一遍。',
+    focuses: ['fieldwork'],
+    excludeOutsideNPO: true,
+  },
+  {
+    tag: '田野筆記',
+    title: '背包裡永遠多帶一支備用原子筆',
+    text: '跑完一整天訪視與座談，回程在車上趁記憶還熱著把每個人的神情、抱怨與真實需求一筆一筆記下來。',
+    focuses: ['fieldwork'],
+    excludeOutsideNPO: true,
+  },
+  {
+    tag: '實務手感',
+    title: '在沒寫進企劃書的細節裡接住人',
+    text: '流程表寫著下午兩點結束，但你刻意多留了半小時把最後離開的當事人或會員的心事聽完才收場。',
+    focuses: ['fieldwork'],
+    excludeOutsideNPO: true,
+  },
+  {
+    tag: '跨點奔波',
+    title: '通勤里程默默跳過兩千公里',
+    text: '這季把大小據點、服務現場與合作單位跑了一輪，鞋底磨薄了一層，對第一線困境的畫面卻更清晰了。',
+    focuses: ['fieldwork'],
+    excludeOutsideNPO: true,
+  },
+  // === 工作重心：專業進修 / 自我修復 / 財務斜槓 ===
+  {
+    tag: '專業進修',
+    title: '把跨領域法條與案例讀進腦袋',
+    text: '趁工作空檔參加跨團實務論壇，意外發現困擾自家單位三年的流程僵局，早就有友會試出解法。',
+    focuses: ['growth'],
+  },
+  {
+    tag: '知識整理',
+    title: '建立自己的實務範本工具庫',
+    text: '把這季經手的公文架構、預算試算表與協調話術整理成個人筆記，感覺自己不再只是靠直覺瞎忙。',
+    focuses: ['growth'],
+  },
+  {
+    tag: '數位斷線',
+    title: '週末刻意不點開工作群組紅點',
+    text: '練習把公務通知設成靜音，週六下午去海邊或公園散步三小時，提醒自己世界少你回訊息這半天不會毀滅。',
+    focuses: ['recovery'],
+  },
+  {
+    tag: '重新充電',
+    title: '找回工作頭銜以外的自己',
+    text: '這季重新撿回久違的煮飯、運動或看展習慣，終於想起來自己不只是組織裡的一顆螺絲，還是一個完整的人。',
+    focuses: ['recovery'],
+  },
+  {
+    tag: '開源節流',
+    title: '替緊急預備金多存下一層緩衝',
+    text: '這季接了幾場實務分享多賺一筆講師費，順便砍掉不常用的訂閱服務，看著存款緩慢爬升心安不少。',
+    focuses: ['finance'],
+  },
+  {
+    tag: '盤點身價',
+    title: '把過往專案實績整理成作品集',
+    text: '趁週末把這幾年帶過的專案規模、談判成果與危機處理寫進履歷存檔，確保自己隨時保有選擇的底氣。',
+    focuses: ['finance'],
+  },
+  // === 區域日常補充 (non_six_rural & other_six) ===
+  {
+    tag: '地方節奏',
+    title: '下班騎五分鐘去傳統市場買菜',
+    text: '五點半街上店面陸續關燈，順路在巷口買一把剛採的青菜回家煮晚餐，物價與空氣都比大都會溫柔得多。',
+    regions: ['non_six_rural'],
+  },
+  {
+    tag: '交通挑戰',
+    title: '末班客運與跨鄉鎮據點支援',
+    text: '為了拜訪山線或海線的合作夥伴來回開了三小時車，深刻體會城鄉資源落差就寫在公車班次表上。',
+    regions: ['non_six_rural'],
+  },
+  {
+    tag: '雙城節奏',
+    title: '六都通勤與區域資源串聯',
+    text: '早上在市府開會、下午趕去衛星城鎮跑現場，學會用雙鐵時刻表 App 精算每一段轉乘時間。',
+    regions: ['other_six'],
+  },
+  {
+    tag: '中堅城市',
+    title: '下班後在巷口老店吃碗熱湯麵',
+    text: '不像雙北房租那樣讓人喘不過氣，又保有一些同行聚會與跨界講座，在生活與工作之間找到難得平衡。',
+    regions: ['other_six'],
+  },
+  // === 轉任企業 ESG 補充日常 ===
+  {
+    tag: '轉職視角',
+    title: '在企業會議提醒第一線落地現實',
+    text: '簡報白板上寫滿永續評比指標與媒體曝光量，你舉手提醒大家「先確認民間夥伴接不接得住」，讓全場安靜三秒。',
+    onlyOutsideNPO: true,
+  },
+  {
+    tag: '同業來電',
+    title: '老戰友打來詢問企業贊助窗口',
+    text: '接到以前圈內夥伴的電話，語氣多了一點客氣與試探；聊完流程後你把可申請的公益預算窗口一次整理給對方。',
+    onlyOutsideNPO: true,
+  },
 ];
 
 export const ALL_ROUTINE_LINES: RoutineLine[] = [...ROUTINE_LINES, ...EXTRA_SEASONAL_LINES];
 
 export function pickRoutineLine(state: SimulationState, rng = Math.random): RoutineLine {
   const isOutside = state.org.isOutsideNPO;
+  const tenureYears = state.totalQuartersElapsed / 4;
 
   const baseFilter = (line: RoutineLine) => {
     if (isOutside) {
@@ -630,19 +793,27 @@ export function pickRoutineLine(state: SimulationState, rng = Math.random): Rout
     } else {
       if (line.onlyOutsideNPO) return false;
       if (line.orgTypes && !line.orgTypes.includes(state.org.type)) return false;
+      if (line.excludeOrgTypes && line.excludeOrgTypes.includes(state.org.type)) return false;
       if (line.roles && !line.roles.includes(state.role)) return false;
     }
     if (line.onlyRegular && state.employmentType !== 'regular') return false;
     if (line.quarters && !line.quarters.includes(state.currentQuarter)) return false;
+    if (line.focuses && !line.focuses.includes(state.focus)) return false;
+    if (line.regions && !line.regions.includes(state.region)) return false;
     if (line.minAge !== undefined && state.age < line.minAge) return false;
     if (line.maxAge !== undefined && state.age > line.maxAge) return false;
+    if (line.minTenure !== undefined && tenureYears < line.minTenure) return false;
+    if (line.maxTenure !== undefined && tenureYears > line.maxTenure) return false;
+    if (line.minOrgYears !== undefined && state.org.yearsInCurrentOrg < line.minOrgYears) return false;
+    if (line.maxOrgYears !== undefined && state.org.yearsInCurrentOrg > line.maxOrgYears) return false;
+    if (line.minRoleLevel !== undefined && state.roleLevel < line.minRoleLevel) return false;
+    if (line.housing && !line.housing.includes(state.lifeStatus.housing)) return false;
+    if (line.relationship && !line.relationship.includes(state.lifeStatus.relationship)) return false;
     return true;
   };
 
   const exactMatches = ALL_ROUTINE_LINES.filter((line) => {
     if (!baseFilter(line)) return false;
-    if (line.focuses && !line.focuses.includes(state.focus)) return false;
-    if (line.regions && !line.regions.includes(state.region)) return false;
     const hasSpecific = isOutside
       ? Boolean(line.onlyOutsideNPO || line.roles?.includes('corp_esg_officer'))
       : Boolean(line.orgTypes || line.roles || line.focuses || line.regions);

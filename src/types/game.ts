@@ -49,6 +49,9 @@ export interface LifeStatus {
   parentAge: number;
   studentLoanRemaining: number; // 剩餘學貸總額（NTD）
   monthlyStudentLoan: number; // 每月固定償還（NTD）
+  mortgageMonthsRemaining: number; // 剩餘房貸期數（月）
+  carLoanRemaining: number; // 剩餘車貸總額（NTD）
+  monthlyCarLoan: number; // 每月固定車貸（NTD）
   monthlyFilialAllowance: number; // 每月固定孝親費（NTD）
   hasProfessionalCert: boolean; // 證照或碩士學歷加給資格
   healthAlert: boolean; // 健檢紅字警告
@@ -113,6 +116,7 @@ export interface EventConditions {
   minTenure?: number; // 總年資
   maxTenure?: number;
   minOrgYears?: number; // 現職年資
+  maxOrgYears?: number;
   minRoleLevel?: number;
   maxRoleLevel?: number;
   relationship?: RelationshipStatus[];
@@ -138,6 +142,7 @@ export interface ChoiceEffect {
   salaryMultiplier?: number; // 例如 1.15
   savingsDelta?: number; // 存款一次增減 (NTD)
   roleLevelDelta?: number; // 升遷 (+1) 或降載
+  setRoleTitle?: string; // 明確指定事件後對外顯示職稱
   changeRole?: RoleId;
   changeOrgType?: OrgTypeId;
   changeOrgName?: string;
@@ -146,6 +151,10 @@ export interface ChoiceEffect {
   boardClimate?: BoardClimate;
   relationship?: RelationshipStatus;
   housing?: HousingType;
+  addCarLoan?: {
+    totalAmount: number;
+    monthlyPayment: number;
+  };
   hasChild?: boolean;
   childAge?: number | null;
   parentCare?: ParentCareStatus;
@@ -205,10 +214,20 @@ export interface ChronicleEntry {
   deltaSummary?: string;
 }
 
+export interface IncomeBreakdown {
+  baseSalary: number;
+  managementAllowance: number;
+  overtimePay: number;
+  overtimeNote?: string;
+  sideIncome: number;
+  grossMonthly: number;
+}
+
 export interface ExpenseBreakdown {
   housing: number;
   living: number;
   studentLoan: number;
+  carLoan: number;
   filialCare: number;
   childCare: number;
   longTermCare: number;
@@ -312,6 +331,7 @@ export interface SimulationState {
   org: OrgState;
   role: RoleId;
   roleLevel: 0 | 1 | 2 | 3; // 0: 專員/基層, 1: 資深/督導, 2: 組長/副秘書長, 3: 秘書長/執行長/理事長顧問
+  customRoleTitle?: string;
   employmentType: EmploymentType;
   consecutiveFreezeYears: number;
   monthlySalary: number;
@@ -319,6 +339,7 @@ export interface SimulationState {
   savings: number;
   laborPensionTotal: number; // 勞退 6% 專戶累計
   lastQuarterlyNet: number;
+  lastIncomeBreakdown: IncomeBreakdown;
   lastExpenseBreakdown: ExpenseBreakdown;
 
   focus: FocusId;

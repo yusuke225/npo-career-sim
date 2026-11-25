@@ -204,7 +204,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     isEraEvent: true,
     conditions: { yearRange: [2022, 2025], excludeOutsideNPO: true },
     narrative:
-      '原本巷口八十元的排骨便當漲破一百一，房東又發訊息通知下期起反映電價調漲。回頭看組織薪資表，今年的調薪幅度卻只有 0% 到 2%，實質購買力倒退回五年前。全辦公室午休話題只剩下哪裡還有便宜便當與到底要不要轉行。',
+      '原本巷口八十元的排骨便當漲破一百一，電價與居住開銷又跟著調漲。回頭看組織薪資表，今年的調薪幅度卻只有 0% 到 2%，實質購買力倒退回五年前。全辦公室午休話題只剩下哪裡還有便宜便當與到底要不要轉行。',
     choices: [
       {
         id: 'push_cost_of_living_adj',
@@ -291,7 +291,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
       },
       {
         id: 'double_output_hustle',
-        label: '用 AI 狂衝研究報告、募款文案與英語提案量，拼出亮眼年度績效',
+        label: '用 AI 狂衝研究報告、對外文案與英文資料量，拼出亮眼年度績效',
         sublabel: '專業籌碼與影響力快速拉升，代價是節奏更快更難喘氣',
         effect: {
           statsDelta: { energy: -9, purpose: 4, capital: 12, life: -5, impactScore: 16 },
@@ -444,7 +444,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     category: 'intertwined',
     tag: '使命感微光',
     weight: 15,
-    conditions: { minAge: 22, maxAge: 35, maxPurpose: 75, excludeOutsideNPO: true },
+    conditions: { minAge: 22, maxAge: 35, minTenure: 1, maxPurpose: 75, excludeOutsideNPO: true },
     narrative:
       '連著三個月被行政雜務、低薪與無止盡的表格磨到懷疑人生，這天正打算把寫好的離職信存進隨身碟時，在信箱裡看到一封半年多前你經手幫助過的{targetNoun}親筆寄來的明信片，上面歪歪扭扭寫著你的名字與一句「幸好那時候你沒有掛我電話」。',
     choices: [
@@ -476,7 +476,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     category: 'intertwined',
     tag: '專業資本投資',
     weight: 16,
-    conditions: { minAge: 24, maxAge: 39, requiresNoCert: true, excludeOutsideNPO: true },
+    conditions: { minAge: 24, maxAge: 39, minTenure: 1, requiresNoCert: true, excludeOutsideNPO: true },
     narrative:
       '工作幾年下來明顯感覺到「只靠熱情做不長久」，這季你認真評估起報名「{certGoal}」，希望能替自己在組織敘薪或未來跨界談判多加一張硬底氣。但下定決心代表未來兩三年每個下班與週末都要繳學費兼熬夜讀書。',
     choices: [
@@ -644,7 +644,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     category: 'life',
     tag: '價值觀動搖',
     weight: 15,
-    conditions: { minAge: 29, maxAge: 42 },
+    conditions: { minAge: 29, maxAge: 42, minTenure: 3 },
     narrative:
       '曾經比你更熱血、說好要一起推動台灣改革十年的好友，今天辦完離職手續轉進外商當公關，晚上約你喝兩杯。幾杯啤酒下肚後他紅著眼眶說：「我不是不相信那些價值了，我只是受不了每次生病看醫生都要算這筆掛號費會不會影響下個月房租。」',
     choices: [
@@ -653,6 +653,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
         label: '抱抱他告訴他「去好好過生活，你已經替這個圈子撐夠久了」',
         sublabel: '理解組織結構才是問題而非個人逃兵，也重新整理自己留下的理由',
         effect: {
+          setFlag: 'blessed_departing_friend',
           statsDelta: { energy: 2, purpose: 5, capital: 3, life: 6 },
         },
         outcomeText:
@@ -715,10 +716,10 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     title: '四十歲三明治風暴：父母突發重病失能的長照拉鋸',
     category: 'intertwined',
     tag: '長照與職場重擊',
-    weight: 22,
-    conditions: { minAge: 38, maxAge: 55, parentCare: ['healthy', 'allowance'], excludeOutsideNPO: true },
+    weight: 16,
+    conditions: { minAge: 38, maxAge: 62, parentCare: ['healthy', 'allowance'], excludeOutsideNPO: true },
     narrative:
-      '平常替{targetNoun}奔走各種權益的你，最害怕的電話還是響了——長輩在家跌倒中風住院，出院後需要全天候復健與專人看顧。外籍看護與長照喘息自付額每月至少吃掉兩萬到三萬五，兄弟姊妹又都在外地或無力分擔。你站在醫院走廊算著請假天數與存摺餘額。',
+      '平常替{targetNoun}奔走各種權益的你，最害怕的電話還是響了——長輩在家跌倒中風住院，出院後需要復健與日間照護。就算申請長照補助與家人分攤，外籍看護、日照與耗材每月仍可能吃掉一兩萬元自付額。你站在醫院走廊算著請假天數與存摺餘額。',
     choices: [
       {
         id: 'hire_care_and_apply_ltc',
@@ -795,6 +796,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
       startOrgTypes: ['large_welfare', 'grassroots', 'local_foundation'],
       minAge: 34,
       maxAge: 52,
+      minTenure: 5,
       minCapital: 55,
       excludeOutsideNPO: true,
     },
@@ -810,6 +812,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
           changeOrgType: 'grassroots',
           changeOrgName: '社團法人島嶼社區共伴關懷協會',
           roleLevelDelta: 1,
+          setRoleTitle: '創會秘書長',
           statsDelta: { energy: -10, purpose: 20, capital: 12, life: -5, impactScore: 26 },
           boardClimate: 'trusting',
           milestoneTag: '共同發起立案在地社區共伴關懷協會',
@@ -839,6 +842,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
       startOrgTypes: ['advocacy_ngo', 'corp_intl_ngo'],
       minAge: 34,
       maxAge: 52,
+      minTenure: 5,
       minCapital: 55,
       excludeOutsideNPO: true,
     },
@@ -854,6 +858,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
           changeOrgType: 'advocacy_ngo',
           changeOrgName: '社團法人島嶼公共政策監督聯盟',
           roleLevelDelta: 1,
+          setRoleTitle: '創會秘書長',
           statsDelta: { energy: -10, purpose: 20, capital: 12, life: -5, impactScore: 26 },
           boardClimate: 'trusting',
           milestoneTag: '共同發起立案島嶼公共政策監督聯盟',
@@ -883,6 +888,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
       startOrgTypes: ['academic_society'],
       minAge: 34,
       maxAge: 52,
+      minTenure: 5,
       minCapital: 55,
       excludeOutsideNPO: true,
     },
@@ -898,6 +904,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
           changeOrgType: 'academic_society',
           changeOrgName: '社團法人春山跨界實務學會',
           roleLevelDelta: 1,
+          setRoleTitle: '專任秘書長',
           statsDelta: { energy: -10, purpose: 20, capital: 12, life: -5, impactScore: 26 },
           boardClimate: 'trusting',
           milestoneTag: '發起籌組並立案春山跨界實務學會',
@@ -927,6 +934,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
       startOrgTypes: ['industrial_union', 'occupational_union'],
       minAge: 34,
       maxAge: 52,
+      minTenure: 5,
       minCapital: 55,
       excludeOutsideNPO: true,
     },
@@ -942,6 +950,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
           changeOrgType: 'industrial_union',
           changeOrgName: '島嶼跨領域受僱者聯合產業工會',
           roleLevelDelta: 1,
+          setRoleTitle: '創會秘書長',
           statsDelta: { energy: -10, purpose: 20, capital: 12, life: -5, impactScore: 26 },
           boardClimate: 'trusting',
           milestoneTag: '共同發起立案島嶼跨領域受僱者聯合產業工會',
@@ -1105,7 +1114,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     category: 'work',
     tag: '55+ 世代交棒',
     weight: 26,
-    conditions: { minAge: 55, maxAge: 65, excludeOutsideNPO: true },
+    conditions: { minAge: 55, maxAge: 65, minTenure: 8, minOrgYears: 4, minRoleLevel: 1, excludeOutsideNPO: true },
     narrative:
       '在這個生態走過四分之一個世紀，如今理監事與後輩都敬你三分。然而眼前培養了四年的接班人選，作風與你大不相同——他們想把行之有年的紙本流程全面數位化、砍掉你當年一手建立的某些傳統做法。是趁還沒離開前出手擋下，還是真的放手讓屬於他們的組織長出來？',
     choices: [
@@ -1376,7 +1385,14 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     category: 'life',
     tag: '返鄉與發展拉鋸',
     weight: 13,
-    conditions: { minAge: 31, maxAge: 42, regions: ['taipei_metro', 'other_six'], excludeOutsideNPO: true },
+    conditions: {
+      minAge: 31,
+      maxAge: 42,
+      minTenure: 4,
+      housing: ['studio_rent', 'shared_room'],
+      regions: ['taipei_metro', 'other_six'],
+      excludeOutsideNPO: true,
+    },
     narrative:
       '老家那邊的{hometownOrg}開了一個缺，薪水比都會區少六千，但回家住老宅就能免去每月一萬多塊房租，順便顧家。然而一旦回去，就意味著退出過去累積十年的都會人脈圈與政策核心。',
     choices: [
@@ -1445,7 +1461,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     category: 'intertwined',
     tag: '前輩的鏡子',
     weight: 14,
-    conditions: { minAge: 36, maxAge: 56 },
+    conditions: { minAge: 36, maxAge: 56, minTenure: 5 },
     narrative:
       '當年手把手帶你入行、陪你一起{fieldMove}的資深前輩住進了加護病房。他奉獻了三十年給台灣民間組織與基層現場，名下沒有房產、存款有限，病房外擠滿了各單位趕來輪班照顧的後輩。看著病床上的他，你彷彿看見某種版本的未來。',
     choices: [
@@ -1545,13 +1561,13 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
   },
   {
     id: 'life_all_housing_emergency_repair',
-    title: '生活突發狀況：通勤機車報廢或租屋冷氣漏水大修',
+    title: '生活突發狀況：通勤機車報廢或住處冷氣漏水大修',
     category: 'life',
     tag: '生活意外開銷',
     weight: 14,
     conditions: { minTenure: 1, excludeOutsideNPO: true },
     narrative:
-      '本來就抓得很緊的月份，偏偏通勤{fieldMove}的老機車半路拋錨大修或報廢，或者租屋處老舊家電突然壞掉得自己貼錢換新。兩三萬元的意外支出，對沒有高年終緩衝的非營利工作者來說格外刺痛。',
+      '本來就抓得很緊的月份，偏偏通勤{fieldMove}的老機車半路拋錨大修或報廢，或者家裡老舊家電突然壞掉得自己貼錢換新。兩三萬元的意外支出，對沒有高年終緩衝的非營利工作者來說格外刺痛。',
     choices: [
       {
         id: 'buy_reliable_replacement',
@@ -1563,6 +1579,17 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
         },
         outcomeText:
           '看著網銀扣款還是心痛了一下，但至少雨天騎車跑現場不用再提心吊膽怕半路熄火。',
+      },
+      {
+        id: 'finance_vehicle_installment',
+        label: '手頭現金吃緊改辦分期付款換購新機車／代步工具（零頭款分 24 期）',
+        sublabel: '不一次掏空存款，但往後兩年每月固定多出一筆 $2,800 車貸月繳',
+        effect: {
+          addCarLoan: { totalAmount: 67200, monthlyPayment: 2800 },
+          statsDelta: { energy: 2, life: 1 },
+        },
+        outcomeText:
+          '辦完分期後先把眼前交通危機壓了下來，只是每月帳本又多了一條車貸扣款提醒你別輕易辭職。',
       },
       {
         id: 'switch_public_transit_temporarily',
@@ -1681,7 +1708,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
   },
   {
     id: 'life_expense_insurance_and_home_appliance',
-    title: '商業醫療險保費調漲＋租屋家電汰換：成年人的隱形固定帳單',
+    title: '商業醫療險保費調漲＋居家家電汰換：成年人的隱形固定帳單',
     category: 'life',
     tag: '風險防護與生活費',
     weight: 15,
@@ -1731,6 +1758,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
       excludeOutsideNPO: true,
       minAge: 26,
       maxAge: 46,
+      minTenure: 2,
     },
     narrative:
       '工作幾年後，你開始覺得單靠現場土法煉鋼總有天花板。某私立大學的「非營利組織管理學程碩士在職專班」正在招生，簡章上寫著師資涵蓋社福、倡議、勸募與組織治理實務，同學多半是各組織主管與資深專員。只是兩年學分費加上週末整天上課、下班趕論文，對存款與體力都是硬仗。',
@@ -1772,6 +1800,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
       excludeOutsideNPO: true,
       minAge: 26,
       maxAge: 46,
+      minTenure: 2,
     },
     narrative:
       '跑了幾場勞資爭議調解與裁決庭後，你越來越深刻體會只靠熱血衝撞不夠，面對資方律師團還得要有更扎實的勞動法理與集體談判研究功底。某國立大學「勞工研究所」在職專班正在招生，同學幾乎都是各工會幹部、調解人與勞政實務者，只是兩年通勤上課與寫論文勢必吃掉所有週末。',
@@ -1866,6 +1895,638 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
         },
         outcomeText:
           '茶水間裡大家第一次公開聊起補休與加班規範，雖然主管路過時表情有點微妙，但團隊對「好好工作也要好好生活」多了一份共識。',
+      },
+    ],
+  },
+
+  // =========================================================================
+  // v0.23 新增：跨年度多段劇情線（setFlag → 多年後 requiredFlag 回收）
+  // =========================================================================
+  {
+    id: 'arc_early_intern_crisis',
+    title: '帶到一位快被現場挫敗擊垮的實習生／菜鳥同事',
+    category: 'work',
+    tag: '跨年伏筆 · 世代陪伴',
+    weight: 18,
+    conditions: { excludeOutsideNPO: true, minTenure: 1, maxTenure: 6 },
+    narrative:
+      '這季單位分派給你帶一位剛接觸實務的大專實習生或菜鳥助理。才第三週，對方就在電話被當事人或窗口罵完後躲在樓梯間紅了眼眶，小聲問你：「我是不是根本不適合來{orgNoun}工作？」眼看你自己手邊還有兩份急件等著下班前交出。',
+    choices: [
+      {
+        id: 'mentor_intern_carefully',
+        label: '把手邊急件先延一小時，帶他去喝杯熱飲拆解剛剛那通電話「不是你的錯」',
+        sublabel: '今晚得晚一點回家，但替這個圈子留住一顆尚未熄滅的種子（未來可能重逢）',
+        effect: {
+          setFlag: 'intern_mentored',
+          statsDelta: { energy: -5, purpose: 7, capital: 4, life: -1, impactScore: 6 },
+        },
+        outcomeText:
+          '你教他怎麼分辨「對象的焦慮」跟「自己的能力」，結束實習那天他送你一張寫滿謝謝的便條紙，說以後一定還要投入公共領域。',
+      },
+      {
+        id: 'tell_them_toughen_up',
+        label: '安慰兩句「做這行本來就這樣，多被罵幾次就習慣了」便回去趕自己的急件',
+        sublabel: '保住自己準時下班與今晚的睡眠，不額外扛帶人的情緒勞動',
+        effect: {
+          statsDelta: { energy: 1, purpose: -2, capital: 1, life: 2 },
+        },
+        outcomeText:
+          '實習結束後那個年輕人再也沒有回過辦公室訊息，聽說畢業後直接去考公職或進了科技業。',
+      },
+    ],
+  },
+  {
+    id: 'arc_intern_returns_ally',
+    title: '多年後的重逢：當年你帶過的菜鳥如今成了關鍵跨界戰友',
+    category: 'intertwined',
+    tag: '劇情回收 · 當年的種子',
+    weight: 24,
+    conditions: { excludeOutsideNPO: true, minTenure: 5, requiredFlag: 'intern_mentored' },
+    narrative:
+      '這季你們正在推一項吃力卻沒什麼媒體聲量的重點工作。忽然一封標題寫著「還記得樓梯間那杯熱紅茶嗎」的信寄進信箱——當年差點在實習期陣亡、被你耐心接住的那個年輕人，如今已在中央媒體跑政策線（或進了部會幕僚室），主動問你需要什麼協助。',
+    choices: [
+      {
+        id: 'co_launch_impact_feature',
+        label: '不走私下關說，而是與他合作企劃一篇扎實的專題報導／公開政策建言',
+        sublabel: '把多年情誼轉化為真正推動制度的公共影響力，寫下職涯高光時刻',
+        effect: {
+          statsDelta: { energy: -4, purpose: 12, capital: 10, life: 3, impactScore: 18 },
+          milestoneTag: '與當年親自帶領的後輩重逢並促成跨界合作',
+        },
+        outcomeText:
+          '專題刊出那天引起廣泛討論，他私訊你：「當年如果不是你告訴我不是我的錯，我早就離開這個領域了。」那一刻過去所有的疲憊彷彿都有了回音。',
+      },
+      {
+        id: 'stay_humble_swap_insights',
+        label: '約出來喝杯咖啡敘舊、交換第一線最新資訊，彼此保留專業獨立性',
+        sublabel: '收穫一場療癒的跨世代對談，為接下來幾年補回滿滿理想電力',
+        effect: {
+          statsDelta: { energy: 6, purpose: 10, capital: 7, life: 6, impactScore: 9 },
+        },
+        outcomeText:
+          '看著他神采奕奕談起公共事務的樣子，你突然想起來自己二十幾歲時眼裡也有過同樣的光。',
+      },
+    ],
+  },
+  {
+    id: 'arc_sop_saves_audit',
+    title: '突襲查核與人事劇烈震盪：當年你熬夜建的「交接與歸檔 SOP」救了全場',
+    category: 'work',
+    tag: '劇情回收 · 制度回響',
+    weight: 24,
+    conditions: { excludeOutsideNPO: true, minTenure: 4, requiredFlag: 'rookie_built_sop' },
+    narrative:
+      '會計年度最忙的時刻突然遇上主管機關專案抽查（加上負責行政的同事臨時請長假）。就在全辦公室陷入找不到三年前原始憑證與簽呈的恐慌時，有人翻出你剛到職那年硬著頭皮建立起來的雲端索引與標準歸檔規範，所有資料十分鐘內完整調出！',
+    choices: [
+      {
+        id: 'formalize_org_handbook',
+        label: '趁這次滿分過關，正式向{boardNoun}提案把這套架構升格為組織標準治理手冊',
+        sublabel: '證明行政基建的長期價值，大幅提高組織韌性與個人專業地位',
+        effect: {
+          orgFinanceDelta: 1,
+          statsDelta: { energy: -3, purpose: 8, capital: 12, life: 2, impactScore: 14 },
+          milestoneTag: '新人期建置的交接制度獲肯定並升格為組織治理手冊',
+        },
+        outcomeText:
+          '{bossTitle}在{boardNoun}會議上公開點名致謝：「還好當年有你把亂帳理清楚，不然這次真的要賠掉公信力。」',
+      },
+      {
+        id: 'share_template_with_peers',
+        label: '順手把這套去識別化的歸檔與交接範本開源分享給友會同事使用',
+        sublabel: '幫整個民間圈少走冤枉路，跨組織專業口碑大增',
+        effect: {
+          statsDelta: { energy: -2, purpose: 10, capital: 10, life: 3, impactScore: 15 },
+        },
+        outcomeText:
+          '好幾個小型組織的專員私訊感謝你救了他們的報帳地獄，你笑著回覆：「這是當年自己踩完四百個資料夾地雷換來的。」',
+      },
+    ],
+  },
+  {
+    id: 'arc_early_report_pressure',
+    title: '結案前夕的數字壓力：合作方暗示「把成果報告數據修漂亮一點」',
+    category: 'work',
+    tag: '跨年伏筆 · 專業誠信',
+    weight: 18,
+    conditions: { excludeOutsideNPO: true, minTenure: 1, maxTenure: 6 },
+    narrative:
+      '年度重要方案或研究到了結案交卷時刻，但受限於現實疫情、天氣或參與人數門檻，實際成效只有原訂指標的七成。對口承辦與部分高層私下暗示：「把問卷滿意度跟參與人次寫法調整得好看一點，大家明年才都好交差。」',
+    choices: [
+      {
+        id: 'insist_honest_reporting',
+        label: '拒絕灌水！把真實數字與困難原因如實寫進檢討報告，同時附上具體修正方案',
+        sublabel: '短期可能挨一頓刮或被嫌不知變通，但守住實務工作者的專業名譽（日後會有迴響）',
+        effect: {
+          setFlag: 'kept_professional_integrity',
+          statsDelta: { energy: -5, purpose: 8, capital: 6, life: -1, impactScore: 8 },
+        },
+        outcomeText:
+          '會議上確實挨了一頓冷眼，但現場幾位外聘審查委員翻到你寫得極其坦誠的限制章節時，悄悄多看了你一眼並記下你的名字。',
+      },
+      {
+        id: 'polish_metrics_quietly',
+        label: '採取「合法合規的美化寫法」讓結案數字達標，免得整個團隊明年被扣預算',
+        sublabel: '保全當年度經費過關與表面和氣，但你知道報告裡那幾行數字是空的',
+        effect: {
+          statsDelta: { energy: -2, purpose: -6, capital: 2, life: 1, impactScore: 3 },
+        },
+        outcomeText:
+          '案子順利結清了，只是你從此很怕別人問起那份報告到底對真實世界有什麼幫助。',
+      },
+    ],
+  },
+  {
+    id: 'arc_integrity_policy_invite',
+    title: '多年後的口碑迴響：當年看過你「誠實檢討報告」的委員邀你主持重點計畫',
+    category: 'work',
+    tag: '劇情回收 · 誠信紅利',
+    weight: 24,
+    conditions: { minTenure: 5, requiredFlag: 'kept_professional_integrity' },
+    narrative:
+      '幾年前某位看過你寧可挨罵也不願灌水結案報告的資深學者／評審委員，如今受邀負責一項跨縣市的旗艦級實務評估與培力計畫。他在會議上指名找你：「全場一堆報告都在寫完美神話，只有你當年敢寫出真實阻力在哪裡，這個位置非你莫屬。」',
+    choices: [
+      {
+        id: 'lead_flagship_review',
+        label: '接下外部共同主持／諮詢邀請！將真實第一線困境帶入高層評鑑設計',
+        sublabel: '取得 $18,000 專業顧問回饋並大幅拉升跨界資歷與政策話語權',
+        effect: {
+          savingsDelta: 18000,
+          statsDelta: { energy: -5, purpose: 10, capital: 14, life: 2, impactScore: 18 },
+          milestoneTag: '因早年堅持專業誠信獲邀主持跨區實務諮詢計畫',
+        },
+        outcomeText:
+          '當你在正式工作坊簡報裡講出「誠實面對失敗，系統才真的修得好」時，台下不少年輕工作者拼命點頭抄筆記。',
+      },
+      {
+        id: 'recommend_team_and_co_design',
+        label: '帶著組織年輕夥伴一起參與協作，把難得的專業信任轉化成團隊共同舞台',
+        sublabel: '分享榮譽與鍛鍊後輩，讓誠信成為組織文化的一部分',
+        effect: {
+          savingsDelta: 8000,
+          statsDelta: { energy: -3, purpose: 11, capital: 10, life: 4, impactScore: 15 },
+        },
+        outcomeText:
+          '你替單位爭取到一筆合理的專業協力費，也讓後輩親眼見證「在民間領域，把話說真話做實，久了真的會有路」。',
+      },
+    ],
+  },
+  {
+    id: 'arc_friend_corporate_bridge',
+    title: '老戰友回來敲門：當年轉進外商的他，如今手握企業永續預算想跟你聯手',
+    category: 'intertwined',
+    tag: '劇情回收 · 跨界同盟',
+    weight: 24,
+    conditions: { excludeOutsideNPO: true, minTenure: 6, requiredFlag: 'blessed_departing_friend' },
+    narrative:
+      '幾年前在居酒屋紅著眼眶離開民間圈、當時你抱著他給出祝福的那位戰友，如今已升上大型外商企業公關與永續副理。他私下約你吃飯：「我們公司今年有一筆兩百萬的非綁標長期支持預算，我第一時間就想到你——而且如果你累了，我們部門也剛好有個副理缺。」',
+    choices: [
+      {
+        id: 'bring_budget_back_to_field',
+        label: '婉拒跳槽邀請，但幫{orgNoun}談成「不綁過多商業曝光」的兩年期基礎支持合作',
+        sublabel: '替現職組織補進關鍵彈藥並深化跨界影響力，當年那場祝福開出了最美的花',
+        effect: {
+          orgFinanceDelta: 1,
+          statsDelta: { energy: -2, purpose: 11, capital: 11, life: 5, impactScore: 17 },
+          milestoneTag: '攜手轉戰外商的昔日戰友促成跨界長期合作案',
+        },
+        outcomeText:
+          '簽約那天他在簡報室對你眨眨眼：「看吧，我在外面賺資源、你在裡面守現場，這算不算另一種一起改變台灣？」',
+      },
+      {
+        id: 'accept_bridge_move_outside',
+        label: '誠實承認自己也需要喘息與合理回報，答應接下對方邀請轉往企業永續端',
+        sublabel: '【轉赴企業 ESG 部門】月薪跳升至 $68,000，與老友重新成為企業端推動夥伴',
+        effect: {
+          enterOutsideNPO: {
+            orgName: '海風永續科技集團 ESG 公共事務部',
+            role: 'corp_esg_officer',
+            newSalary: 68000,
+          },
+          setRoleTitle: '永續發展副理',
+          statsDelta: { energy: 10, purpose: -2, capital: 10, life: 12 },
+          milestoneTag: '受昔日戰友邀請轉任企業 ESG 公共事務部門',
+        },
+        outcomeText:
+          '報到第一天他端了兩杯免費拿鐵進會議室笑說：「歡迎來到有冷氣和年終的世界，別忘了我們還要一起幫以前那些傻朋友找資源。」',
+      },
+    ],
+  },
+  {
+    id: 'arc_early_quiet_followup',
+    title: '沒有任何 KPI 要求的結案之後：要不要多跑一趟現場回訪？',
+    category: 'work',
+    tag: '跨年伏筆 · 現場連結',
+    weight: 18,
+    conditions: { excludeOutsideNPO: true, minTenure: 1, maxTenure: 5 },
+    narrative:
+      '一個階段性的專案或服務已經依法如期結案、成果報告也拿滿核銷章了。同事都在忙著趕下一檔期新案，但你突然想起過程中某幾位特別脆弱、還沒完全站穩的{targetNoun}，如果沒人再問候一聲，他們很容易又掉出接住網之外。',
+    choices: [
+      {
+        id: 'do_unpaid_quiet_followup',
+        label: '撥出兩個空檔親自打電話與走訪回顧，確認對方後續真正安頓下來',
+        sublabel: '不在考績表上的溫柔堅持，默默種下深厚的民間信任（日後將有回音）',
+        effect: {
+          setFlag: 'rooted_community_trust',
+          statsDelta: { energy: -4, purpose: 9, capital: 3, life: -1, impactScore: 7 },
+        },
+        outcomeText:
+          '其中一位阿姨或師傅握著你的手反覆說「還好你們做完活動沒有把我們忘記」，回程路上你覺得整個人都很踏實。',
+      },
+      {
+        id: 'move_on_to_next_kpi',
+        label: '告訴自己「資源有限不能無限承諾」，收心全速投入下一個年度重點專案',
+        sublabel: '維持高效率推進節奏，符合現代專業化管理邊界',
+        effect: {
+          statsDelta: { energy: 1, purpose: -1, capital: 4, life: 2, impactScore: 4 },
+        },
+        outcomeText:
+          '進度表漂亮地如期推進，只是偶爾經過那條巷口或單位外時，心裡會閃過一秒「不曉得他後來怎麼了」。',
+      },
+    ],
+  },
+  {
+    id: 'arc_community_stands_up',
+    title: '組織陷入低潮的那年：當年你真誠回訪過的現場夥伴自發站出來相挺',
+    category: 'intertwined',
+    tag: '劇情回收 · 民間回響',
+    weight: 24,
+    conditions: { excludeOutsideNPO: true, minTenure: 5, requiredFlag: 'rooted_community_trust' },
+    narrative:
+      '這季單位遭遇預算斷層或外界誤解攻擊，辦公室氣氛降到冰點。就在大家幾乎以為這件事沒有人在乎時，幾位幾年前你在沒有任何 KPI 壓力下回訪陪伴過的{targetNoun}與在地夥伴，竟自發串聯上百人連署聲援，還帶著社區手作與小額資助走進辦公室。',
+    choices: [
+      {
+        id: 'co_create_mutual_aid_network',
+        label: '借這股來自現場的力量轉型成「自助互助行動網」，不再只靠單向救濟運作',
+        sublabel: '把感動升級成永續組織結構，扭轉財務與使命低谷',
+        effect: {
+          orgFinanceDelta: 1,
+          statsDelta: { energy: 6, purpose: 14, capital: 8, life: 7, impactScore: 18 },
+          milestoneTag: '早年深耕現場的夥伴反過來挺身撐住組織度過低谷',
+        },
+        outcomeText:
+          '一位大哥站在大門口說：「以前你們沒寫進報告還跑來看我們，現在換我們幫你們撐傘。」整間辦公室瞬間有人紅了眼眶。',
+      },
+      {
+        id: 'thank_them_and_keep_boundary',
+        label: '滿懷感謝地接住這份心意，妥善公開徵信每一筆支持並穩住既定節奏',
+        sublabel: '能量與理想瞬間回血，更確信自己這幾年沒有白走',
+        effect: {
+          statsDelta: { energy: 8, purpose: 12, capital: 5, life: 6, impactScore: 12 },
+        },
+        outcomeText:
+          '那天晚上你們把大家送來的卡片貼滿公告欄，你突然徹底明白：真正的社會資本從來不在簡報數字裡，而在人與人的記憶裡。',
+      },
+    ],
+  },
+  {
+    id: 'arc_early_weekend_boundary',
+    title: '「做志業哪有人在算補休的？」：面對組織裡無償週末加班的潛規則',
+    category: 'work',
+    tag: '跨年伏筆 · 勞動文化',
+    weight: 18,
+    conditions: { excludeOutsideNPO: true, minTenure: 1, maxTenure: 5 },
+    narrative:
+      '這季你已經連續三個禮拜六支援{weekendTask}，週一進辦公室卻發現系統裡沒有任何補休紀錄。資深同事笑著說：「我們這行都是用愛發電啦，申請補休會被{bossTitle}跟老理事覺得計較。」你看著鏡子裡黑眼圈越來越深的自己。',
+    choices: [
+      {
+        id: 'log_hours_and_push_policy',
+        label: '開始逐筆記錄出勤時數，在內部會議禮貌提案「活動加班應依法給補休並限期休畢」',
+        sublabel: '可能短暫被貼上「比較計較」標籤，但種下改變組織血汗文化的種子',
+        effect: {
+          setFlag: 'defended_healthy_boundary',
+          statsDelta: { energy: 2, purpose: 6, capital: 5, life: 5, impactScore: 6 },
+        },
+        outcomeText:
+          '雖然經歷了一番「經費有限怎麼排班」的拉扯，但{bossTitle}最後點頭試辦實名補休紀錄——團隊第一次在活動後真的能好好放假一天。',
+      },
+      {
+        id: 'go_with_flow_silently',
+        label: '不想剛待沒幾年就變成同事眼中的刺頭，繼續照潛規則默默吞下假日工時',
+        sublabel: '短期職場人際最安全，但身體與生活感持續磨損',
+        effect: {
+          statsDelta: { energy: -7, purpose: -3, capital: 1, life: -5 },
+        },
+        outcomeText:
+          '大家繼續笑稱自己是「功德無量組」，只是這一年離職的人好像又多了一個。',
+      },
+    ],
+  },
+  {
+    id: 'arc_boundary_culture_shift',
+    title: '多年後的口碑反轉：「聽說你們單位是真的給補休、不靠情緒勒索運作的？」',
+    category: 'work',
+    tag: '劇情回收 · 良善循環',
+    weight: 24,
+    conditions: { excludeOutsideNPO: true, minTenure: 5, requiredFlag: 'defended_healthy_boundary' },
+    narrative:
+      '以前開出招募職缺總是石沉大海，今年居然一口氣湧進十幾位資深實務工作者與優秀新人投履歷。面試時對方笑著坦白：「圈內朋友都說，這家單位是少數真的有落實補休、不用免費奉獻證明熱情的地方，我們才敢把下一個五年賭在這裡。」',
+    choices: [
+      {
+        id: 'recruit_strong_team_upgrade',
+        label: '趁勢補齊夢幻新夥伴！把組織正式升級為兼顧專業效能與合理工時的示範據點',
+        sublabel: '大幅緩解自身長年扛責壓力，組織戰力與生活感同步拉升',
+        effect: {
+          statsDelta: { energy: 10, purpose: 10, capital: 10, life: 9, impactScore: 15 },
+          milestoneTag: '早年推動合理補休制度終成招募即戰力的最強招牌',
+        },
+        outcomeText:
+          '新夥伴報到第一個月就幫團隊解決了積壓已久的專案瓶頸。你望著六點準時熄燈卻產出極高的辦公室，覺得當初敢開口真好。',
+      },
+      {
+        id: 'publish_healthy_workplace_guide',
+        label: '把你們這幾年的排班與補休做法寫成「非營利組織友善職場小指南」公開分享',
+        sublabel: '打破整個領域「做好事就該過勞」的神話，累積跨界影響力',
+        effect: {
+          statsDelta: { energy: 6, purpose: 12, capital: 9, life: 7, impactScore: 16 },
+        },
+        outcomeText:
+          '文章發出後被轉發破千次，好幾位友會幹部留言：「原來真的有人做得到，下週理監事會我也要拿去提案！」',
+      },
+    ],
+  },
+  {
+    id: 'life_all_used_car_loan',
+    title: '外勤跑點與家庭接送需求增加：要不要分期買一輛中古代步車？',
+    category: 'life',
+    tag: '代步與車貸抉擇',
+    weight: 14,
+    conditions: { minAge: 26, maxAge: 50, minTenure: 2, excludeOutsideNPO: true },
+    narrative:
+      '這幾年頻繁跨區跑據點與會議，加上下雨天接送家人或搬運活動物資，沒有汽車愈來愈吃力。朋友介紹一輛車況不錯的五年國產中古車開價二十六萬，業務說可以辦三十六期車貸、頭期先付兩萬。看著帳戶餘額，你在時間體力與固定車貸之間猶豫。',
+    choices: [
+      {
+        id: 'buy_used_car_with_loan',
+        label: '決定分期購入中古代步車！先付兩萬頭期款並背負三年 $7,200 車貸',
+        sublabel: '存款 -$20,000、新增 $240,000 車貸（每月 $7,200），換取行動力與體力修復',
+        effect: {
+          savingsDelta: -20000,
+          addCarLoan: { totalAmount: 240000, monthlyPayment: 7200 },
+          statsDelta: { energy: 7, capital: 4, life: 6, impactScore: 6 },
+          milestoneTag: '分期購入代步汽車改善外勤與家庭移動品質',
+        },
+        outcomeText:
+          '拿到鑰匙那晚你在車裡坐了五分鐘。雖然接下來三年帳本每個月都要多扣七千多塊車貸，但大雨天終於不用再穿著雨衣載一箱文件奔波。',
+      },
+      {
+        id: 'keep_transit_and_scooter',
+        label: '精算養車＋停車＋車貸太傷現金流，維持機車與大眾運輸／偶爾租共享車',
+        sublabel: '守住每月支出不被固定車貸綁死，體力消耗略高但現金流安全許多',
+        effect: {
+          statsDelta: { energy: -4, life: -1, capital: 1 },
+        },
+        outcomeText:
+          '算完車貸加上油錢保養一年少存快十萬後你果斷放棄，改把預算留給緊急預備金。',
+      },
+    ],
+  },
+
+  // =========================================================================
+  // v0.23 新增：居住型態轉換與孝親費協商事件（5 則）
+  // =========================================================================
+  {
+    id: 'life_housing_move_out_from_parents',
+    title: '住家裡的自由與摩擦：工作存了一點錢，要不要搬出去獨立租屋？',
+    category: 'life',
+    tag: '居住獨立抉擇',
+    weight: 16,
+    conditions: { minAge: 25, maxAge: 38, minTenure: 1, housing: ['with_parents'] },
+    narrative:
+      '雖然暫住家裡省下不少房租，但加班晚歸被念、休假在家想補眠卻不斷被打斷，加上親戚偶爾來家裡串門子又要被關心薪水與婚事，讓你漸漸覺得沒有喘息空間。看著帳戶存款，你開始認真考慮搬出去租屋。',
+    choices: [
+      {
+        id: 'move_out_to_studio',
+        label: '搬出去租獨立小套房！付押金與搬家費換回真正屬於自己的下班生活',
+        sublabel: '存款 -$24,000、轉為獨立租屋（每月居住支出大幅增加），但身心與生活關係大補血',
+        effect: {
+          housing: 'studio_rent',
+          savingsDelta: -24000,
+          statsDelta: { energy: 6, life: 10 },
+          milestoneTag: '搬離原生家庭展開獨立租屋生活',
+        },
+        outcomeText:
+          '第一晚坐在空蕩蕩的租屋處地板吃外送便當，雖然想到下個月起要多付一萬多房租有點肉痛，但關上門那刻的安靜簡直無價。',
+      },
+      {
+        id: 'move_out_shared_room',
+        label: '找志同道合的朋友或同業合租雅房，折衷保住自由又不讓房租失血過多',
+        sublabel: '存款 -$12,000、轉為合租雅房，生活空間與儲蓄速度取得平衡',
+        effect: {
+          housing: 'shared_room',
+          savingsDelta: -12000,
+          statsDelta: { energy: 3, life: 6 },
+        },
+        outcomeText:
+          '跟朋友分租了老公寓的三房一廳，晚上回家還有人能一起吐槽今天的奇葩會議，自由度高了許多。',
+      },
+      {
+        id: 'stay_with_parents_set_rules',
+        label: '算完房租還是吞了口氣繼續住家裡，約父母好好談清楚作息與敲門界線',
+        sublabel: '守住每月超高存錢效率，但得靠耐性磨合兩代生活習慣',
+        effect: {
+          statsDelta: { energy: -2, life: -3 },
+        },
+        outcomeText:
+          '你在房門上貼了一張「線上開會中」紙條，跟爸媽約法三章晚歸不吵醒彼此，總算勉強維持住脆弱的平衡。',
+      },
+    ],
+  },
+  {
+    id: 'life_housing_downsize_or_social_housing',
+    title: '房租快吃掉半個月薪水：要不要換合租雅房、申請社宅或先搬回家止血？',
+    category: 'life',
+    tag: '居住成本止血',
+    weight: 18,
+    conditions: { minTenure: 2, maxSavings: 80000, housing: ['studio_rent'] },
+    narrative:
+      '打開帳本算一算，獨立套房房租加上水電已經吃掉將近一半月薪，這幾季存款幾乎見底還得靠緊縮外食硬撐。剛好附近有朋友缺室友，家裡也問要不要先搬回去省錢，同時間你先前遞件排隊的社會住宅與租屋補貼也傳出消息。',
+    choices: [
+      {
+        id: 'downsize_to_shared_room',
+        label: '改搬去合租雅房把每月居住支出砍半，優先把負債或見底危機擋下來',
+        sublabel: '存款 -$6,000（搬家費）、轉為合租雅房，生活品質打折但大幅緩解月現金流壓力',
+        effect: {
+          housing: 'shared_room',
+          savingsDelta: -6000,
+          statsDelta: { energy: -3, life: -4 },
+        },
+        outcomeText:
+          '忍痛把大部分雜物斷捨離打包進雅房。雖然共用浴室不太習慣，但看到下個月固定流出少了好幾千元，晚上總算睡得著了。',
+      },
+      {
+        id: 'move_back_with_parents',
+        label: '放下成年人的包袱，先搬回家／親友空房住一陣子全力回血存款',
+        sublabel: '存款 -$4,000（清運搬家）、轉為暫住家裡，每月居住開銷降至最低',
+        effect: {
+          housing: 'with_parents',
+          savingsDelta: -4000,
+          statsDelta: { energy: 4, life: -3 },
+          milestoneTag: '為改善財務結構暫時搬回家中儲蓄止血',
+        },
+        outcomeText:
+          '把家具寄放或送人後拉著行李箱回家。雖然隱私少了點、通勤久了點，但終於不用每個月一領薪水就先繳一半給房東。',
+      },
+      {
+        id: 'apply_social_housing_subsidy',
+        label: '還是割捨不下獨立空間！跑完社會住宅候補與政府租金補貼申請咬牙撐住',
+        sublabel: '獲核定租屋補貼回補 $6,000，保住獨立套房與生活品質',
+        effect: {
+          savingsDelta: 6000,
+          statsDelta: { energy: 2, life: 3 },
+        },
+        outcomeText:
+          '跑了三趟文件補件終於領到租屋補貼入帳，雖然還是緊繃，但至少不用立刻打包搬離已經習慣的社區。',
+      },
+    ],
+  },
+  {
+    id: 'life_housing_upgrade_to_studio',
+    title: '合租室友深夜打電動＋廚房永遠堆著碗：存到緩衝金了，要不要搬進獨立套房？',
+    category: 'life',
+    tag: '生活品質升級',
+    weight: 15,
+    conditions: { minAge: 27, minSavings: 120000, housing: ['shared_room'] },
+    narrative:
+      '白天工作已經要處理無止盡的人際與情緒，回到合租雅房還得忍受室友半夜外放影片、浴室排水孔塞住沒人清。這幾年好不容易存到一筆十幾萬的緊急預備金，你在想是不是該多花幾千元租一間真正安靜的獨立套房。',
+    choices: [
+      {
+        id: 'upgrade_to_studio_rent',
+        label: '搬進獨立小套房！把下班後的安靜修復品質當作長跑必備投資',
+        sublabel: '存款 -$20,000（押金與家具）、轉為獨立租屋，每月支出增加但能量與生活感大升',
+        effect: {
+          housing: 'studio_rent',
+          savingsDelta: -20000,
+          statsDelta: { energy: 9, life: 8 },
+          milestoneTag: '改善居住品質搬入獨立租屋套房',
+        },
+        outcomeText:
+          '搬進有對外窗的獨立小套房那週，你連著睡了三天從沒被室友關門聲吵醒的好覺，白天脾氣也明顯變好了。',
+      },
+      {
+        id: 'endure_shared_keep_saving',
+        label: '戴上降噪耳機繼續忍一忍！把每個月多省下來的房租差額留著當未來底氣',
+        sublabel: '維持低房租結構持續累績存款，代價是生活幸福感略微磨損',
+        effect: {
+          statsDelta: { energy: -4, life: -3 },
+        },
+        outcomeText:
+          '你買了一組超強隔音耳塞跟獨立小冰箱放進房間，提醒自己「等存款再厚一點再說」。',
+      },
+    ],
+  },
+  {
+    id: 'life_filial_negotiate_down',
+    title: '帳單與孝親費兩頭燒：要不要向父母坦白真實薪資、協商調降每月家用？',
+    category: 'life',
+    tag: '原生家庭財務協商',
+    weight: 19,
+    conditions: { minTenure: 1, maxSavings: 90000, parentCare: ['allowance'] },
+    narrative:
+      '這幾個月扣除房租、生活費與固定匯回老家的孝親費後，存摺幾乎一直在負成長邊緣徘徊。每次媽媽電話裡說「在台北（或外面）做那種公益工作應該很體面吧」，你都不敢告訴他自己月底連掛號費都要精算。',
+    choices: [
+      {
+        id: 'honest_talk_reduce_3000',
+        label: '週末回家把薪資單與收支表攤開誠實溝通，請求每月孝親費先調降三千元',
+        sublabel: '每月固定支出 -$3,000！打破報喜不報憂的惡性循環，雖有愧疚但保住現金流',
+        effect: {
+          monthlyFilialDelta: -3000,
+          statsDelta: { energy: 4, purpose: 1, life: -2 },
+          milestoneTag: '與原生家庭坦誠溝通實際薪資並調降孝親費',
+        },
+        outcomeText:
+          '媽媽看著你的薪資單沉默了好一陣子，最後嘆了口氣說：「早知道你領這麼少還一直硬撐……先顧好自己吃飯要緊。」雖有點鼻酸，肩膀卻瞬間輕了一截。',
+      },
+      {
+        id: 'rebalance_with_siblings',
+        label: '召開手足／親戚家庭會議重算長輩開銷，請經濟較寬裕的家人多扛兩千元',
+        sublabel: '每月固定支出 -$2,000，讓照顧責任不再只壓在單一成員身上',
+        effect: {
+          monthlyFilialDelta: -2000,
+          statsDelta: { energy: 2, capital: 2, life: 1 },
+        },
+        outcomeText:
+          '大家把父母的年金、國民年金與實際水電買菜費重新對了一次，原來有許多重複支出的部分，重新分工後你每個月少負擔兩千元。',
+      },
+      {
+        id: 'keep_paying_silently',
+        label: '不想讓兩老為自己擔心，咬緊牙關維持原本的孝親額度、靠自己再省一點',
+        sublabel: '維持家人安心與和氣，但個人經濟與身心壓力持續累積',
+        effect: {
+          statsDelta: { energy: -5, life: 3 },
+        },
+        outcomeText:
+          '你笑著回電話說「我最近有存錢啦不用擔心」，掛斷後默默把購物車裡的東西全部刪掉。',
+      },
+    ],
+  },
+  {
+    id: 'life_filial_raise_after_growth',
+    title: '存款與薪資總算穩下來了：要不要主動替父母多加一筆每月家用？',
+    category: 'life',
+    tag: '家庭回饋選擇',
+    weight: 14,
+    conditions: { minTenure: 4, minSavings: 180000, parentCare: ['healthy', 'allowance'] },
+    narrative:
+      '熬過前幾年的捉襟見肘，現在的存款數字總算能應付突發狀況。最近回家發現爸媽省吃儉用、冷氣老是捨不得開，你在想既然手頭寬裕了些，是不是該主動每個月多轉一筆固定家用過去。',
+    choices: [
+      {
+        id: 'raise_filial_allowance',
+        label: '設定每月固定多轉 $2,500 孝親家用，要爸媽別再為了省電費捨不得開冷氣',
+        sublabel: '每月固定孝親支出 +$2,500，大幅增進家庭關係與安心感',
+        effect: {
+          parentCare: 'allowance',
+          monthlyFilialDelta: 2500,
+          statsDelta: { purpose: 3, life: 9 },
+          milestoneTag: '職涯穩健後主動增加原生家庭固定孝親補貼',
+        },
+        outcomeText:
+          '爸爸嘴上唸著「自己留著用就好」，隔週卻開始天天跟鄰居炫耀你工作做得有聲有色、還貼心顧家。',
+      },
+      {
+        id: 'give_lump_sum_gifts_instead',
+        label: '不拉高每個月固定扣款壓力，改用過年大紅包加上帶兩老健檢旅行回饋',
+        sublabel: '存款 -$12,000，守住每月現金流彈性同時兼顧家庭情感',
+        effect: {
+          savingsDelta: -12000,
+          statsDelta: { energy: 2, life: 6 },
+        },
+        outcomeText:
+          '你替爸媽預約了全套自費健檢又帶他們去泡溫泉，留住月收支彈性，也讓家裡氣氛暖呼呼的。',
+      },
+    ],
+  },
+  {
+    id: 'life40_ltc_relief_support',
+    title: '長照轉折點：排到社區日照中心名額＋手足重新分攤照顧',
+    category: 'life',
+    tag: '長照減壓出口',
+    weight: 22,
+    conditions: { minAge: 40, parentCare: ['long_term_care'] },
+    narrative:
+      '咬牙扛了一段長照自付額與醫院往返後，當初申請的社區型日照中心終於通知排到名額、長照 2.0 喘息額度也審核通過；同時幾位家人看到你幾乎快累垮，主動坐下來討論輪流接送與共同分攤看護差額。',
+    choices: [
+      {
+        id: 'shift_to_daycare_and_share',
+        label: '改採「社區日照中心＋手足輪流支援」模式，解除高強度自付額與減班鎖死',
+        sublabel: '不再單人硬扛全額長照帳單（降回常態補貼），身心能量與生活感明顯回血',
+        effect: {
+          parentCare: 'allowance',
+          partTimeReduced: false,
+          statsDelta: { energy: 6, life: 7, capital: 2 },
+          milestoneTag: '成功整合長照 2.0 日照資源與手足分攤減壓',
+        },
+        outcomeText:
+          '父母在日照中心認識了新朋友、精神反而比悶在家裡好很多；你的帳本終於不再每個月流血，也能專心把工作節奏拉回正軌。',
+      },
+      {
+        id: 'keep_home_care_with_subsidy',
+        label: '長輩習慣在家由熟悉看護照顧，改以領取長照喘息與補助差額減輕這季負擔',
+        sublabel: '存款 +$18,000 補助回補，維持居家照護模式同時喘一口氣',
+        effect: {
+          savingsDelta: 18000,
+          statsDelta: { energy: 5, life: 4 },
+        },
+        outcomeText:
+          '補助款入帳加上喘息服務替你換出兩個完整的週末下午，讓你終於能去喝杯咖啡、好好睡上一覺。',
       },
     ],
   },

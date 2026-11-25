@@ -810,7 +810,7 @@ function downloadShareCardPng(record: CareerArchiveRecord) {
   // Footer
   ctx.fillStyle = '#88788e';
   ctx.font = '400 20px "Noto Sans TC", sans-serif';
-  ctx.fillText('做好事，是份好工作嗎？ v0.222｜台灣非營利組織職涯模擬器', 104, 1244);
+  ctx.fillText('做好事，是份好工作嗎？ v0.23｜台灣非營利組織職涯模擬器', 104, 1244);
 
   const link = document.createElement('a');
   link.download = `npo-career-${record.docNumber}.png`;

@@ -15,6 +15,7 @@ try {
     entryPoints: [
       path.resolve('src/engine/simulation.ts'),
       path.resolve('src/data/organizations.ts'),
+      path.resolve('src/data/chronicles.ts'),
     ],
     outdir: tmpDir,
     bundle: true,
@@ -26,6 +27,7 @@ try {
 
   const sim = await import(pathToFileURL(path.join(tmpDir, 'engine/simulation.mjs')).href);
   const orgData = await import(pathToFileURL(path.join(tmpDir, 'data/organizations.mjs')).href);
+  const chronicles = await import(pathToFileURL(path.join(tmpDir, 'data/chronicles.mjs')).href);
 
   // Ensure localStorage calls are safely no-oped in Node
   globalThis.window = undefined;
@@ -37,6 +39,10 @@ try {
   for (const org of orgData.ORG_TYPE_LIST) {
     assert.ok(orgData.ORG_CONTEXT_TOKENS[org.id], `Missing ORG_CONTEXT_TOKENS for ${org.id}`);
     assert.ok(org.allowedRoles.length > 0, `No allowedRoles for ${org.id}`);
+    assert.ok(
+      !/[（）()]/.test(org.legalForm) && !/[（）()]/.test(org.sizeLabel),
+      `Avoid nested parentheses in ${org.id} legalForm/sizeLabel`
+    );
   }
 
   // 2. Validate event catalog integrity
@@ -132,6 +138,128 @@ try {
     }
   }
 
+  // Ensure newly hired player never receives tenure-gated, mismatched-housing/rel/region routine lines
+  const newHireState = sim.buildStateFromConfig(
+    {
+      orgType: 'industrial_union',
+      role: 'union_organizer',
+      region: 'non_six_rural',
+      background: 'independent',
+      employmentType: 'regular',
+      startAge: 38,
+      pace: 'standard',
+    },
+    false,
+    () => 0.5
+  );
+  newHireState.lifeStatus.relationship = 'single';
+  newHireState.lifeStatus.housing = 'with_parents';
+
+  const forbiddenForNewHire = ['五年來', '十年', '紀念日', '捷運站外的小套房', '人團會務規範'];
+  for (let i = 0; i < 400; i++) {
+    const line = chronicles.pickRoutineLine(newHireState);
+    const fullText = `${line.title} ${line.text}`;
+    for (const bad of forbiddenForNewHire) {
+      assert.ok(
+        !fullText.includes(bad),
+        `Newly hired state must not receive routine line containing "${bad}", got: ${line.title}`
+      );
+    }
+  }
+
+  // Ensure veteran events require actual tenure (and succession requires orgYears)
+  for (const id of [
+    'life30_best_friend_leaves_npo',
+    'life40_old_mentor_illness',
+    'life50_succession_handover',
+    'life40_found_welfare_assoc',
+    'life40_found_advocacy_ngo',
+    'life40_found_academic_society',
+    'life40_found_new_union',
+  ]) {
+    const ev = sim.ALL_EVENTS.find((e) => e.id === id);
+    assert.ok(ev, `Missing veteran event ${id}`);
+    assert.ok(
+      (ev.conditions?.minTenure ?? 0) >= 3,
+      `Veteran event ${id} must require minTenure >= 3, got ${ev.conditions?.minTenure}`
+    );
+  }
+  const successionEv = sim.ALL_EVENTS.find((e) => e.id === 'life50_succession_handover');
+  assert.ok(
+    (successionEv?.conditions?.minOrgYears ?? 0) >= 4,
+    `life50_succession_handover must require minOrgYears >= 4`
+  );
+
+  // Validate v0.23 structural coverage & routine linter
+  const rookieEvs = sim.ALL_EVENTS.filter((e) => (e.conditions?.maxTenure ?? 99) <= 2);
+  assert.ok(rookieEvs.length >= 4, `Expected >= 4 rookie events, got ${rookieEvs.length}`);
+
+  const chainEvs = sim.ALL_EVENTS.filter((e) => Boolean(e.conditions?.requiredFlag));
+  assert.ok(chainEvs.length >= 6, `Expected >= 6 story-chain follow-up events, got ${chainEvs.length}`);
+
+  const housingModEvs = sim.ALL_EVENTS.filter((e) =>
+    e.choices.some((ch) => Boolean(ch.effect?.housing))
+  );
+  assert.ok(housingModEvs.length >= 5, `Expected >= 5 events modifying housing, got ${housingModEvs.length}`);
+
+  const filialModEvs = sim.ALL_EVENTS.filter((e) =>
+    e.choices.some((ch) => typeof ch.effect?.monthlyFilialDelta === 'number')
+  );
+  assert.ok(filialModEvs.length >= 2, `Expected >= 2 events modifying monthlyFilialDelta, got ${filialModEvs.length}`);
+
+  for (const org of orgData.ORG_TYPE_LIST) {
+    const exclusive = sim.ALL_EVENTS.filter(
+      (e) => e.conditions?.orgTypes?.length === 1 && e.conditions.orgTypes[0] === org.id
+    );
+    assert.ok(exclusive.length >= 6, `Expected >= 6 exclusive events for ${org.id}, got ${exclusive.length}`);
+  }
+
+  const fieldworkRoutine = chronicles.ALL_ROUTINE_LINES.filter((r) => r.focuses?.includes('fieldwork'));
+  assert.ok(fieldworkRoutine.length >= 4, `Expected >= 4 fieldwork routine lines, got ${fieldworkRoutine.length}`);
+  const rookieRoutine = chronicles.ALL_ROUTINE_LINES.filter((r) => (r.maxOrgYears ?? 99) <= 1);
+  assert.ok(rookieRoutine.length >= 4, `Expected >= 4 rookie routine lines, got ${rookieRoutine.length}`);
+  for (const r of chronicles.ALL_ROUTINE_LINES) {
+    assert.ok(!/\{[a-zA-Z0-9_]+\}/.test(`${r.title} ${r.text}`), `Routine line "${r.title}" contains uninterpolated token`);
+    if (r.orgTypes?.includes('industrial_union')) {
+      assert.ok(!`${r.title} ${r.text}`.includes('廠區出入口'), `Enterprise union routine line must not mention 廠區出入口`);
+    }
+  }
+
+  // Validate role title override, management allowance, and car loan ledger calculations
+  const mgrState = sim.buildStateFromConfig(
+    {
+      orgType: 'advocacy_ngo',
+      role: 'fundraiser_pr',
+      region: 'taipei_metro',
+      background: 'independent',
+      employmentType: 'regular',
+      startAge: 30,
+      pace: 'compact',
+    },
+    false,
+    () => 0.5
+  );
+  mgrState.roleLevel = 3;
+  mgrState.customRoleTitle = '專任秘書長';
+  assert.equal(sim.getRoleDisplayTitle(mgrState), '專任秘書長');
+  const mgrInc = sim.calculateMonthlyIncome(mgrState);
+  assert.ok(mgrInc.managementAllowance >= 7000, `Expected managementAllowance >= 7000 at level 3, got ${mgrInc.managementAllowance}`);
+  mgrState.lifeStatus.carLoanRemaining = 240000;
+  mgrState.lifeStatus.monthlyCarLoan = 7200;
+  const afterCarQuarter = sim.advanceQuarter(mgrState, () => 0.99);
+  assert.equal(afterCarQuarter.lastExpenseBreakdown.carLoan, 7200);
+  assert.equal(afterCarQuarter.lifeStatus.carLoanRemaining, 240000 - 7200 * 3);
+
+  // Validate org transition automatically records target org name in milestones
+  const jumpEvent = sim.ALL_EVENTS.find((e) => e.id === 'common_cross_sector_offer');
+  assert.ok(jumpEvent, 'Missing common_cross_sector_offer');
+  mgrState.pendingEvent = jumpEvent;
+  const afterJump = sim.resolveEventChoice(mgrState, 0, () => 0.5);
+  assert.ok(
+    afterJump.milestones.some((m) => m.includes(afterJump.org.name)),
+    `Org transition milestone must contain new org name "${afterJump.org.name}"`
+  );
+
   // 3. Validate employment-type pension & expense rules
   for (const empType of ['regular', 'multi_employment', 'contractor']) {
     const startState = sim.buildStateFromConfig(
@@ -161,6 +289,8 @@ try {
 
   // 4. Simulate 120 careers across both paces
   const uninterpolated = [];
+  const endReasons = {};
+  const statSums = { energy: 0, purpose: 0, capital: 0, life: 0, impactScore: 0 };
   for (let i = 0; i < 120; i++) {
     const pace = i < 60 ? 'standard' : 'compact';
     let state = sim.generateRandomStart(pace);
@@ -179,6 +309,17 @@ try {
     }
     assert.ok(state.isEnded, `Simulation ${i} failed to end within 200 steps`);
     assert.ok(state.archiveRecord, `Simulation ${i} missing archiveRecord`);
+    assert.ok(
+      state.totalQuartersElapsed >= 8,
+      `Simulation ${i} ended too early (${state.totalQuartersElapsed} quarters, reason=${state.endReason})`
+    );
+    const reason = state.endReason || 'unknown';
+    endReasons[reason] = (endReasons[reason] || 0) + 1;
+    statSums.energy += state.stats.energy;
+    statSums.purpose += state.stats.purpose;
+    statSums.capital += state.stats.capital;
+    statSums.life += state.stats.life;
+    statSums.impactScore += state.stats.impactScore;
     for (const val of [
       state.monthlySalary,
       state.savings,
@@ -209,9 +350,13 @@ try {
 
   assert.deepEqual(uninterpolated, [], `Found uninterpolated tokens in events: ${uninterpolated.join(', ')}`);
 
-  console.log(
-    `[verify-sim] OK: ${orgData.ORG_TYPE_LIST.length} org types (weight=${totalWeight}), ${sim.ALL_EVENTS.length} events, 120 simulated careers passed.`
+  const avgStats = Object.fromEntries(
+    Object.entries(statSums).map(([k, v]) => [k, Math.round((v / 120) * 10) / 10])
   );
+  console.log(
+    `[verify-sim] OK: ${orgData.ORG_TYPE_LIST.length} org types (weight=${totalWeight}), ${sim.ALL_EVENTS.length} events, ${chronicles.ALL_ROUTINE_LINES.length} routine lines, 120 simulated careers passed.`
+  );
+  console.log(`[verify-sim] Endings (120 runs): ${JSON.stringify(endReasons)} | Avg stats: ${JSON.stringify(avgStats)}`);
 } finally {
   fs.rmSync(tmpDir, { recursive: true, force: true });
 }
