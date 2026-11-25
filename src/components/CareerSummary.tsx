@@ -810,7 +810,7 @@ function downloadShareCardPng(record: CareerArchiveRecord) {
   // Footer
   ctx.fillStyle = '#88788e';
   ctx.font = '400 20px "Noto Sans TC", sans-serif';
-  ctx.fillText('做好事，是份好工作嗎？ v0.221｜台灣非營利組織職涯模擬器', 104, 1244);
+  ctx.fillText('做好事，是份好工作嗎？ v0.222｜台灣非營利組織職涯模擬器', 104, 1244);
 
   const link = document.createElement('a');
   link.download = `npo-career-${record.docNumber}.png`;
@@ -992,9 +992,23 @@ export function CareerSummary({
               fontWeight: 600,
             }}
           >
-            台灣非營利組織產業工會（NPOIU）
+            非營利組織產業工會
           </a>{' '}
-          臉書專頁。
+          臉書專頁，也歡迎報名{' '}
+          <a
+            href="https://www.facebook.com/FJUNPO"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: 'var(--accent-teal)',
+              textDecoration: 'underline',
+              textUnderlineOffset: '3px',
+              fontWeight: 600,
+            }}
+          >
+            輔大非營利組織管理碩士學程（在職班）
+          </a>{' '}
+          認識更多NPO工作者。
         </div>
 
         <div

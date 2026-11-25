@@ -41,8 +41,14 @@ interface BeforeInstallPromptEvent extends Event {
 
 const RELEASE_CHANGELOG: Array<{ version: string; tag: string; summary: string }> = [
   {
-    version: 'v0.221',
+    version: 'v0.222',
     tag: '最新',
+    summary:
+      '結算畫面底部新增「輔大非營利組織管理碩士學程（在職班）」粉專宣傳連結，並與非營利組織產業工會臉書專頁並列呈現。',
+  },
+  {
+    version: 'v0.221',
+    tag: '工會與文本',
     summary:
       '徹底區分企業／產業工會與職業工會的事件與職務生態（拆分疫情紓困與無薪假攻防、升遷線等），新增 4 則企業工會專屬事件，並修正工會結算適用《工會法》用語及首頁標題／音樂按鈕精簡。',
   },
@@ -197,7 +203,7 @@ export function LandingScreen({
           <strong className="font-serif" style={{ fontSize: 17 }}>
             做好事，是份好工作嗎？
           </strong>
-          <span className="brand-code">1 IN 100,000 · TW-NPO SIM v0.221</span>
+          <span className="brand-code">1 IN 100,000 · TW-NPO SIM v0.222</span>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <button type="button" className="btn btn-sm" onClick={onOpenArchive}>
@@ -607,7 +613,7 @@ export function LandingScreen({
           向《80億分之1》（1in8b.life）帶給我們的感動致敬，本作所有組織與案例是基於實務處境以虛構呈現，數據僅存於您自己的瀏覽器。
         </div>
         <div>
-          v0.221｜via{' '}
+          v0.222｜via{' '}
           <a
             href="mailto:yusuke225@gmail.com"
             style={{ color: 'var(--accent-teal)', textDecoration: 'underline', textUnderlineOffset: '3px' }}
