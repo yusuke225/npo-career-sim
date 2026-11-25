@@ -29,6 +29,7 @@ interface RoutineLine {
   minOrgYears?: number;
   maxOrgYears?: number;
   minRoleLevel?: number;
+  maxRoleLevel?: number;
   housing?: HousingType[];
   relationship?: RelationshipStatus[];
 }
@@ -480,12 +481,14 @@ const ROUTINE_LINES: RoutineLine[] = [
     title: '週末的會議紀錄逐字修正',
     text: '星期六開了一整天理監事或董事會議，禮拜一主管又退回會議紀錄說某位資深委員的措辭要改得「更圓融一點」。',
     orgTypes: ['academic_society', 'industrial_union', 'occupational_union', 'grassroots'],
+    maxRoleLevel: 2,
   },
   {
     tag: '方案創新',
     title: '把舊活動改造成新試點',
     text: '說服主管把沿用八年的制式活動砍掉一半，騰出預算試做更貼近當代需求的小型試驗。',
     minOrgYears: 1,
+    maxRoleLevel: 2,
     excludeOutsideNPO: true,
   },
   {
@@ -807,6 +810,7 @@ export function pickRoutineLine(state: SimulationState, rng = Math.random): Rout
     if (line.minOrgYears !== undefined && state.org.yearsInCurrentOrg < line.minOrgYears) return false;
     if (line.maxOrgYears !== undefined && state.org.yearsInCurrentOrg > line.maxOrgYears) return false;
     if (line.minRoleLevel !== undefined && state.roleLevel < line.minRoleLevel) return false;
+    if (line.maxRoleLevel !== undefined && state.roleLevel > line.maxRoleLevel) return false;
     if (line.housing && !line.housing.includes(state.lifeStatus.housing)) return false;
     if (line.relationship && !line.relationship.includes(state.lifeStatus.relationship)) return false;
     return true;

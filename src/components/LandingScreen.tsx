@@ -41,8 +41,14 @@ interface BeforeInstallPromptEvent extends Event {
 
 const RELEASE_CHANGELOG: Array<{ version: string; tag: string; summary: string }> = [
   {
-    version: 'v0.23',
+    version: 'v0.231',
     tag: '最新',
+    summary:
+      '修正升任執行長／秘書長等最高專職後不會再抽到下屬對主管對話，並提高中高齡長照危機事件遇見機率與放寬觸發年齡區間。',
+  },
+  {
+    version: 'v0.23',
+    tag: '大更新',
     summary:
       '新增 30 則事件（含新手報到、五大組織專屬、6 條跨年度劇情線、車貸與居住／孝親協商、長照減壓）及 20 則日常切片；全介面改以月份呈現與「每月淨結餘」帳本（含主管加給、加班費／責任制、房貸／車貸）；新增最低工資每年 0–5%（貼近通膨）連動調薪、開局緩衝與升遷職稱／轉職節點同步。',
   },
@@ -209,7 +215,7 @@ export function LandingScreen({
           <strong className="font-serif" style={{ fontSize: 17 }}>
             做好事，是份好工作嗎？
           </strong>
-          <span className="brand-code">1 IN 100,000 · TW-NPO SIM v0.23</span>
+          <span className="brand-code">1 IN 100,000 · TW-NPO SIM v0.231</span>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <button type="button" className="btn btn-sm" onClick={onOpenArchive}>
@@ -619,7 +625,7 @@ export function LandingScreen({
           向《80億分之1》（1in8b.life）帶給我們的感動致敬，本作所有組織與案例是基於實務處境以虛構呈現，數據僅存於您自己的瀏覽器。
         </div>
         <div>
-          v0.23｜via{' '}
+          v0.231｜via{' '}
           <a
             href="mailto:yusuke225@gmail.com"
             style={{ color: 'var(--accent-teal)', textDecoration: 'underline', textUnderlineOffset: '3px' }}

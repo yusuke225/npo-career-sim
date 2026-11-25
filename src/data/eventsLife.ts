@@ -417,7 +417,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'swap_shift_keep_date',
-        label: '硬著頭皮跟主管同事調班或只去半天，晚上無論如何趕回來陪對方',
+        label: '硬著頭皮跟同事協調調班或只去半天，晚上無論如何趕回來陪對方',
         sublabel: '向組織示範「工作者也有私生活」，守護重要關係',
         effect: {
           relationship: 'dating',
@@ -716,10 +716,10 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     title: '四十歲三明治風暴：父母突發重病失能的長照拉鋸',
     category: 'intertwined',
     tag: '長照與職場重擊',
-    weight: 16,
-    conditions: { minAge: 38, maxAge: 62, parentCare: ['healthy', 'allowance'], excludeOutsideNPO: true },
+    weight: 26,
+    conditions: { minAge: 36, maxAge: 62, parentCare: ['healthy', 'allowance'] },
     narrative:
-      '平常替{targetNoun}奔走各種權益的你，最害怕的電話還是響了——長輩在家跌倒中風住院，出院後需要復健與日間照護。就算申請長照補助與家人分攤，外籍看護、日照與耗材每月仍可能吃掉一兩萬元自付額。你站在醫院走廊算著請假天數與存摺餘額。',
+      '平常總在替別人處理各種難題與專案的你，最害怕的電話還是響了——長輩在家跌倒中風住院，出院後需要復健與日間照護。就算申請長照補助與家人分攤，外籍看護、日照與耗材每月仍可能吃掉一兩萬元自付額。你站在醫院走廊算著請假天數與存摺餘額。',
     choices: [
       {
         id: 'hire_care_and_apply_ltc',
@@ -1289,7 +1289,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     weight: 12,
     conditions: { minTenure: 1, excludeOutsideNPO: true },
     narrative:
-      '年度重大計畫與會議都剛順利交卷，下午三點半{bossTitle}罕見地走出來說：「大家這季辛苦了，沒急事的話四點就各自收一收提前下班吧。」外頭剛好是微涼的晴天。',
+      '年度重大計畫與會議都剛順利交卷，下午三點半辦公室罕見地沒有任何急件，大家乾脆說好四點各自收一收提前下班。外頭剛好是微涼的晴天。',
     choices: [
       {
         id: 'walk_in_sunshine',
@@ -1988,7 +1988,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
           milestoneTag: '新人期建置的交接制度獲肯定並升格為組織治理手冊',
         },
         outcomeText:
-          '{bossTitle}在{boardNoun}會議上公開點名致謝：「還好當年有你把亂帳理清楚，不然這次真的要賠掉公信力。」',
+          '{boardNoun}在會議上公開點名致謝：「還好當年有你把亂帳理清楚，不然這次真的要賠掉公信力。」',
       },
       {
         id: 'share_template_with_peers',
@@ -2184,7 +2184,7 @@ export const LIFE_AND_ERA_EVENTS: GameEvent[] = [
     category: 'work',
     tag: '跨年伏筆 · 勞動文化',
     weight: 18,
-    conditions: { excludeOutsideNPO: true, minTenure: 1, maxTenure: 5 },
+    conditions: { excludeOutsideNPO: true, minTenure: 1, maxTenure: 5, maxRoleLevel: 2 },
     narrative:
       '這季你已經連續三個禮拜六支援{weekendTask}，週一進辦公室卻發現系統裡沒有任何補休紀錄。資深同事笑著說：「我們這行都是用愛發電啦，申請補休會被{bossTitle}跟老理事覺得計較。」你看著鏡子裡黑眼圈越來越深的自己。',
     choices: [

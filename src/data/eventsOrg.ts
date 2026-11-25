@@ -1170,7 +1170,7 @@ export const ORG_EVENTS: GameEvent[] = [
     category: 'work',
     tag: '募款低谷',
     weight: 14,
-    conditions: { orgTypes: ['advocacy_ngo', 'grassroots'], excludeOutsideNPO: true },
+    conditions: { orgTypes: ['advocacy_ngo', 'grassroots'], maxRoleLevel: 2, excludeOutsideNPO: true },
     narrative:
       '大環境選後政治疲乏加上物價上漲，倡議型組織的小額定捐出現連續四個月淨流失。秘書長召集資深同仁開會：「如果不開拓新財源，明年要不是砍掉一個研究員缺，就是大家凍薪一年半。」',
     choices: [
@@ -1312,7 +1312,7 @@ export const ORG_EVENTS: GameEvent[] = [
     category: 'work',
     tag: '人力斷層衝擊',
     weight: 16,
-    conditions: { excludeOutsideNPO: true },
+    conditions: { maxRoleLevel: 2, excludeOutsideNPO: true },
     narrative:
       '和你一起並肩作戰兩年的同事撐不住低薪與過勞遞出辭呈，一個月後離職。然而人力銀行掛了三週只有兩封不符資格的履歷，主管拍拍你肩膀說：「現在大環境不好找人，他的業務先由你代理到這季結束，我們一定加速徵才。」結果你心裡隱約覺得這個「暫代」會變成常態。',
     choices: [
@@ -2123,7 +2123,7 @@ export const ORG_EVENTS: GameEvent[] = [
     category: 'work',
     tag: '假承攬真僱傭',
     weight: 26,
-    conditions: { employmentTypes: ['contractor'], excludeOutsideNPO: true },
+    conditions: { employmentTypes: ['contractor'], maxRoleLevel: 1, excludeOutsideNPO: true },
     narrative:
       '簽約時組織說「因為人事管銷上限，只能用自然人承攬領車馬費／研究費」，結果一樣要求你每天九點打卡、假日支援活動、請假要寫假單找主管簽核。這季你去查才發現，整年不但沒有一塊錢雇主 6% 勞退提撥、每筆超過兩萬還被扣 2.11% 二代健保，萬一職災或資遣完全零保障。',
     choices: [
@@ -2163,6 +2163,7 @@ export const ORG_EVENTS: GameEvent[] = [
     weight: 20,
     conditions: {
       excludeOutsideNPO: true,
+      maxRoleLevel: 2,
       excludeOrgTypes: ['industrial_union', 'occupational_union', 'corp_intl_ngo', 'academic_society'],
     },
     narrative:
@@ -2238,6 +2239,7 @@ export const ORG_EVENTS: GameEvent[] = [
     weight: 16,
     conditions: {
       excludeOutsideNPO: true,
+      maxRoleLevel: 2,
       orgTypes: ['large_welfare', 'grassroots', 'local_foundation'],
       employmentTypes: ['regular'],
       minTenure: 2,
@@ -2427,7 +2429,7 @@ export const ORG_EVENTS: GameEvent[] = [
     category: 'work',
     tag: '低薪凍漲撞牆',
     weight: 22,
-    conditions: { excludeOutsideNPO: true, minTenure: 3, minOrgYears: 2 },
+    conditions: { excludeOutsideNPO: true, minTenure: 3, minOrgYears: 2, maxRoleLevel: 2 },
     narrative:
       '在{orgNoun}待了好幾年，物價跟房租早不知漲了多少輪，你的本薪卻幾乎原地踏步，甚至比剛進來的新進人員還低。你整理好過去一年的實績紀錄與業務成果，決定找{bossTitle}正式談一次調薪。對方聽完沉吟半晌說：「我們知道你很辛苦，但今年組織真的沒多餘財源……」',
     choices: [
@@ -3383,7 +3385,7 @@ export const ORG_EVENTS: GameEvent[] = [
     category: 'work',
     tag: '大型機構內耗',
     weight: 18,
-    conditions: { orgTypes: ['large_welfare'], excludeOutsideNPO: true, minTenure: 1 },
+    conditions: { orgTypes: ['large_welfare'], excludeOutsideNPO: true, minTenure: 1, maxRoleLevel: 2 },
     narrative:
       '總會顧問花百萬買了套全新數位個案追蹤系統，要求第一線每次訪視後兩小時內必須用手機填完 35 欄量化指標，否則影響分會考評。但偏鄉訊號微弱、弱勢阿嬤家裡根本不適合一直滑手機問卷，全組社工集體炸鍋。',
     choices: [

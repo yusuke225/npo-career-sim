@@ -190,6 +190,19 @@ try {
     `life50_succession_handover must require minOrgYears >= 4`
   );
 
+  // Ensure events acting as a subordinate reporting to a higher boss do not fire at top executive level (roleLevel === 3)
+  for (const ev of sim.ALL_EVENTS) {
+    const c = ev.conditions || {};
+    if (c.maxRoleLevel !== undefined && c.maxRoleLevel <= 2) continue;
+    const text = JSON.stringify({ title: ev.title, narrative: ev.narrative, choices: ev.choices });
+    for (const bad of ['敲開{bossTitle}辦公室', '執行長約談你', '秘書長召集']) {
+      assert.ok(
+        !text.includes(bad),
+        `Event ${ev.id} eligible at roleLevel=3 must not contain subordinate wording "${bad}"`
+      );
+    }
+  }
+
   // Validate v0.23 structural coverage & routine linter
   const rookieEvs = sim.ALL_EVENTS.filter((e) => (e.conditions?.maxTenure ?? 99) <= 2);
   assert.ok(rookieEvs.length >= 4, `Expected >= 4 rookie events, got ${rookieEvs.length}`);
